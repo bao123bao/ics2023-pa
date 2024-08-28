@@ -65,6 +65,11 @@ static int cmd_si(char *args) {
   return 0;
 }
 
+static int cmd_info_r(char *args) {
+	isa_reg_display();
+	return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -73,7 +78,8 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Execute a step of instruction for N times", cmd_si}
+  { "si", "Execute a step of instruction for [N] times", cmd_si},
+	{ "info r", "Print register [r]'s status", cmd_info_r }
 
   /* TODO: Add more commands */
 
