@@ -87,6 +87,17 @@ static int cmd_info(char *args) {
 	return 0;
 }
 
+static int cmd_x(char *args) {
+	int n;
+	vaddr_t addr;
+	if (args && (sscanf(args, "%d 0x%x", &n, &addr))) {
+		printf("n=%d, addr=0x%x\n", n, addr);
+	}
+	return 0;
+}
+
+
+
 static struct {
   const char *name;
   const char *description;
@@ -96,7 +107,8 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute a step of instruction for <N> times", cmd_si},
-	{ "info", "Print registers' status with [r]", cmd_info }
+	{ "info", "Print registers' status with [r]", cmd_info },
+	{ "x", "Print memory content at [EXPR] for [N]*4 bytes (x [N] [EXPR])", cmd_x}
 
   /* TODO: Add more commands */
 
