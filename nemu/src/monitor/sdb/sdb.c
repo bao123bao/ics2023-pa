@@ -65,8 +65,25 @@ static int cmd_si(char *args) {
   return 0;
 }
 
-static int cmd_info_r(char *args) {
-	isa_reg_display();
+static int cmd_info(char *args) {
+	if (!args) {
+		printf("Unknown command\n");
+		return 0;
+	}
+
+	char subcmd;
+
+	if (sscanf(args, "%c", &subcmd)==1) {
+		switch (subcmd) {
+			case 'r':
+				isa_reg_display();
+				break;
+
+			default:	
+				printf("Unknown command\n");
+				break;
+		}
+	}
 	return 0;
 }
 
@@ -78,8 +95,8 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Execute a step of instruction for [N] times", cmd_si},
-	{ "info r", "Print register [r]'s status", cmd_info_r }
+  { "si", "Execute a step of instruction for <N> times", cmd_si},
+	{ "info", "Print registers' status with [r]", cmd_info }
 
   /* TODO: Add more commands */
 
