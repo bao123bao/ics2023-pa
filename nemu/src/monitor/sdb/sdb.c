@@ -60,6 +60,14 @@ static int cmd_si(char *args) {
   }else{
     printf("No args provided.\n");
   }
+
+	int n, nargs;
+
+	if ( (nargs = sscanf(args,"%d",&n)) != 1){
+		printf("Too many args: %d provided, but %d needed.\n", nargs, 1);
+	}
+	cpu_exec(n);
+
   return 0;
 }
 
