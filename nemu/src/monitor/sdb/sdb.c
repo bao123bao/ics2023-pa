@@ -17,6 +17,7 @@
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <memory/vaddr.h>
 #include "sdb.h"
 
 static int is_batch_mode = false;
@@ -88,10 +89,15 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-	int n;
+	int n, i;
 	vaddr_t addr;
 	if (args && (sscanf(args, "%d 0x%x", &n, &addr))) {
 		printf("n=%d, addr=0x%x\n", n, addr);
+	}
+
+	for(i=0; i<n; i++){
+		printf("@0x%x: 0x%x\n",addr  ,vaddr_read(addr, 4));
+		addr += 4;
 	}
 	return 0;
 }
