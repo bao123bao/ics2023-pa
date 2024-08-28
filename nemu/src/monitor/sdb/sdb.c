@@ -55,18 +55,12 @@ static int cmd_q(char *args) {
 static int cmd_help(char *args);
 
 static int cmd_si(char *args) {
-  if(args){
-    printf("%s\n",args);
-  }else{
-    printf("No args provided.\n");
-  }
+	int n;
 
-	int n = 1, nargs;
-
-	if (args && ((nargs = sscanf(args,"%d",&n)) != 1)) {
-		printf("Too many args: %d provided, but %d needed.\n", nargs, 1);
-	}
-	cpu_exec(n);
+	if (args && sscanf(args,"%d",&n)==1)
+		cpu_exec(n);
+	else
+		cpu_exec(1);
 
   return 0;
 }
