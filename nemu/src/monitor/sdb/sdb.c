@@ -61,9 +61,9 @@ static int cmd_si(char *args) {
     printf("No args provided.\n");
   }
 
-	int n, nargs;
+	int n = 1, nargs;
 
-	if ( (nargs = sscanf(args,"%d",&n)) != 1){
+	if (args && ((nargs = sscanf(args,"%d",&n)) != 1)) {
 		printf("Too many args: %d provided, but %d needed.\n", nargs, 1);
 	}
 	cpu_exec(n);
@@ -79,7 +79,7 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Execute a step of instruction for N times", cmd_si}
+  { "si [N]", "Execute a step of instruction for N times", cmd_si}
 
   /* TODO: Add more commands */
 
