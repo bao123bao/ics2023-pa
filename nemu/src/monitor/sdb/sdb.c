@@ -96,7 +96,7 @@ static int cmd_x(char *args) {
 	}
 
 	for(i=0; i<n; i++){
-		printf("@0x%x: 0x%x\n",addr  ,vaddr_read(addr, 16));
+		printf("@0x%x: 0x%x\n",addr  ,vaddr_read(addr, 4));
 		addr += 4;
 	}
 	return 0;
