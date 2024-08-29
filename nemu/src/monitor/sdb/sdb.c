@@ -102,6 +102,19 @@ static int cmd_x(char *args) {
 	return 0;
 }
 
+static int cmd_p(char *args) {
+	if (!args) {
+		printf("No expression provided\n");
+		return 0;
+	}
+
+	init_regex();
+	bool success;
+	expr(args,&success);
+
+	return 0;
+}
+
 
 
 static struct {
@@ -114,7 +127,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute a step of instruction for <N> times", cmd_si},
 	{ "info", "Print registers' status with [r]", cmd_info },
-	{ "x", "Print memory content at [EXPR] for [N]*4 bytes (x [N] [EXPR])", cmd_x}
+	{ "x", "Print memory content at [EXPR] for [N]*4 bytes (x [N] [EXPR])", cmd_x},
+	{ "p", "Evaluate expression [EXPR]", cmd_p}
 
   /* TODO: Add more commands */
 
