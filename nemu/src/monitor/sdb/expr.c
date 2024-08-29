@@ -13,15 +13,20 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <isa.h>
+//#include <isa.h>
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
+#include "../../../include/isa.h"
 #include <regex.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ, TK_NUMBER
 
   /* TODO: Add more token types */
 
@@ -38,7 +43,13 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
+	{"-", '-'},           // minus
+	{"\\*", '*'},         // multiply
+	{"/", '/'},           // divide
   {"==", TK_EQ},        // equal
+	{"\\(", '('},         // left bracket
+	{"\\)", ')'},         // right bracket
+	{"[0-9]+", TK_NUMBER} // decimal number
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -95,7 +106,23 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
-          default: TODO();
+          case TK_NOTYPE:
+						printf("spaces read, pass\n");
+						break;
+
+					case TK_NUMBER:
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = '\0';
+						tokens[nr_token].type = TK_NUMBER;
+						printf("tokens[%d] type=number: %s\n", nr_token, tokens[nr_token].str);
+						nr_token++;
+						break;
+
+					default:
+						tokens[nr_token].type = *substr_start;
+						printf("tokens[%d].type='%c'\n", nr_token, tokens[nr_token].type);
+						nr_token++;
+						break;
         }
 
         break;
@@ -119,7 +146,20 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
 
   return 0;
 }
+
+
+/*
+int main() {
+	char *test_str = "123 + 5 * (4 +3)/4 - 2";
+	init_regex();
+
+	make_token(test_str);
+	return 0;
+
+}
+*/
+
+
