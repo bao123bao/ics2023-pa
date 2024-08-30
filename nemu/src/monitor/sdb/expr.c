@@ -176,12 +176,75 @@ int check_parentheses(int p, int q) {
 }
 
 
-/*int op_position(int p, int q) {
-	
+int op_position(int p, int q) {
+	int cur_op_pos = -1;
+	int cur_op_type = -1;
+	bool paren_flag = false;
+	int cur_type;
+  //	while (tokens[p].type==TK_NUMBER)
+
+	while (p <= q) {
+		cur_type = tokens[p].type;
+		switch (cur_type) {
+
+			case '(':
+				// enter paren area
+				paren_flag = true;
+				break;
+
+			case ')':
+				// exit paren area
+				paren_flag = false;
+				break;
+
+			case '+':
+			case '-':
+				// currently meet op +-
+				switch (cur_op_type) {
+					case -1:
+					case '+':
+					case '-':
+						// no previous op or previously +-
+						if (!paren_flag) {
+							// when not in paren area
+							cur_op_pos = p;
+							cur_op_type = cur_type;
+						}
+						break;
+					case '*':
+					case '/':
+					default:
+						break;
+				}
+				break;
+
+			case '*':
+			case '/':
+				// currently meet op */
+				switch (cur_op_type) {
+					case -1:
+					case '*':
+					case '/':
+						if (!paren_flag) {
+							cur_op_pos = p;
+							cur_op_type = cur_type;
+						}
+						break;
+					case '+':
+					case '-':
+					default:
+						break;
+				}
+				break;
+
+		}
+		p++;
+	}	
+	return cur_op_pos;
 }
 
 
-int eval(int p, int q) {
+/*int eval(int p, int q) {
 	if (p > q) {
 		// bad expr
 		return -1;
@@ -232,6 +295,11 @@ word_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
+
+	int op_pos = op_position(0, len-1);
+	printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
+
+	
 
 
 
