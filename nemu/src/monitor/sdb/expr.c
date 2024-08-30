@@ -25,8 +25,10 @@
 #include <string.h>
 #include "stack.h"
 
+#define MAXLEN 32
+
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUMBER
+  TK_NOTYPE = 256, TK_EQ, TK_NUMBER, TK_EMPTY
 
   /* TODO: Add more token types */
 
@@ -87,7 +89,7 @@ static bool make_token(char *e) {
   regmatch_t pmatch;
 
 	for (i=0; i<32; i++) {
-		tokens[i].type = TK_NOTYPE;
+		tokens[i].type = TK_EMPTY;
 	}
 
   nr_token = 0;
@@ -247,7 +249,10 @@ int op_position(int p, int q) {
 int eval(int p, int q) {
 	if (p > q) {
 		// bad expr
+		printf("bad expr\n");
+		assert(0);
 		return -1;
+
 	}else if(p == q) {
 		// single number
 		return atoi(tokens[p].str);
@@ -256,6 +261,8 @@ int eval(int p, int q) {
 		return eval(p + 1, q - 1);
 	}else if(check_parentheses(p, q) == -1) {
 		// bad expr
+		printf("invalid parentheses\n");
+		assert(0);
 		return -1;
 	}else{
 		int op_pos = op_position(p, q);
@@ -265,7 +272,12 @@ int eval(int p, int q) {
 			case ('+'): return val1 + val2;
 			case ('-'): return val1 - val2;
 			case ('*'): return val1 * val2;
-			case ('/'): return val1 / val2;
+			case ('/'): {
+				if (val2==0) {
+					
+				}
+				return val1 / val2;
+			}
 			default: assert(0); return -1;
 		}
 	}
@@ -280,11 +292,17 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
 	
 	int len = 0;
-	while (tokens[len].type != TK_NOTYPE) {
+	while (tokens[len].type != TK_EMPTY) {
 		len++;
 	}
 	printf("tokens len=%d\n", len);
-
+	
+	// print tokens
+	int i;
+	for (i=0; i<len; i++) {
+		
+	}
+	
 	// check paren
 	int paren_flag = check_parentheses(0, len-1); 
 	if (paren_flag == -1) {
