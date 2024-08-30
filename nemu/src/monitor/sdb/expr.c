@@ -143,7 +143,7 @@ static bool make_token(char *e) {
 }
 
 
-// return: 1 for outer paren, -1 for bad expr
+// return: 1 for outer paren, 0 for valid paren, -1 for bad expr
 int check_parentheses(int p, int q) {
 	if (!p || !q) 
 		return -1;
@@ -171,6 +171,8 @@ int check_parentheses(int p, int q) {
 
 	if (stack_is_empty(pStack) && closed_paren)
 		return 1;
+	else if (stack_is_empty(pStack))
+		return 0;
 	else 
 		return -1;
 }
@@ -226,8 +228,9 @@ word_t expr(char *e, bool *success) {
 	printf("tokens len=%d\n", len);
 
 	// check paren
-	if (check_parentheses(0, len-1) != 1) {
-		printf("invalid parentheses\n");
+	int paren_flag = check_parentheses(0, len-1); 
+	if (paren_flag == -1) {
+		printf("invalid parentheses (flag=%d)\n", paren_flag);
 		*success = false;
 		return 0;
 	}
