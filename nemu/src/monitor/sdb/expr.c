@@ -144,24 +144,24 @@ static bool make_token(char *e) {
 
 
 // return: 1 for outer paren, -1 for bad expr
-int check_parentheses(char *p, char *q) {
+int check_parentheses(int p, int q) {
 	if (!p || !q) 
 		return -1;
 	Stack *pStack;
-	char c;
+	char type;
 
 	// whether the string like: "( ... )"
-	bool closed_paren = (*p=='(' && *q==')');
+	bool closed_paren = (tokens[p].type=='(' && tokens[q].type==')');
 
 	init_stack(&pStack, 32);
 
 	while (p <= q) {
-		if (*p == '(') {
-			stack_push(pStack, *p);
-		}else if (*p == ')') {
-			if (!stack_pop(pStack, &c))
+		if (tokens[p].type == '(') {
+			stack_push(pStack, '('); 
+		}else if (tokens[p].type == ')') {
+			if (!stack_pop(pStack, &type))
 				return -1;
-			if (c != '(') {
+			if (type != '(') {
 				assert(0);
 				return -1;
 			}
@@ -176,13 +176,18 @@ int check_parentheses(char *p, char *q) {
 }
 
 
-int eval(char *p, char*q) {
+/*int op_position(int p, int q) {
+	
+}
+
+
+int eval(int p, int q) {
 	if (p > q) {
 		// bad expr
 		return -1;
 	}else if(p == q) {
 		// single number
-		return atoi(p);
+		return atoi(tokens[p].str);
 	}else if(check_parentheses(p, q) == 1) {
 		// outer parentheses
 		return eval(p + 1, q - 1);
@@ -190,11 +195,11 @@ int eval(char *p, char*q) {
 		// bad expr
 		return -1;
 	}else{
-		char *op_pos;
-		op_position(p, q, &op_pos);
+		int op_pos;
+		op_pos = op_position(p, q);
 		val1 = eval(p, op_pos - 1);
 		val2 = eval(op_pos + 1, q);
-		switch (*op_pos) {
+		switch (tokens[op_pos].type) {
 			case ('+'): return val1 + val2; break;
 			case ('-'): return val1 - val2; break;
 			case ('*'): return val1 * val2; break;
@@ -204,7 +209,7 @@ int eval(char *p, char*q) {
 	}
 	assert(0)
 	return -1;
-}
+}*/
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -214,10 +219,22 @@ word_t expr(char *e, bool *success) {
 	
   /* TODO: Insert codes to evaluate the expression. */
 	
-	// check paren
-	//printf("%d\n",check_parentheses(e, e+strlen(e)-1));
+	int len = 0;
+	while (tokens[len].type != TK_NOTYPE) {
+		len++;
+	}
+	printf("tokens len=%d\n", len);
 
-	int i = 0;
+	// check paren
+	if (check_parentheses(0, len-1) != 1) {
+		printf("invalid parentheses\n");
+		*success = false;
+		return 0;
+	}
+
+
+
+	/*int i = 0;
 	printf("tokens: ");
 	while(tokens[i].type != TK_NOTYPE) {
 		switch (tokens[i].type) {
@@ -230,7 +247,7 @@ word_t expr(char *e, bool *success) {
 		}
 		i++;
 	}
-	putchar('\n');
+	putchar('\n');*/
   return 0;
 }
 
