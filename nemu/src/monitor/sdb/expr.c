@@ -301,13 +301,13 @@ word_t expr(char *e, bool *success) {
 			len++;
 			switch (type) {
 				case TK_NUMBER:
-					printf("tk=NUM(%s) ", tokens[i].str);
+					printf("tk#%d=NUM(%s) ", i, tokens[i].str);
 					break;
 				case TK_EMPTY:
-					printf("tk=EMPTY ");
+					printf("tk#%d=EMPTY ", i);
 					break;
 				default:
-					printf("tk=%c ", type);
+					printf("tk#%d=%c ", i, type);
 			}
 		}
 	}
