@@ -213,8 +213,12 @@ word_t expr(char *e, bool *success) {
   }
 	
   /* TODO: Insert codes to evaluate the expression. */
+	
+	// check paren
 
-	int i = 0;
+	printf("%d\n",check_parentheses(e, e+strlen(e)-1));
+
+	/*int i = 0;
 	printf("tokens: ");
 	while(tokens[i].type != TK_NOTYPE) {
 		switch (tokens[i].type) {
@@ -227,7 +231,7 @@ word_t expr(char *e, bool *success) {
 		}
 		i++;
 	}
-	putchar('\n');
+	putchar('\n');*/
   return 0;
 }
 
