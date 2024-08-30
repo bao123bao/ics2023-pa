@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-
+#include "stack.h"
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_NUMBER
@@ -74,7 +74,7 @@ void init_regex() {
 }
 
 typedef struct token {
-  int type;
+  int type = TK_NOTYPE;
   char str[32];
 } Token;
 
@@ -139,6 +139,39 @@ static bool make_token(char *e) {
 }
 
 
+// return: 1 for outer paren, -1 for bad expr
+int check_parentheses(char *p, char *q) {
+	if (!p || !q) 
+		return -1;
+	Stack *pStack;
+	char c;
+
+	// whether the string like: "( ... )"
+	bool closed_paren = (*p=='(' && *q==')');
+
+	init_stack(&pStack, 32);
+
+	while (p <= q) {
+		if (*p == '(') {
+			stack_push(pStack, *p);
+		}else if (*p == ')') {
+			if (!stack_pop(pStack, &c))
+				return -1;
+			if (c != '(') {
+				assert(0);
+				return -1;
+			}
+		}
+		p++;
+	}
+
+	if (stack_is_empty(pStack) && closed_paren)
+		return 1;
+	else 
+		return -1;
+}
+
+
 int eval(char *p, char*q) {
 	if (p > q) {
 		// bad expr
@@ -147,7 +180,7 @@ int eval(char *p, char*q) {
 		// single number
 		return atoi(*p);
 	}else if(check_parentheses(p, q) == 1) {
-		// out parentheses
+		// outer parentheses
 		return eval(p + 1, q - 1);
 	}else if(check_parentheses(p, q) == -1) {
 		// bad expr
@@ -158,10 +191,10 @@ int eval(char *p, char*q) {
 		val1 = eval(p, op_pos - 1);
 		val2 = eval(op_pos + 1, q);
 		switch (*op_pos) {
-			case ('+') return val1 + val2; break;
-			case ('-') return val1 - val2; break;
-			case ('*') return val1 * val2; break;
-			case ('/') return val1 / val2; break;
+			case ('+'): return val1 + val2; break;
+			case ('-'): return val1 - val2; break;
+			case ('*'): return val1 * val2; break;
+			case ('/'): return val1 / val2; break;
 			default: assert(0);
 		}
 	}
@@ -172,22 +205,23 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-
+	
   /* TODO: Insert codes to evaluate the expression. */
+
+	int i = 0;
+	while(tokens[i].type != TK_NOTYPE) {
+		switch (tokens[i].type) {
+			case TK_NUMBER:
+				printf("%s",tokens[i].str);
+				break;
+			defualt:
+				printf("%c",tokens[i].type);
+				break;
+		}
+	}
+
+
 
   return 0;
 }
-
-
-/*
-int main() {
-	char *test_str = "123 + 5 * (4 +3)/4 - 2";
-	init_regex();
-
-	make_token(test_str);
-	return 0;
-
-}
-*/
-
 
