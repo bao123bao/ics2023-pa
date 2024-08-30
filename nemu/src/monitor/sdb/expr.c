@@ -99,8 +99,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        /* Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+            i, rules[i].regex, position, substr_len, substr_len, substr_start); */
 
         position += substr_len;
 
@@ -111,20 +111,20 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
           case TK_NOTYPE:
-						printf("spaces read, pass\n");
+						// printf("spaces read, pass\n");
 						break;
 
 					case TK_NUMBER:
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
 						tokens[nr_token].type = TK_NUMBER;
-						printf("tokens[%d] type=number: %s\n", nr_token, tokens[nr_token].str);
+						// printf("tokens[%d] type=number: %s\n", nr_token, tokens[nr_token].str);
 						nr_token++;
 						break;
 
 					default:
 						tokens[nr_token].type = *substr_start;
-						printf("tokens[%d].type='%c'\n", nr_token, tokens[nr_token].type);
+						// printf("tokens[%d].type='%c'\n", nr_token, tokens[nr_token].type);
 						nr_token++;
 						break;
         }
