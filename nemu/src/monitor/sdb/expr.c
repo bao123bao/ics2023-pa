@@ -423,8 +423,8 @@ word_t expr(char *e, bool *success) {
 	int op_pos = op_position(0, len-1);
 	printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
 	
-	int result = eval(0, len-1);
-	printf("result is %d\n", result);
+//	int result = eval(0, len-1);
+//	printf("result is %d\n", result);
 
   return 0;
 }
