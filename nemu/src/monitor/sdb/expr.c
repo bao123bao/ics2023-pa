@@ -244,7 +244,7 @@ int op_position(int p, int q) {
 }
 
 
-/*int eval(int p, int q) {
+int eval(int p, int q) {
 	if (p > q) {
 		// bad expr
 		return -1;
@@ -258,21 +258,18 @@ int op_position(int p, int q) {
 		// bad expr
 		return -1;
 	}else{
-		int op_pos;
-		op_pos = op_position(p, q);
-		val1 = eval(p, op_pos - 1);
-		val2 = eval(op_pos + 1, q);
+		int op_pos = op_position(p, q);
+		int val1 = eval(p, op_pos - 1);
+		int val2 = eval(op_pos + 1, q);
 		switch (tokens[op_pos].type) {
-			case ('+'): return val1 + val2; break;
-			case ('-'): return val1 - val2; break;
-			case ('*'): return val1 * val2; break;
-			case ('/'): return val1 / val2; break;
-			default: assert(0); return 0;
+			case ('+'): return val1 + val2;
+			case ('-'): return val1 - val2;
+			case ('*'): return val1 * val2;
+			case ('/'): return val1 / val2;
+			default: assert(0); return -1;
 		}
 	}
-	assert(0)
-	return -1;
-}*/
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -298,9 +295,10 @@ word_t expr(char *e, bool *success) {
 
 	int op_pos = op_position(0, len-1);
 	printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
-
 	
-
+	int result = eval(0, len-1);
+	printf("result is %d\n", result);
+	
 
 
 	/*int i = 0;
