@@ -346,7 +346,6 @@ word_t expr(char *e, bool *success) {
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
 		type = tokens[i].type;
 		switch (type) {
-
 			case TK_NUMBER:
 				// next is op or ')', not negative sign
 				pre_op_flag = false;
@@ -374,7 +373,7 @@ word_t expr(char *e, bool *success) {
 				break;
 
 			case '-':
-				if (!pre_op_flag) {
+				if (!pre_op_flag && i!=0) {
 					// previous is not op
 					// right after number or '(' or ')'
 					// this '-' is minus
