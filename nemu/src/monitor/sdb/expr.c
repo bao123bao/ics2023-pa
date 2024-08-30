@@ -25,7 +25,8 @@
 #include <string.h>
 #include "stack.h"
 
-#define MAXLEN 32
+#define MAX_TOKENS_ARR_LEN 50 
+#define MAX_TOKEN_LEN 32
 
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_NUMBER, TK_EMPTY
@@ -77,10 +78,10 @@ void init_regex() {
 
 typedef struct token {
   int type;
-  char str[32];
+  char str[MAX_TOKEN_LEN];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[MAX_TOKENS_ARR_LEN] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
@@ -88,7 +89,7 @@ static bool make_token(char *e) {
   int i;
   regmatch_t pmatch;
 
-	for (i=0; i<32; i++) {
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
 		tokens[i].type = TK_EMPTY;
 	}
 
@@ -153,7 +154,7 @@ int check_parentheses(int p, int q) {
 	// whether the string like: "( ... )"
 	bool closed_paren = (tokens[p].type=='(' && tokens[q].type==')');
 
-	init_stack(&pStack, 32);
+	init_stack(&pStack, MAX_TOKENS_ARR_LEN);
 
 	while (p <= q) {
 		if (tokens[p].type == '(') {
@@ -290,18 +291,27 @@ word_t expr(char *e, bool *success) {
   }
 	
   /* TODO: Insert codes to evaluate the expression. */
-	
-	int len = 0;
-	while (tokens[len].type != TK_EMPTY) {
-		len++;
-	}
-	printf("tokens len=%d\n", len);
-	
-	// print tokens
 	int i;
-	for (i=0; i<len; i++) {
-		
+	int len = 0;
+	int type;
+	// print tokens
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		type = tokens[i].type;
+		if (type != TK_EMPTY) {
+			len++;
+			switch (type) {
+				case TK_NUMBER:
+					printf("tk=NUM(%s) ", tokens[i].str);
+					break;
+				case TK_EMPTY:
+					printf("tk=EMPTY ");
+					break;
+				default:
+					printf("tk=%c ", type);
+			}
+		}
 	}
+	printf("\ntokens len=%d\n", len);
 	
 	// check paren
 	int paren_flag = check_parentheses(0, len-1); 
@@ -316,23 +326,8 @@ word_t expr(char *e, bool *success) {
 	
 	int result = eval(0, len-1);
 	printf("result is %d\n", result);
-	
 
-
-	/*int i = 0;
-	printf("tokens: ");
-	while(tokens[i].type != TK_NOTYPE) {
-		switch (tokens[i].type) {
-			case TK_NUMBER:
-				printf("%s",tokens[i].str);
-				break;
-			default:
-				printf("%c",tokens[i].type);
-				break;
-		}
-		i++;
-	}
-	putchar('\n');*/
   return 0;
 }
+
 
