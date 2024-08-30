@@ -195,9 +195,11 @@ int eval(char *p, char*q) {
 			case ('-'): return val1 - val2; break;
 			case ('*'): return val1 * val2; break;
 			case ('/'): return val1 / val2; break;
-			default: assert(0);
+			default: assert(0); return 0;
 		}
 	}
+	assert(0);
+	return -1;
 }
 
 word_t expr(char *e, bool *success) {
@@ -218,6 +220,7 @@ word_t expr(char *e, bool *success) {
 				printf("%c",tokens[i].type);
 				break;
 		}
+		i++;
 	}
 
 
