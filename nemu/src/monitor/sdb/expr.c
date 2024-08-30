@@ -175,7 +175,7 @@ int check_parentheses(char *p, char *q) {
 		return -1;
 }
 
-/*
+
 int eval(char *p, char*q) {
 	if (p > q) {
 		// bad expr
@@ -204,7 +204,7 @@ int eval(char *p, char*q) {
 	}
 	assert(0)
 	return -1;
-}*/
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -215,10 +215,9 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
 	
 	// check paren
+	//printf("%d\n",check_parentheses(e, e+strlen(e)-1));
 
-	printf("%d\n",check_parentheses(e, e+strlen(e)-1));
-
-	/*int i = 0;
+	int i = 0;
 	printf("tokens: ");
 	while(tokens[i].type != TK_NOTYPE) {
 		switch (tokens[i].type) {
@@ -231,7 +230,7 @@ word_t expr(char *e, bool *success) {
 		}
 		i++;
 	}
-	putchar('\n');*/
+	putchar('\n');
   return 0;
 }
 
