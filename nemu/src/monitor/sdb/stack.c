@@ -12,7 +12,7 @@ bool init_stack(Stack **ppStack, int size) {
 	}
 	*ppStack = (Stack *) malloc(sizeof(Stack));
 	(*pStack)->size = size;
-	(*pStack)->item = (char *) malloc(size * sizeof(char));
+	(*pStack)->items = (char *) malloc(size * sizeof(char));
 	(*pStack)->top = 0;
 	return true;
 }
@@ -26,6 +26,44 @@ bool stack_is_full(Stack *pStack) {
 }
 
 bool stack_push(Stack *pStack, char item) {
-	
+	if (stack_is_full(pStack)) {
+		printf("stack is full\n");
+		return false;
+	}
+	pStack->top++;
+	pStack->items[top] = item;
+	return true;
+}
+
+bool stack_pop(Stack *pStack, char *pItem) {
+	if (stack_is_empty(pStack)) {
+		printf("stack is empty\n");
+		return false;
+	}
+	*pItem = pStack->items[top];
+	pStack->top--;
+	return true;
+}
+
+void stack_print(Stack *pStack) {
+	if (!pStack) {
+		printf("null stack ptr\n");
+		return;
+	}
+	if (stack_is_empty(pStack)) {
+		printf("empty stack\n");
+		return;
+	}
+	int i;
+	int size = pStack->size;
+	printf("Stack size=%d\n", size);
+	printf("Bottom: ");
+	for (i=0; i<size; i++) {
+		printf("%c ", pStack->items[i]);
+	}
+	printf("\n");
+	if (stack_is_full(pStack))
+		printf("stack is full\n");
+	return;
 }
 
