@@ -29,7 +29,7 @@
 #define MAX_TOKEN_LEN 32
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUMBER, TK_EMPTY
+  TK_NOTYPE = 256, TK_EQ, TK_NUMBER, TK_EMPTY, TK_NSIGN
 
   /* TODO: Add more token types */
 
@@ -284,6 +284,18 @@ int eval(int p, int q) {
 	}
 }
 
+// return a^n given n>=0
+int power(int a, int n) {
+	if (n==0) 
+		return 1;
+	int i;
+	int result = a;
+	for (i=1; i<n ;i++) {
+		result *= a;
+	}
+	return result;
+}
+
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -294,24 +306,11 @@ word_t expr(char *e, bool *success) {
 	int i;
 	int len = 0;
 	int type;
-	// print tokens
-	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
-		type = tokens[i].type;
-		if (type != TK_EMPTY) {
+
+	// calculate tokens length
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++)
+		if (tokens[i].type != TK_EMPTY)
 			len++;
-			switch (type) {
-				case TK_NUMBER:
-					printf("tk#%d=NUM(%s) ", i, tokens[i].str);
-					break;
-				case TK_EMPTY:
-					printf("tk#%d=EMPTY ", i);
-					break;
-				default:
-					printf("tk#%d=%c ", i, type);
-			}
-		}
-	}
-	printf("\ntokens len=%d\n", len);
 	
 	// check paren
 	int paren_flag = check_parentheses(0, len-1); 
@@ -320,6 +319,106 @@ word_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
+
+
+	// print tokens before dealing with minus
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		type = tokens[i].type;
+		if (type != TK_EMPTY) {
+			switch (type) {
+				case TK_NUMBER:
+					printf("#%d=NUM(%s) ", i+1, tokens[i].str);
+					break;
+				case TK_EMPTY:
+					printf("#%d=EMPTY ", i+1);
+					break;
+				default:
+					printf("#%d=%c ", i+1, type);
+			}
+		}
+	}
+	printf("\ntokens len=%d\n", len);
+
+	// extract negative sign from minus
+	bool pre_op_flag = false;
+	int nsign_times = 0;
+	int num;
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		type = tokens[i].type;
+		switch (type) {
+
+			case TK_NUMBER:
+				// next is op or ')', not negative sign
+				pre_op_flag = false;
+				num = atoi(tokens[i].str); // original unsigned number
+				num = power(num, nsign_times); // signed number
+				sprintf(tokens[i].str, "%d", num); // cast back to string
+				nsign_times = 0;
+				break;
+
+			case '(':
+				// next '-' is negative sign
+				pre_op_flag = true;
+				break;
+
+			case ')':
+				// next '-' is op minus
+				pre_op_flag = false;
+				break;
+
+			case '+':
+			case '*':
+			case '/':
+				// these signs are op
+				pre_op_flag = true;
+				break;
+
+			case '-':
+				if (!pre_op_flag) {
+					// previous is not op
+					// right after number or '(' or ')'
+					// this '-' is minus
+					pre_op_flag = true;
+				}else if (i == 0) {
+					// leading '-'
+					// this '-' is negative sign
+					tokens[i].type = TK_NSIGN;
+					nsign_times++;
+				}
+				else if (pre_op_flag) {
+					// previous is op or '('
+					// this '-' is negative sign
+					tokens[i].type = TK_NSIGN;
+					nsign_times++;
+				}else{
+					;
+				}
+			default: ;
+		}
+	}
+
+
+	
+	// print tokens after dealing with minus
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		type = tokens[i].type;
+		if (type != TK_EMPTY) {
+			switch (type) {
+				case TK_NUMBER:
+					printf("#%d=NUM(%s) ", i+1, tokens[i].str);
+					break;
+				case TK_EMPTY:
+					printf("#%d=EMPTY ", i+1);
+					break;
+				case TK_NSIGN:
+					printf("#%d=NSIGN ", i+1);
+				default:
+					printf("#%d=%c ", i+1, type);
+			}
+		}
+	}
+	printf("\ntokens len=%d\n", len);
+	
 
 	int op_pos = op_position(0, len-1);
 	printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
