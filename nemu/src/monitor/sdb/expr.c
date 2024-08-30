@@ -215,6 +215,7 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
 
 	int i = 0;
+	printf("tokens: ");
 	while(tokens[i].type != TK_NOTYPE) {
 		switch (tokens[i].type) {
 			case TK_NUMBER:
@@ -226,7 +227,7 @@ word_t expr(char *e, bool *success) {
 		}
 		i++;
 	}
-
+	putchar('\n');
   return 0;
 }
 
