@@ -74,7 +74,7 @@ void init_regex() {
 }
 
 typedef struct token {
-  int type = TK_NOTYPE;
+  int type;
   char str[32];
 } Token;
 
@@ -85,6 +85,10 @@ static bool make_token(char *e) {
   int position = 0;
   int i;
   regmatch_t pmatch;
+
+	for (i=0; i<32; i++) {
+		tokens[i].type = TK_NOTYPE;
+	}
 
   nr_token = 0;
 
@@ -171,20 +175,20 @@ int check_parentheses(char *p, char *q) {
 		return -1;
 }
 
-
+/*
 int eval(char *p, char*q) {
 	if (p > q) {
 		// bad expr
 		return -1;
 	}else if(p == q) {
 		// single number
-		return atoi(*p);
+		return atoi(p);
 	}else if(check_parentheses(p, q) == 1) {
 		// outer parentheses
 		return eval(p + 1, q - 1);
 	}else if(check_parentheses(p, q) == -1) {
 		// bad expr
-		return -1
+		return -1;
 	}else{
 		char *op_pos;
 		op_position(p, q, &op_pos);
@@ -198,9 +202,9 @@ int eval(char *p, char*q) {
 			default: assert(0); return 0;
 		}
 	}
-	assert(0);
+	assert(0)
 	return -1;
-}
+}*/
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -216,14 +220,12 @@ word_t expr(char *e, bool *success) {
 			case TK_NUMBER:
 				printf("%s",tokens[i].str);
 				break;
-			defualt:
+			default:
 				printf("%c",tokens[i].type);
 				break;
 		}
 		i++;
 	}
-
-
 
   return 0;
 }
