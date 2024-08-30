@@ -145,8 +145,6 @@ static bool make_token(char *e) {
 
 // return: 1 for outer paren, 0 for valid paren, -1 for bad expr
 int check_parentheses(int p, int q) {
-	if (!p || !q) 
-		return -1;
 	Stack *pStack;
 	char type;
 
