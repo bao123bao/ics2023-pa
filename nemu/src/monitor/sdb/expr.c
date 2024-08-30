@@ -139,6 +139,34 @@ static bool make_token(char *e) {
 }
 
 
+int eval(char *p, char*q) {
+	if (p > q) {
+		// bad expr
+		return -1;
+	}else if(p == q) {
+		// single number
+		return atoi(*p);
+	}else if(check_parentheses(p, q) == 1) {
+		// out parentheses
+		return eval(p + 1, q - 1);
+	}else if(check_parentheses(p, q) == -1) {
+		// bad expr
+		return -1
+	}else{
+		char *op_pos;
+		op_position(p, q, &op_pos);
+		val1 = eval(p, op_pos - 1);
+		val2 = eval(op_pos + 1, q);
+		switch (*op_pos) {
+			case ('+') return val1 + val2; break;
+			case ('-') return val1 - val2; break;
+			case ('*') return val1 * val2; break;
+			case ('/') return val1 / val2; break;
+			default: assert(0);
+		}
+	}
+}
+
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
