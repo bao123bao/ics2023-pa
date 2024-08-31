@@ -366,7 +366,7 @@ word_t expr(char *e, bool *success) {
 	int ans;
 	char expr[65536];
 	while ((read = getline(&line, &len, fp)) != -1) {
-		if (cnt==1) break;
+		//if (cnt==1) break;
 //		printf("c: %s", line);
 		sscanf(line, "%d %s", &ans, expr);
 		printf("a: %d\nexpr: %s\n", ans, expr);
@@ -502,7 +502,7 @@ word_t expr(char *e, bool *success) {
 	}
 	printf("result=%d, ans=%d\n", result, ans);
  
-	break;
+	cnt++;
 	}
 	free(line);
 	return 0;
