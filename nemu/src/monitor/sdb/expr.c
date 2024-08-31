@@ -192,6 +192,9 @@ int check_parentheses(int p, int q) {
 
 
 int op_position(int p, int q) {
+
+	if(debug_flag)
+		printf("op_position(): p=%d, q=%d\n",p,q);
 	int cur_op_pos = -1;
 	int cur_op_type = -1;
 	bool paren_flag = false;
