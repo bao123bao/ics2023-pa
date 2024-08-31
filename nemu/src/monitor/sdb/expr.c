@@ -31,7 +31,7 @@
 #define MAX_TOKEN_LEN 100
 
 
-bool debug_flag = false;
+bool debug_flag = true;
 
 
 enum {
@@ -334,9 +334,9 @@ word_t expr(char *e, bool *success) {
 	char expr[65536];
 	while ((read = getline(&line, &len, fp)) != -1) {
 		if (cnt==5) break;
-		printf("c: %s", line);
+//		printf("c: %s", line);
 		sscanf(line, "%d %s", &ans, expr);
-		printf("a: %d\nexpr: %s", ans, expr);
+		printf("a: %d\nexpr: %s\n", ans, expr);
 
 		if (!make_token(expr)) {
     	*success = false;
