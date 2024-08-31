@@ -471,7 +471,7 @@ word_t expr(char *e, bool *success) {
 	}
 	printf("result = %d\n", result);
  
-
+	break;
 	}
 	free(line);
 	return 0;
@@ -609,9 +609,9 @@ word_t expr(char *e, bool *success) {
 		return 0;
 	}
 	printf("result = %d\n", result);
-*/
-  cnt ++;
+
 	return 0;
+	*/
 }
 
 
