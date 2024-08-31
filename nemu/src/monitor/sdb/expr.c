@@ -27,8 +27,8 @@
 #include <limits.h>
 #include "stack.h"
 
-#define MAX_TOKENS_ARR_LEN 50 
-#define MAX_TOKEN_LEN 32
+#define MAX_TOKENS_ARR_LEN 65536 
+#define MAX_TOKEN_LEN 100
 
 
 bool debug_flag = false;
@@ -318,7 +318,6 @@ int power(int a, int n) {
 
 
 word_t expr(char *e, bool *success) {
-  
 	
 	FILE *fp;
 	char *line = NULL;
