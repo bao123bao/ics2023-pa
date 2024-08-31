@@ -155,6 +155,9 @@ static bool make_token(char *e) {
 
 // return: 1 for outer paren, 0 for valid paren, -1 for bad expr
 int check_parentheses(int p, int q) {
+	if(debug_flag){
+		printf("check_paren: p=%d, q=%d\n",p,q);
+	}
 	Stack *pStack;
 	char type;
 
@@ -260,7 +263,7 @@ bool error_flag = false;
 
 int eval(int p, int q) {
 	if (debug_flag) {
-		printf("p=%d, q=%d\n", p, q);
+		printf("eval: p=%d, q=%d\n", p, q);
 	}
 	if (p > q) {
 		// bad expr
@@ -287,6 +290,8 @@ int eval(int p, int q) {
 		return eval(p+1, q);
 	}else{
 		int op_pos = op_position(p, q);
+		if(debug_flag)
+			printf("eval: po_pos=%d\n", op_pos);
 		int val1 = eval(p, op_pos - 1);
 		int val2 = eval(op_pos + 1, q);
 		if (val1==INT_MIN || val2==INT_MIN)
