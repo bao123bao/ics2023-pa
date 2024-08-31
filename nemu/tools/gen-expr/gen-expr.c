@@ -36,8 +36,8 @@ static char code_buf[MAX_CODE_LEN] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
-"  unsigned result = %s; "
-"  printf(\"%%u\", result); "
+"  int result = %s; "
+"  printf(\"%%d\", result); "
 "  return 0; "
 "}";
 
@@ -48,7 +48,7 @@ int choose(int n) {
 }
 
 static void gen_num() {
-	if (pbuf-buf >= NAX_EXPR_LEN) {
+	if (pbuf-buf >= MAX_EXPR_LEN) {
 		overflow = true;
 		return;
 	}
@@ -58,7 +58,7 @@ static void gen_num() {
 }
 
 static void gen(char c) {
-	if (pbuf-buf >= NAX_EXPR_LEN) {
+	if (pbuf-buf >= MAX_EXPR_LEN) {
 		overflow = true;
 		return;
 	}
@@ -70,7 +70,7 @@ static void gen(char c) {
 static char ops[] = {'+', '-', '*', '/'};
 
 static void gen_rand_op() {
-	if (pbuf-buf >= NAX_EXPR_LEN) {
+	if (pbuf-buf >= MAX_EXPR_LEN) {
 		overflow = true;
 		return;
 	}
@@ -98,7 +98,9 @@ static void gen_rand_expr() {
 }
 
 int main(int argc, char *argv[]) {
-  int seed = time(0);
+ 	int seed = time(0); 
+	srand(seed);	
+	/*
 	*pbuf = '\0';
   srand(seed);
 	overflow = false;
@@ -108,34 +110,44 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 	printf("expr: %s\n", buf);
-	/*
+	*/
+
   int loop = 1;
   if (argc > 1) {
     sscanf(argv[1], "%d", &loop);
   }
   int i;
   for (i = 0; i < loop; i ++) {
-    gen_rand_expr();
+    overflow = false;
+		*pbuf = '\0';
+		gen_rand_expr();
+		while (overflow) {
+			overflow = false;
+			*pbuf = '\0';
+			gen_rand_expr();
+		}
 
+		// printf("#1: %s\n",buf);
+	
     sprintf(code_buf, code_format, buf);
-
-    FILE *fp = fopen("/tmp/.code.c", "w");
+		
+    FILE *fp = fopen("./tmp/code.c", "w");
     assert(fp != NULL);
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
-    if (ret != 0) continue;
+    int ret = system("gcc ./tmp/.code.c -o ./tmp/.expr");
+    if (ret != 0) continue; // error happens
 
-    fp = popen("/tmp/.expr", "r");
-    assert(fp != NULL);
+    fp = popen("./tmp/.expr", "r");
+    assert(fp != NULL); // shoud have opened the file
 
     int result;
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
 
-    printf("%u %s\n", result, buf);
+    printf("%d %s\n", result, buf);
   }
-	*/
+	
   return 0;
 }
