@@ -337,6 +337,7 @@ word_t expr(char *e, bool *success) {
 		if (cnt==5) break;
 		printf("c: %s", line);
 		sscanf(line, "%d %s", &ans, expr);
+		printf("a: %d\nexpr: %s", ans, expr);
 
 		if (!make_token(expr)) {
     	*success = false;
