@@ -250,12 +250,14 @@ int op_position(int p, int q) {
 							cur_op_type = cur_type;
 						}
 						break;
+
 					case '+':
 					case '-':
 						if (!paren_flag) {
 							cur_op_pos = p;
 							cur_op_type = cur_type;
 						}
+						break;
 					default:
 						break;
 				}
