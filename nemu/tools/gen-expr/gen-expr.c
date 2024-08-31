@@ -14,19 +14,23 @@
 ***************************************************************************************/
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <assert.h>
 #include <string.h>
 
+#define MAX_EXPR_LEN 65536
+#define MAX_CODE_LEN (MAX_EXPR_LEN + 128)
+
 // this should be enough
 // buf stores expression
-static char buf[65536] = {};
+static char buf[MAX_EXPR_LEN] = {};
 static char* pbuf = buf;
-
+static bool overflow = false;
 // code_but stros expr + main_function
-static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+static char code_buf[MAX_CODE_LEN] = {}; // a little larger than `buf`
 
 // main function
 static char *code_format =
@@ -44,12 +48,20 @@ int choose(int n) {
 }
 
 static void gen_num() {
+	if (pbuf-buf >= NAX_EXPR_LEN) {
+		overflow = true;
+		return;
+	}
 	int num = choose(100) + 1;
 	int len = sprintf(pbuf, "%d", num);
 	pbuf += len;
 }
 
 static void gen(char c) {
+	if (pbuf-buf >= NAX_EXPR_LEN) {
+		overflow = true;
+		return;
+	}
 	*pbuf = c;
 	*(pbuf+1) = '\0';
 	pbuf++;
@@ -58,13 +70,17 @@ static void gen(char c) {
 static char ops[] = {'+', '-', '*', '/'};
 
 static void gen_rand_op() {
+	if (pbuf-buf >= NAX_EXPR_LEN) {
+		overflow = true;
+		return;
+	}
 	*pbuf = ops[choose(4)];
 	*(pbuf+1) = '\0';
 	pbuf++;
 }
 
 static void gen_rand_expr() {
-	switch (rand() % 3) {
+	switch (choose(3)) {
 		case 0: 
 			gen_num(); 
 			break;
@@ -79,13 +95,18 @@ static void gen_rand_expr() {
 			gen_rand_expr();
 			break;
 	}
-  buf[0] = '\0';
 }
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
+	*pbuf = '\0';
   srand(seed);
+	overflow = false;
 	gen_rand_expr();
+	if (overflow) {
+		printf("buf overflow, discard this expr\n");
+		return 0;
+	}
 	printf("expr: %s\n", buf);
 	/*
   int loop = 1;
