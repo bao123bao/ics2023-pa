@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <limits.h>
 #include "stack.h"
 
 #define MAX_TOKENS_ARR_LEN 50 
@@ -247,6 +248,8 @@ int op_position(int p, int q) {
 }
 
 
+bool error_flag = false;
+
 int eval(int p, int q) {
 	if (p > q) {
 		// bad expr
@@ -257,25 +260,32 @@ int eval(int p, int q) {
 	}else if(p == q) {
 		// single number
 		return atoi(tokens[p].str);
+
 	}else if(check_parentheses(p, q) == 1) {
 		// outer parentheses
 		return eval(p + 1, q - 1);
+
 	}else if(check_parentheses(p, q) == -1) {
 		// bad expr
 		printf("invalid parentheses\n");
 		assert(0);
 		return -1;
+	}else if(tokens[p].type == TK_NSIGN){
+		return eval(p+1, q);
 	}else{
 		int op_pos = op_position(p, q);
 		int val1 = eval(p, op_pos - 1);
 		int val2 = eval(op_pos + 1, q);
+		if (val1==INT_MIN || val2==INT_MIN)
+			return INT_MIN;
 		switch (tokens[op_pos].type) {
 			case ('+'): return val1 + val2;
 			case ('-'): return val1 - val2;
 			case ('*'): return val1 * val2;
 			case ('/'): {
 				if (val2==0) {
-					
+					error_flag = true;
+					return INT_MIN;	
 				}
 				return val1 / val2;
 			}
@@ -295,6 +305,9 @@ int power(int a, int n) {
 	}
 	return result;
 }
+
+
+
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -380,7 +393,7 @@ word_t expr(char *e, bool *success) {
 				}else{
 					// previous is op or '('
 					// this '-' is negative sign
-					tokens[i].type = TK_EMPTY;
+					tokens[i].type = TK_NSIGN;
 					nsign_times++;
 					next_nsign = true;
 				}
@@ -416,8 +429,12 @@ word_t expr(char *e, bool *success) {
 	int op_pos = op_position(0, len-1);
 	printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
 	
-//	int result = eval(0, len-1);
-//	printf("result is %d\n", result);
+	int result = eval(0, len-1);
+	if (result==INT_MIN && error_flag) {
+		printf("divied by 0\n");
+		return 0;
+	}
+	printf("result is %d\n", result);
 
   return 0;
 }
