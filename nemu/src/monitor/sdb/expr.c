@@ -350,7 +350,7 @@ word_t expr(char *e, bool *success) {
 				// next is op or ')', not negative sign
 				pre_op_flag = false;
 				num = atoi(tokens[i].str); // original unsigned number
-				num = power(num, nsign_times); // signed number
+				num = num * power(-1 , nsign_times); // signed number
 				sprintf(tokens[i].str, "%d", num); // cast back to string
 				nsign_times = 0;
 				break;
@@ -411,6 +411,7 @@ word_t expr(char *e, bool *success) {
 					break;
 				case TK_NSIGN:
 					printf("#%d=NSIGN ", i+1);
+					break;
 				default:
 					printf("#%d=%c ", i+1, type);
 			}
