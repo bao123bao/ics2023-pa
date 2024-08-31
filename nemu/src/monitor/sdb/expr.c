@@ -340,7 +340,7 @@ word_t expr(char *e, bool *success) {
 	printf("\ntokens len=%d\n", len);
 
 	// extract negative sign from minus
-	bool pre_op_flag = false;
+	bool next_nsign = true;
 	int nsign_times = 0;
 	int num;
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
@@ -348,7 +348,7 @@ word_t expr(char *e, bool *success) {
 		switch (type) {
 			case TK_NUMBER:
 				// next is op or ')', not negative sign
-				pre_op_flag = false;
+				next_nsign = false;
 				num = atoi(tokens[i].str); // original unsigned number
 				num = num * power(-1 , nsign_times); // signed number
 				sprintf(tokens[i].str, "%d", num); // cast back to string
@@ -357,41 +357,34 @@ word_t expr(char *e, bool *success) {
 
 			case '(':
 				// next '-' is negative sign
-				pre_op_flag = true;
+				next_nsign = true;
 				break;
 
 			case ')':
 				// next '-' is op minus
-				pre_op_flag = false;
+				next_nsign = false;
 				break;
 
 			case '+':
 			case '*':
 			case '/':
 				// these signs are op
-				pre_op_flag = true;
+				next_nsign = true;
 				break;
 
 			case '-':
-				if (!pre_op_flag && i!=0) {
-					// previous is not op
-					// right after number or '(' or ')'
-					// this '-' is minus
-					pre_op_flag = true;
-				}else if (i == 0) {
-					// leading '-'
-					// this '-' is negative sign
-					tokens[i].type = TK_NSIGN;
-					nsign_times++;
-				}
-				else if (pre_op_flag) {
+				if (!next_nsign) {
+					// this '-' is not negative sign
+					// remain original
+					next_nsign = true;
+				}else{
 					// previous is op or '('
 					// this '-' is negative sign
 					tokens[i].type = TK_NSIGN;
 					nsign_times++;
-				}else{
-					;
+					next_nsign = true;
 				}
+				break;
 			default: ;
 		}
 	}
