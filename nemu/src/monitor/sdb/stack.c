@@ -4,6 +4,7 @@
 
 #include "stack.h"
 
+static const bool debug = true;
 
 bool init_stack(Stack **ppStack, int size) {
 	if (size <= 0) {
@@ -32,7 +33,8 @@ bool stack_push(Stack *pStack, char item) {
 	}
 	pStack->top++;
 	pStack->items[pStack->top] = item;
-	//printf("push\n");
+	if(debug)
+		printf("push\n");
 	return true;
 }
 
@@ -43,7 +45,8 @@ bool stack_pop(Stack *pStack, char *pItem) {
 	}
 	*pItem = pStack->items[pStack->top];
 	pStack->top--;
-	//printf("pop\n");
+	if(debug)
+		printf("pop\n");
 	return true;
 }
 
