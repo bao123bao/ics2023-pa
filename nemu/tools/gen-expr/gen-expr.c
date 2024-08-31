@@ -26,11 +26,12 @@
 
 // this should be enough
 // buf stores expression
-static char buf[MAX_EXPR_LEN] = {};
+static char buf[MAX_EXPR_LEN + 1] = {};
 static char* pbuf = buf;
 static bool overflow = false;
 // code_but stros expr + main_function
 static char code_buf[MAX_CODE_LEN] = {}; // a little larger than `buf`
+static const bool debug_flag = false;
 
 // main function
 static char *code_format =
@@ -47,39 +48,68 @@ int choose(int n) {
 	return rand() % n;
 }
 
-static void gen_num() {
-	if (pbuf-buf >= MAX_EXPR_LEN) {
+static void print_debug(char *s) {
+	if (debug_flag)
+		printf("%s made (dif=%ld, of=%d): %s\n",s, pbuf-buf, overflow, buf);
+}
+
+
+static void gen_space() {
+	if (pbuf-buf >= 0.7*MAX_EXPR_LEN) {
 		overflow = true;
 		return;
 	}
-	int num = choose(100) + 1;
-	int len = sprintf(pbuf, "%d", num);
+	if (!choose(20) && !overflow) {
+		*pbuf = ' ';
+		*(pbuf+1) = '\0';
+		pbuf++;
+		print_debug("space");
+	}
+}
+
+static void gen_num() {
+	if (pbuf-buf >= 0.7*MAX_EXPR_LEN) {
+		overflow = true;
+		return;
+	}
+	int num = choose(500);
+	int len = sprintf(pbuf, "%u", num);
 	pbuf += len;
+	//gen_space();
+	print_debug("num");
 }
 
 static void gen(char c) {
-	if (pbuf-buf >= MAX_EXPR_LEN) {
+	if (pbuf-buf >= 0.7*MAX_EXPR_LEN) {
 		overflow = true;
 		return;
 	}
 	*pbuf = c;
 	*(pbuf+1) = '\0';
 	pbuf++;
+	//gen_space();
+	print_debug("char");
 }
 
 static char ops[] = {'+', '-', '*', '/'};
 
 static void gen_rand_op() {
-	if (pbuf-buf >= MAX_EXPR_LEN) {
+	if (pbuf-buf >= 0.7*MAX_EXPR_LEN ) {
 		overflow = true;
 		return;
 	}
 	*pbuf = ops[choose(4)];
 	*(pbuf+1) = '\0';
 	pbuf++;
+	//gen_space();
+	print_debug("op");
 }
 
 static void gen_rand_expr() {
+	if (pbuf-buf >= 0.7*MAX_EXPR_LEN) {
+		overflow = true;
+		return;
+	}
 	switch (choose(3)) {
 		case 0: 
 			gen_num(); 
@@ -100,9 +130,9 @@ static void gen_rand_expr() {
 int main(int argc, char *argv[]) {
  	int seed = time(0); 
 	srand(seed);	
-	/*
+
+/*
 	*pbuf = '\0';
-  srand(seed);
 	overflow = false;
 	gen_rand_expr();
 	if (overflow) {
@@ -110,19 +140,23 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 	printf("expr: %s\n", buf);
-	*/
+*/
+
 
   int loop = 1;
   if (argc > 1) {
     sscanf(argv[1], "%d", &loop);
   }
   int i;
+	pbuf = buf;
   for (i = 0; i < loop; i ++) {
     overflow = false;
+		pbuf = buf;
 		*pbuf = '\0';
 		gen_rand_expr();
 		while (overflow) {
 			overflow = false;
+			pbuf = buf;
 			*pbuf = '\0';
 			gen_rand_expr();
 		}
@@ -131,15 +165,16 @@ int main(int argc, char *argv[]) {
 	
     sprintf(code_buf, code_format, buf);
 		
-    FILE *fp = fopen("./tmp/code.c", "w");
+    FILE *fp = fopen("/tmp/.code.c", "w");
     assert(fp != NULL);
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc ./tmp/.code.c -o ./tmp/.expr");
+    int ret = system("gcc /tmp/.code.c -s -Werror -o /tmp/.expr");
+		// printf("ret val of sys(gcc): %d\n", ret);
     if (ret != 0) continue; // error happens
 
-    fp = popen("./tmp/.expr", "r");
+    fp = popen("/tmp/.expr", "r");
     assert(fp != NULL); // shoud have opened the file
 
     int result;
@@ -148,6 +183,6 @@ int main(int argc, char *argv[]) {
 
     printf("%d %s\n", result, buf);
   }
-	
+
   return 0;
 }
