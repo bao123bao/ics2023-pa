@@ -207,8 +207,8 @@ int op_position(int p, int q) {
 
 		cur_type = tokens[p].type;
 
-		if(debug_flag && cur_op_type>0)
-			printf("p=%d, cur_type=%d, cur_op='%c'@%d\n", p, cur_type,cur_op_type, cur_op_pos );
+		if(debug_flag && cur_op_type>0 && cur_type<256)
+			printf("p=%d, cur_type=%c, cur_op='%c'@%d\n", p, cur_type,cur_op_type, cur_op_pos );
 
 		switch (cur_type) {
 
