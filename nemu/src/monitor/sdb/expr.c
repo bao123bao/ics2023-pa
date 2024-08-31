@@ -380,7 +380,7 @@ word_t expr(char *e, bool *success) {
 				}else{
 					// previous is op or '('
 					// this '-' is negative sign
-					tokens[i].type = TK_NSIGN;
+					tokens[i].type = TK_EMPTY;
 					nsign_times++;
 					next_nsign = true;
 				}
