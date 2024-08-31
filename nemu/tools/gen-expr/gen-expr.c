@@ -21,8 +21,14 @@
 #include <string.h>
 
 // this should be enough
+// buf stores expression
 static char buf[65536] = {};
+static char* pbuf = buf;
+
+// code_but stros expr + main_function
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+
+// main function
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
@@ -31,13 +37,57 @@ static char *code_format =
 "  return 0; "
 "}";
 
+
+// return rand number [0, n-1]
+int choose(int n) {
+	return rand() % n;
+}
+
+static void gen_num() {
+	int num = choose(100) + 1;
+	int len = sprintf(pbuf, "%d", num);
+	pbuf += len;
+}
+
+static void gen(char c) {
+	*pbuf = c;
+	*(pbuf+1) = '\0';
+	pbuf++;
+}
+
+static char ops[] = {'+', '-', '*', '/'};
+
+static void gen_rand_op() {
+	*pbuf = ops[choose(4)];
+	*(pbuf+1) = '\0';
+	pbuf++;
+}
+
 static void gen_rand_expr() {
+	switch (rand() % 3) {
+		case 0: 
+			gen_num(); 
+			break;
+		case 1: 
+			gen('('); 
+			gen_rand_expr(); 
+			gen(')'); 
+			break;
+		default: 
+			gen_rand_expr();
+			gen_rand_op();
+			gen_rand_expr();
+			break;
+	}
   buf[0] = '\0';
 }
 
 int main(int argc, char *argv[]) {
   int seed = time(0);
   srand(seed);
+	gen_rand_expr();
+	printf("expr: %s\n", buf);
+	/*
   int loop = 1;
   if (argc > 1) {
     sscanf(argv[1], "%d", &loop);
@@ -65,5 +115,6 @@ int main(int argc, char *argv[]) {
 
     printf("%u %s\n", result, buf);
   }
+	*/
   return 0;
 }
