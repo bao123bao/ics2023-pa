@@ -198,7 +198,7 @@ int op_position(int p, int q) {
 		printf("op_position(): p=%d, q=%d\n",p,q);
 	int cur_op_pos = -1;
 	int cur_op_type = -1;
-	bool paren_flag = false;
+	int paren_flag = -1;
 	int cur_type;
   //	while (tokens[p].type==TK_NUMBER)
 
@@ -216,12 +216,12 @@ int op_position(int p, int q) {
 
 			case '(':
 				// enter paren area
-				paren_flag = true;
+				paren_flag++;
 				break;
 
 			case ')':
 				// exit paren area
-				paren_flag = false;
+				paren_flag--;
 				break;
 
 			case '+':
@@ -236,7 +236,7 @@ int op_position(int p, int q) {
 					case '*':
 					case '/':
 						// no previous op or previously +-
-						if (!paren_flag) {
+						if (paren_flag<0) {
 							// when not in paren area
 							cur_op_pos = p;
 							cur_op_type = cur_type;
@@ -254,7 +254,7 @@ int op_position(int p, int q) {
 					case -1:
 					case '*':
 					case '/':
-						if (!paren_flag) {
+						if (paren_flag<0) {
 							cur_op_pos = p;
 							cur_op_type = cur_type;
 						}
@@ -262,7 +262,7 @@ int op_position(int p, int q) {
 
 					case '+':
 					case '-':
-						if (!paren_flag) {
+						if (paren_flag<0) {
 							//cur_op_pos = p;
 							//cur_op_type = cur_type;
 						}
