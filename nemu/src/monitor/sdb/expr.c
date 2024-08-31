@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 #include <limits.h>
 #include "stack.h"
 
@@ -88,6 +89,7 @@ typedef struct token {
 
 static Token tokens[MAX_TOKENS_ARR_LEN] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
+
 
 static bool make_token(char *e) {
   int position = 0;
@@ -316,12 +318,32 @@ int power(int a, int n) {
 
 
 word_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
-    *success = false;
-    return 0;
-  }
+  
 	
-  /* TODO: Insert codes to evaluate the expression. */
+	FILE *fp;
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
+
+	fp = fopen("./output", "r");
+	if (!fp) {
+		printf("No file found\n");
+		return 0;
+	}
+	int cnt = 0;
+	int ans;
+	char expr[65536];
+	while ((read = getline(&line, &len, fp)) != -1) {
+		if (cnt==5) break;
+		printf("c: %s", line);
+		sscanf(line, "%d %s", &ans, expr);
+
+		if (!make_token(expr)) {
+    	*success = false;
+    	return 0;
+ 		}
+
+		
 	int i;
 	int len = 0;
 	int type;
@@ -446,7 +468,146 @@ word_t expr(char *e, bool *success) {
 		return 0;
 	}
 	printf("result = %d\n", result);
+ 
 
+	}
+	free(line);
+	return 0;
+
+
+
+	
+
+	
+
+
+/*	
+  // TODO: Insert codes to evaluate the expression. 
+	int i;
+	int len = 0;
+	int type;
+
+	// calculate tokens length
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++)
+		if (tokens[i].type != TK_EMPTY)
+			len++;
+	
+	// check paren
+	int paren_flag = check_parentheses(0, len-1); 
+	if (paren_flag == -1) {
+		if (debug_flag)
+			printf("invalid parentheses (flag=%d)\n", paren_flag);
+		*success = false;
+		return 0;
+	}
+
+	if (debug_flag) {
+		// print tokens before dealing with minus
+		for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+			type = tokens[i].type;
+			if (type != TK_EMPTY) {
+				switch (type) {
+					case TK_NUMBER:
+						printf("#%d=NUM(%s) ", i+1, tokens[i].str);
+						break;
+					case TK_EMPTY:
+						printf("#%d=EMPTY ", i+1);
+						break;
+					default:
+						printf("#%d=%c ", i+1, type);
+				}
+			}	
+		}
+		printf("\ntokens len=%d\n", len);
+	}
+	// extract negative sign from minus
+	bool next_nsign = true;
+	int nsign_times = 0;
+	int num;
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		type = tokens[i].type;
+		switch (type) {
+			case TK_NUMBER:
+				// next is op or ')', not negative sign
+				next_nsign = false;
+				num = atoi(tokens[i].str); // original unsigned number
+				num = num * power(-1 , nsign_times); // signed number
+				sprintf(tokens[i].str, "%d", num); // cast back to string
+				nsign_times = 0;
+				break;
+
+			case '(':
+				// next '-' is negative sign
+				next_nsign = true;
+				break;
+
+			case ')':
+				// next '-' is op minus
+				next_nsign = false;
+				break;
+
+			case '+':
+			case '*':
+			case '/':
+				// these signs are op
+				next_nsign = true;
+				break;
+
+			case '-':
+				if (!next_nsign) {
+					// this '-' is not negative sign
+					// remain original
+					next_nsign = true;
+				}else{
+					// previous is op or '('
+					// this '-' is negative sign
+					tokens[i].type = TK_NSIGN;
+					nsign_times++;
+					next_nsign = true;
+				}
+				break;
+			default: ;
+		}
+	}
+
+
+	
+	// print tokens after dealing with minus
+	if (debug_flag) {
+		for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+			type = tokens[i].type;
+			if (type != TK_EMPTY) {
+				switch (type) {
+					case TK_NUMBER:
+						printf("#%d=NUM(%s) ", i+1, tokens[i].str);
+						break;
+					case TK_EMPTY:
+						printf("#%d=EMPTY ", i+1);
+						break;
+					case TK_NSIGN:
+						printf("#%d=NSIGN ", i+1);
+						break;
+					default:
+						printf("#%d=%c ", i+1, type);
+				}
+			}
+		}
+		printf("\ntokens len=%d\n", len);
+	}
+	
+
+	int op_pos = op_position(0, len-1);
+	if (debug_flag) {
+		printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
+	}
+	
+	int result = eval(0, len-1);
+	if (result==INT_MIN && error_flag) {
+		printf("error: divided by 0\n");
+		return 0;
+	}
+	printf("result = %d\n", result);
+*/
   return 0;
 }
 
