@@ -325,7 +325,7 @@ word_t expr(char *e, bool *success) {
 	size_t len = 0;
 	ssize_t read;
 
-	fp = fopen("./output", "r");
+	fp = fopen("~/ics-2023/nemu/src/monitor/sdb/output", "r");
 	if (!fp) {
 		printf("No file found\n");
 		return 0;
