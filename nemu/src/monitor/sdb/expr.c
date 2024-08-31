@@ -610,7 +610,8 @@ word_t expr(char *e, bool *success) {
 	}
 	printf("result = %d\n", result);
 */
-  return 0;
+  cnt ++;
+	return 0;
 }
 
 
