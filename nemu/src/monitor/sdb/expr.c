@@ -29,6 +29,10 @@
 #define MAX_TOKENS_ARR_LEN 50 
 #define MAX_TOKEN_LEN 32
 
+
+bool debug_flag = false;
+
+
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_NUMBER, TK_EMPTY, TK_NSIGN
 
@@ -253,7 +257,8 @@ bool error_flag = false;
 int eval(int p, int q) {
 	if (p > q) {
 		// bad expr
-		printf("bad expr\n");
+		if (debug_flag)
+			printf("bad expr\n");
 		assert(0);
 		return -1;
 
@@ -267,7 +272,8 @@ int eval(int p, int q) {
 
 	}else if(check_parentheses(p, q) == -1) {
 		// bad expr
-		printf("invalid parentheses\n");
+		if (debug_flag)
+			printf("invalid parentheses\n");
 		assert(0);
 		return -1;
 	}else if(tokens[p].type == TK_NSIGN){
@@ -328,30 +334,31 @@ word_t expr(char *e, bool *success) {
 	// check paren
 	int paren_flag = check_parentheses(0, len-1); 
 	if (paren_flag == -1) {
-		printf("invalid parentheses (flag=%d)\n", paren_flag);
+		if (debug_flag)
+			printf("invalid parentheses (flag=%d)\n", paren_flag);
 		*success = false;
 		return 0;
 	}
 
-
-	// print tokens before dealing with minus
-	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
-		type = tokens[i].type;
-		if (type != TK_EMPTY) {
-			switch (type) {
-				case TK_NUMBER:
-					printf("#%d=NUM(%s) ", i+1, tokens[i].str);
-					break;
-				case TK_EMPTY:
-					printf("#%d=EMPTY ", i+1);
-					break;
-				default:
-					printf("#%d=%c ", i+1, type);
-			}
+	if (debug_flag) {
+		// print tokens before dealing with minus
+		for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+			type = tokens[i].type;
+			if (type != TK_EMPTY) {
+				switch (type) {
+					case TK_NUMBER:
+						printf("#%d=NUM(%s) ", i+1, tokens[i].str);
+						break;
+					case TK_EMPTY:
+						printf("#%d=EMPTY ", i+1);
+						break;
+					default:
+						printf("#%d=%c ", i+1, type);
+				}
+			}	
 		}
+		printf("\ntokens len=%d\n", len);
 	}
-	printf("\ntokens len=%d\n", len);
-
 	// extract negative sign from minus
 	bool next_nsign = true;
 	int nsign_times = 0;
@@ -405,36 +412,40 @@ word_t expr(char *e, bool *success) {
 
 	
 	// print tokens after dealing with minus
-	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
-		type = tokens[i].type;
-		if (type != TK_EMPTY) {
-			switch (type) {
-				case TK_NUMBER:
-					printf("#%d=NUM(%s) ", i+1, tokens[i].str);
-					break;
-				case TK_EMPTY:
-					printf("#%d=EMPTY ", i+1);
-					break;
-				case TK_NSIGN:
-					printf("#%d=NSIGN ", i+1);
-					break;
-				default:
-					printf("#%d=%c ", i+1, type);
+	if (debug_flag) {
+		for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+			type = tokens[i].type;
+			if (type != TK_EMPTY) {
+				switch (type) {
+					case TK_NUMBER:
+						printf("#%d=NUM(%s) ", i+1, tokens[i].str);
+						break;
+					case TK_EMPTY:
+						printf("#%d=EMPTY ", i+1);
+						break;
+					case TK_NSIGN:
+						printf("#%d=NSIGN ", i+1);
+						break;
+					default:
+						printf("#%d=%c ", i+1, type);
+				}
 			}
 		}
+		printf("\ntokens len=%d\n", len);
 	}
-	printf("\ntokens len=%d\n", len);
 	
 
 	int op_pos = op_position(0, len-1);
-	printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
+	if (debug_flag) {
+		printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
+	}
 	
 	int result = eval(0, len-1);
 	if (result==INT_MIN && error_flag) {
 		printf("divied by 0\n");
 		return 0;
 	}
-	printf("result is %d\n", result);
+	printf("result = %d\n", result);
 
   return 0;
 }
