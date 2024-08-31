@@ -1,4 +1,5 @@
 /***************************************************************************************
+
 * Copyright (c) 2014-2022 Zihao Yu, Nanjing University
 *
 * NEMU is licensed under Mulan PSL v2.
@@ -248,7 +249,7 @@ int op_position(int p, int q) {
 
 			case '*':
 			case '/':
-				// currently meet op */
+				// currently meet op 
 				switch (cur_op_type) {
 					case -1:
 					case '*':
