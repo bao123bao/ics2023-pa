@@ -32,7 +32,7 @@
 #define MAX_TOKEN_LEN 100
 
 
-bool debug_flag = true;
+bool debug_flag = false;
 
 
 enum {
@@ -500,7 +500,7 @@ word_t expr(char *e, bool *success) {
 		printf("error: divided by 0\n");
 		return 0;
 	}
-	printf("result = %d\n", result);
+	printf("result=%d, ans=%d\n", result, ans);
  
 	break;
 	}
