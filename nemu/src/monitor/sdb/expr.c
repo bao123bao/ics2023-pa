@@ -259,6 +259,9 @@ int op_position(int p, int q) {
 bool error_flag = false;
 
 int eval(int p, int q) {
+	if (debug_flag) {
+		printf("p=%d, q=%d\n", p, q);
+	}
 	if (p > q) {
 		// bad expr
 		if (debug_flag)
