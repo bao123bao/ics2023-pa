@@ -202,6 +202,8 @@ int op_position(int p, int q) {
   //	while (tokens[p].type==TK_NUMBER)
 
 	while (p <= q) {
+		if(debug_flag)
+			printf("in op_pos while loop: p=%d, q=%d\n", p,q);
 		cur_type = tokens[p].type;
 		switch (cur_type) {
 
