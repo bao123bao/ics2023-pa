@@ -211,6 +211,7 @@ int op_position(int p, int q) {
 			printf("p=%d, cur_type=%c, cur_op='%c'@%d\n", p, cur_type,cur_op_type, cur_op_pos );
 
 		switch (cur_type) {
+			// current ptr's type
 
 			case '(':
 				// enter paren area
@@ -226,9 +227,13 @@ int op_position(int p, int q) {
 			case '-':
 				// currently meet op +-
 				switch (cur_op_type) {
+					// found op type
+
 					case -1:
 					case '+':
 					case '-':
+					case '*':
+					case '/':
 						// no previous op or previously +-
 						if (!paren_flag) {
 							// when not in paren area
@@ -236,8 +241,6 @@ int op_position(int p, int q) {
 							cur_op_type = cur_type;
 						}
 						break;
-					case '*':
-					case '/':
 					default:
 						break;
 				}
@@ -259,8 +262,8 @@ int op_position(int p, int q) {
 					case '+':
 					case '-':
 						if (!paren_flag) {
-							cur_op_pos = p;
-							cur_op_type = cur_type;
+							//cur_op_pos = p;
+							//cur_op_type = cur_type;
 						}
 						break;
 					default:
