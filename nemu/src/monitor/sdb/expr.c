@@ -204,7 +204,12 @@ int op_position(int p, int q) {
 	while (p <= q) {
 		if(debug_flag)
 			printf("in op_pos while loop: p=%d, q=%d\n", p,q);
+
 		cur_type = tokens[p].type;
+
+		if(debug_flag)
+			printf("p=%d, cur_type=%d\n", p, cur_type);
+
 		switch (cur_type) {
 
 			case '(':
