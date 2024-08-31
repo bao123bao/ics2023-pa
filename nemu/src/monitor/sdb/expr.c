@@ -165,11 +165,13 @@ int check_parentheses(int p, int q) {
 
 	while (p <= q) {
 		if (tokens[p].type == '(') {
-			stack_push(pStack, '('); 
+			stack_push(pStack, '(');
+			stack_print(pStack);
 		}else if (tokens[p].type == ')') {
-			if (!stack_pop(pStack, &type))
+			if (!stack_pop(pStack, &type)){
+				stack_print(pStack);
 				return -1;
-			if (type != '(') {
+			}if (type != '(') {
 				assert(0);
 				return -1;
 			}

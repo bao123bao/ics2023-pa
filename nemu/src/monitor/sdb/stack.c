@@ -32,6 +32,7 @@ bool stack_push(Stack *pStack, char item) {
 	}
 	pStack->top++;
 	pStack->items[pStack->top] = item;
+	printf("push\n");
 	return true;
 }
 
@@ -42,6 +43,7 @@ bool stack_pop(Stack *pStack, char *pItem) {
 	}
 	*pItem = pStack->items[pStack->top];
 	pStack->top--;
+	printf("pop\n");
 	return true;
 }
 
