@@ -362,7 +362,7 @@ word_t expr(char *e, bool *success) {
 		printf("No file found\n");
 		return 0;
 	}
-	int cnt = 0;
+	int cnt = 1;
 	int ans;
 	char expr[65536];
 	while ((read = getline(&line, &len, fp)) != -1) {
@@ -500,7 +500,7 @@ word_t expr(char *e, bool *success) {
 		printf("error: divided by 0\n");
 		return 0;
 	}
-	printf("result=%d, ans=%d\n", result, ans);
+	printf("cnt:%d, %d\n", cnt, result==ans);
  
 	cnt++;
 	}
