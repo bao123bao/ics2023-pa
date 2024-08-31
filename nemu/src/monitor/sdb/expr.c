@@ -442,7 +442,7 @@ word_t expr(char *e, bool *success) {
 	
 	int result = eval(0, len-1);
 	if (result==INT_MIN && error_flag) {
-		printf("divied by 0\n");
+		printf("error: divided by 0\n");
 		return 0;
 	}
 	printf("result = %d\n", result);
