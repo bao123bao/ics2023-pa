@@ -32,7 +32,7 @@
 #define MAX_TOKEN_LEN 100
 
 
-bool debug_flag = false;
+bool debug_flag = true;
 //bool stdin_flag = false;
 int correct_cnt = 0;
 
@@ -521,7 +521,10 @@ word_t expr(char *e, bool *success) {
 		printf("error@#%d, expr: %s\n", cnt, expr);
 	}
 	//printf("cnt:%d, %d\n", cnt, result==ans);
+
+	break;
 	}
+
 	printf("Accuracy: %d/%d is correct\n", correct_cnt, cnt);
 	free(line);
 	return 0;
