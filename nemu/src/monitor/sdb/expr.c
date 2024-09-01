@@ -28,8 +28,8 @@
 #include <limits.h>
 #include "stack.h"
 
-#define MAX_TOKENS_ARR_LEN 65536 
-#define MAX_TOKEN_LEN 100
+#define MAX_TOKENS_ARR_LEN 30 
+#define MAX_TOKEN_LEN 50
 
 
 bool debug_flag = false;
@@ -38,7 +38,7 @@ int correct_cnt = 0;
 
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUMBER, TK_EMPTY, TK_NSIGN
+  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_NUMBER, TK_EMPTY, TK_NSIGN, TK_DEREF, TK_AND, TK_HEX, TK_REG
 
   /* TODO: Add more token types */
 
@@ -61,7 +61,11 @@ static struct rule {
   {"==", TK_EQ},        // equal
 	{"\\(", '('},         // left bracket
 	{"\\)", ')'},         // right bracket
-	{"[0-9]+", TK_NUMBER} // decimal number
+	{"[0-9]+", TK_NUMBER},// decimal number
+	{"!=", TK_NEQ},       // not equal !=
+	{"&&", TK_AND},       // logical and
+	{"0x[0-9]*", TK_HEX}, // hex number 0x123123
+	{"\\$[0-9a-z]*", TK_REG} // register names $reg
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -428,8 +432,6 @@ word_t expr(char *e, bool *success) {
 			len++;
 		}
 
-	// filtering too short expr
-
 
 	// check paren
 	if (!check_valid_paren(0, len-1)) {
@@ -442,6 +444,35 @@ word_t expr(char *e, bool *success) {
 	if (debug_flag) {
 		print_tokens(len);
 	}
+
+	// extract dereference from multiply
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		if (tokens[i].type=='*') {
+			if (i==0){
+				tokens[i].type = TK_DEREF;
+			}else{
+				switch(tokens[i-1].type){
+					case '+':
+					case '-':
+					case '*':
+					case '/':
+					case '(':
+					case TK_EQ:
+					case TK_NEQ:
+						tokens[i].type = TK_DEREF;
+						break;
+					default:
+						break;
+				}
+			}
+		} 
+	}
+
+	if (debug_flag) {
+		print_tokens(len);
+	}	
+	
+	return 0;
 
 	// extract negative sign from minus
 	bool next_nsign = true;
