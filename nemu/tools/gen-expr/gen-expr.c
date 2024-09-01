@@ -75,7 +75,7 @@ static void gen_num() {
 	int num = choose(500);
 	int len = sprintf(pbuf, "%u", num);
 	pbuf += len;
-	//gen_space();
+	gen_space();
 	print_debug("num");
 }
 
@@ -87,7 +87,7 @@ static void gen(char c) {
 	*pbuf = c;
 	*(pbuf+1) = '\0';
 	pbuf++;
-	//gen_space();
+	gen_space();
 	print_debug("char");
 }
 
@@ -101,7 +101,7 @@ static void gen_rand_op() {
 	*pbuf = ops[choose(4)];
 	*(pbuf+1) = '\0';
 	pbuf++;
-	//gen_space();
+	gen_space();
 	print_debug("op");
 }
 
