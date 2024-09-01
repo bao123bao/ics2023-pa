@@ -374,7 +374,7 @@ void print_tokens(int len) {
 				printf("#%d=NUM(%s) ", i, tokens[i].str);
 				break;
 			case TK_EMPTY:
-				printf("#%d=EMPTY ", i);
+				//printf("#%d=EMPTY ", i);
 				break;
 			case TK_NSIGN:
 				printf("#%d=NSIGN ", i);
