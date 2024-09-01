@@ -33,7 +33,8 @@
 
 
 bool debug_flag = false;
-bool stdin_flag = false;
+//bool stdin_flag = false;
+int correct_cnt = 0;
 
 
 enum {
@@ -403,14 +404,13 @@ word_t expr(char *e, bool *success) {
 	int ans;
 	char expr[65536];
 	while ((read = getline(&line, &slen, fp)) != -1) {
-		//if (cnt==1) break;
-//		printf("c: %s", line);
 		sscanf(line, "%d %s", &ans, expr);
-		printf("a: %d\nexpr: %s\n", ans, expr);
 
 
-		if(debug_flag)
-			printf("raw expr: %s\n", expr);
+		if(debug_flag) {
+			//printf("raw expr: %s\n", expr);
+			printf("a: %d\nexpr: %s\n", ans, expr);
+		}
 		if (!make_token(expr)) {
     	*success = false;
     	return 0;
@@ -510,12 +510,19 @@ word_t expr(char *e, bool *success) {
 		printf("error: divided by 0\n");
 		return 0;
 	}
-	printf("result = %d\n",result);
+	//printf("result = %d\n",result);
 	*success = true;
-	printf("cnt:%d, %d\n", cnt, result==ans);
- 
+
 	cnt++;
+
+	if (result == ans) {
+		correct_cnt++;
+	}else{
+		printf("error@#%d, expr: %s\n", cnt, expr);
 	}
+	//printf("cnt:%d, %d\n", cnt, result==ans);
+	}
+	printf("Accuracy: %d/%d is correct\n", correct_cnt, cnt);
 	free(line);
 	return 0;
 	
