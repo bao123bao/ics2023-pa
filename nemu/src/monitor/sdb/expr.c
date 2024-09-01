@@ -430,7 +430,7 @@ word_t expr(char *e, bool *success) {
 
 
 	// check paren
-	if (check_valid_paren(0, len-1)) {
+	if (!check_valid_paren(0, len-1)) {
 		if (debug_flag)
 			printf("invalid parentheses\n");
 		*success = false;
