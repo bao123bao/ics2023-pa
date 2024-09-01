@@ -382,6 +382,24 @@ void print_tokens(int len) {
 			case TK_EMPTY:
 				//printf("#%d=EMPTY ", i);
 				break;
+			case TK_HEX:
+				printf("#%d=HEX(%s) ", i, tokens[i].str);
+				break;
+			case TK_EQ:
+				printf("#%d=EQ ", i);
+				break;
+			case TK_NEQ:
+				printf("#%d=NEQ ", i);
+				break;
+			case TK_REG:
+				printf("#%d=REG(%s) ", i, tokens[i].str);
+				break;
+			case TK_AND:
+				printf("#%d=AND ", i);
+				break;
+			case TK_DEREF:
+				printf("#%d=DEREF ", i);
+				break;
 			case TK_NSIGN:
 				printf("#%d=NSIGN ", i);
 				break;
