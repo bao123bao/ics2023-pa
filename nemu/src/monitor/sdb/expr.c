@@ -33,6 +33,7 @@
 
 
 bool debug_flag = false;
+bool stdin_flag = false;
 
 
 enum {
@@ -388,11 +389,11 @@ void print_tokens(int len) {
 
 word_t expr(char *e, bool *success) {
 	
-	//FILE *fp;
-	//char *line = NULL;
-	//size_t slen = 0;
-	//ssize_t read;
-/*
+	FILE *fp;
+	char *line = NULL;
+	size_t slen = 0;
+	ssize_t read;
+
 	fp = fopen("/home/bao/ics-2023/nemu/src/monitor/sdb/output", "r");
 	if (!fp) {
 		printf("No file found\n");
@@ -406,11 +407,11 @@ word_t expr(char *e, bool *success) {
 //		printf("c: %s", line);
 		sscanf(line, "%d %s", &ans, expr);
 		printf("a: %d\nexpr: %s\n", ans, expr);
-*/
+
 
 		if(debug_flag)
-			printf("raw expr: %s\n", e);
-		if (!make_token(e)) {
+			printf("raw expr: %s\n", expr);
+		if (!make_token(expr)) {
     	*success = false;
     	return 0;
  		}
@@ -511,11 +512,11 @@ word_t expr(char *e, bool *success) {
 	}
 	printf("result = %d\n",result);
 	*success = true;
-	//printf("cnt:%d, %d\n", cnt, result==ans);
+	printf("cnt:%d, %d\n", cnt, result==ans);
  
-	//cnt++;
-	//}
-	//free(line);
+	cnt++;
+	}
+	free(line);
 	return 0;
 	
 }
