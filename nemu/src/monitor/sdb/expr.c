@@ -64,7 +64,7 @@ static struct rule {
 	{"[0-9]+", TK_NUMBER},// decimal number
 	{"!=", TK_NEQ},       // not equal !=
 	{"&&", TK_AND},       // logical and
-	{"0x[0-9]*", TK_HEX}, // hex number 0x123123
+	{"0x[0-9a-f]*", TK_HEX}, // hex number 0x123123
 	{"\\$[0-9a-z]*", TK_REG} // register names $reg
 };
 
