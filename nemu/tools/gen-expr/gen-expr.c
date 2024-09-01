@@ -72,8 +72,8 @@ static void gen_num() {
 		overflow = true;
 		return;
 	}
-	int num = choose(500);
-	int len = sprintf(pbuf, "%u", num);
+	int num = choose(2000)-500;
+	int len = sprintf(pbuf, "%d", num);
 	pbuf += len;
 	gen_space();
 	print_debug("num");
