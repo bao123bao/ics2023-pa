@@ -32,7 +32,7 @@
 #define MAX_TOKEN_LEN 50
 
 
-bool debug_flag = false;
+bool debug_flag = true;
 //bool stdin_flag = false;
 int correct_cnt = 0;
 
