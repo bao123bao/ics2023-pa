@@ -404,7 +404,7 @@ word_t expr(char *e, bool *success) {
 	int ans;
 	char expr[65536];
 	while ((read = getline(&line, &slen, fp)) != -1) {
-		sscanf(line, "%d %s", &ans, expr);
+		sscanf(line, "%d %[^\t\n]", &ans, expr);
 
 
 		if(debug_flag) {
