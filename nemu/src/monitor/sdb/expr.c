@@ -158,6 +158,8 @@ static bool make_token(char *e) {
 
 bool check_valid_paren(int p, int q){
 	int acc=0, type;
+	if(p==q && tokens[p].type==TK_NUMBER)
+		return true;
 	while (p<=q) {
 		type = tokens[p].type;
 		switch(type){
@@ -420,9 +422,13 @@ word_t expr(char *e, bool *success) {
 
 	// calculate tokens length
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++)
-		if (tokens[i].type != TK_EMPTY)
+		if (tokens[i].type != TK_EMPTY){
 			len++;
-	
+		}
+
+	// filtering too short expr
+
+
 	// check paren
 	if (check_valid_paren(0, len-1)) {
 		if (debug_flag)
