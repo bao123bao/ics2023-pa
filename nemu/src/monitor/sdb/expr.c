@@ -522,7 +522,6 @@ word_t expr(char *e, bool *success) {
 	}
 	//printf("cnt:%d, %d\n", cnt, result==ans);
 
-	break;
 	}
 
 	printf("Accuracy: %d/%d is correct\n", correct_cnt, cnt);
