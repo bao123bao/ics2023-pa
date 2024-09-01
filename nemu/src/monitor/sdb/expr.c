@@ -390,7 +390,7 @@ void print_tokens(int len) {
 
 word_t expr(char *e, bool *success) {
 	
-	FILE *fp;
+	/*FILE *fp;
 	char *line = NULL;
 	size_t slen = 0;
 	ssize_t read;
@@ -410,8 +410,9 @@ word_t expr(char *e, bool *success) {
 		if(debug_flag) {
 			//printf("raw expr: %s\n", expr);
 			printf("a: %d\nexpr: %s\n", ans, expr);
-		}
-		if (!make_token(expr)) {
+		}*/
+
+		if (!make_token(e)) {
     	*success = false;
     	return 0;
  		}
@@ -513,8 +514,8 @@ word_t expr(char *e, bool *success) {
 	//printf("result = %d\n",result);
 	*success = true;
 
-	cnt++;
-
+	//cnt++;
+	/*
 	if (result == ans) {
 		correct_cnt++;
 	}else{
@@ -526,6 +527,7 @@ word_t expr(char *e, bool *success) {
 
 	printf("Accuracy: %d/%d is correct\n", correct_cnt, cnt);
 	free(line);
+	*/
 	return 0;
 	
 }
