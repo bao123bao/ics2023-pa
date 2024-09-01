@@ -64,8 +64,8 @@ static struct rule {
 	{"[0-9]+", TK_NUMBER},// decimal number
 	{"!=", TK_NEQ},       // not equal !=
 	{"&&", TK_AND},       // logical and
-	{"0[xX][0-9a-fA-F]+", TK_HEX}, // hex number 0x123123
-	{"\\$[0-9a-zA-Z]+", TK_REG} // register names $reg
+	{"^0[xX][0-9a-fA-F]+", TK_HEX}, // hex number 0x123123
+	{"^\\$[0-9a-zA-Z]+", TK_REG} // register names $reg
 };
 
 #define NR_REGEX ARRLEN(rules)
