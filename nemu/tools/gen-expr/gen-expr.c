@@ -59,7 +59,7 @@ static void gen_space() {
 		overflow = true;
 		return;
 	}
-	if (!choose(20) && !overflow) {
+	if (!choose(5) && !overflow) {
 		*pbuf = ' ';
 		*(pbuf+1) = '\0';
 		pbuf++;
@@ -127,21 +127,10 @@ static void gen_rand_expr() {
 	}
 }
 
+
 int main(int argc, char *argv[]) {
  	int seed = time(0); 
 	srand(seed);	
-
-/*
-	*pbuf = '\0';
-	overflow = false;
-	gen_rand_expr();
-	if (overflow) {
-		printf("buf overflow, discard this expr\n");
-		return 0;
-	}
-	printf("expr: %s\n", buf);
-*/
-
 
   int loop = 1;
   if (argc > 1) {
@@ -150,11 +139,16 @@ int main(int argc, char *argv[]) {
   int i;
 	pbuf = buf;
   for (i = 0; i < loop; i ++) {
-    overflow = false;
+    
+		overflow = false;
 		pbuf = buf;
 		*pbuf = '\0';
 		gen_rand_expr();
-		while (overflow) {
+		
+		while ( (overflow || strlen(buf)<10) ) {
+			if(debug_flag)	
+				printf("overflow=%d, len=%ld\n", overflow, strlen(buf));
+			
 			overflow = false;
 			pbuf = buf;
 			*pbuf = '\0';
@@ -172,7 +166,11 @@ int main(int argc, char *argv[]) {
 
     int ret = system("gcc /tmp/.code.c -s -Werror -o /tmp/.expr");
 		// printf("ret val of sys(gcc): %d\n", ret);
-    if (ret != 0) continue; // error happens
+    if (ret != 0) {
+			if(debug_flag)
+				printf("gcc error happened! Abort!\n");
+			continue; // error happens
+		}
 
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL); // shoud have opened the file
@@ -181,7 +179,11 @@ int main(int argc, char *argv[]) {
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
 
-    printf("%d %s\n", result, buf);
+		if(debug_flag)
+	    printf("%d/%d: %d %s\n", i+1, loop, result, buf);
+		else
+	    printf("%d %s\n", result, buf);
+
   }
 
   return 0;
