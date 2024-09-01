@@ -441,10 +441,12 @@ word_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-
+	
+	/*
 	if (debug_flag) {
 		print_tokens(len);
 	}
+	*/
 
 	// extract dereference from multiply
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
