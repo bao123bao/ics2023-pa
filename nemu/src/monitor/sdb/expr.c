@@ -389,6 +389,7 @@ void print_tokens(int len) {
 				printf("#%d=%c ", i, type);
 		}	
 	}
+	putchar('\n');
 }
 
 
