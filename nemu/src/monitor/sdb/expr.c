@@ -400,7 +400,7 @@ word_t expr(char *e, bool *success) {
 		printf("No file found\n");
 		return 0;
 	}
-	int cnt = 1;
+	int cnt = 0;
 	int ans;
 	char expr[65536];
 	while ((read = getline(&line, &slen, fp)) != -1) {
