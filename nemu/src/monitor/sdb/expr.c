@@ -154,41 +154,64 @@ static bool make_token(char *e) {
 }
 
 
-// return: 1 for outer paren, 0 for valid paren, -1 for bad expr
+// return: true for valid parens
+
+bool check_valid_paren(int p, int q){
+	int acc=0, type;
+	while (p<=q) {
+		type = tokens[p].type;
+		switch(type){
+			case '(':
+				acc++;
+				break;
+			case ')':
+				acc--;
+				break;
+			default:
+				break;
+		}
+		p++;
+	}
+	if(acc==0)
+		return true;
+	else
+		return false;
+
+}
+
+
 int check_parentheses(int p, int q) {
 	if(debug_flag){
 		printf("check_paren: p=%d, q=%d\n",p,q);
 	}
-	Stack *pStack;
-	char type;
-
-	// whether the string like: "( ... )"
-	bool closed_paren = (tokens[p].type=='(' && tokens[q].type==')');
-
-	init_stack(&pStack, MAX_TOKENS_ARR_LEN);
-
-	while (p <= q) {
-		if (tokens[p].type == '(') {
-			stack_push(pStack, '(');
-			//stack_print(pStack);
-		}else if (tokens[p].type == ')') {
-			if (!stack_pop(pStack, &type)){
-				stack_print(pStack);
-				return -1;
-			}if (type != '(') {
-				assert(0);
-				return -1;
-			}
+	
+	if ( !(tokens[p].type=='(' && tokens[q].type==')') )
+		return 0;
+	if (q-p==1 || q-p==2)
+		return 1;
+	
+	// already checked initial p and q is '(' and ')'
+	int acc=1, type;
+	p++;
+	
+	while (p<q) {
+		type = tokens[p].type;
+		switch(type){
+			case '(':
+				acc++;
+				break;
+			case ')':
+				acc--;
+				if(acc==0)
+					return 0;
+				break;
+			default:
+				break;
 		}
 		p++;
 	}
-
-	if (stack_is_empty(pStack) && closed_paren)
-		return 1;
-	else if (stack_is_empty(pStack))
-		return 0;
-	else 
-		return -1;
+	return 1;
+	
 }
 
 
@@ -347,16 +370,34 @@ int power(int a, int n) {
 	return result;
 }
 
-
+void print_tokens(int len) {
+	int i, type;
+	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		type = tokens[i].type;
+		switch (type) {
+			case TK_NUMBER:
+				printf("#%d=NUM(%s) ", i, tokens[i].str);
+				break;
+			case TK_EMPTY:
+				printf("#%d=EMPTY ", i);
+				break;
+			case TK_NSIGN:
+				printf("#%d=NSIGN ", i);
+				break;
+			default:
+				printf("#%d=%c ", i, type);
+		}	
+	}
+}
 
 
 word_t expr(char *e, bool *success) {
 	
-	FILE *fp;
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
-
+	//FILE *fp;
+	//char *line = NULL;
+	//size_t slen = 0;
+	//ssize_t read;
+/*
 	fp = fopen("/home/bao/ics-2023/nemu/src/monitor/sdb/output", "r");
 	if (!fp) {
 		printf("No file found\n");
@@ -365,13 +406,13 @@ word_t expr(char *e, bool *success) {
 	int cnt = 1;
 	int ans;
 	char expr[65536];
-	while ((read = getline(&line, &len, fp)) != -1) {
+	while ((read = getline(&line, &slen, fp)) != -1) {
 		//if (cnt==1) break;
 //		printf("c: %s", line);
 		sscanf(line, "%d %s", &ans, expr);
 		printf("a: %d\nexpr: %s\n", ans, expr);
-
-		if (!make_token(expr)) {
+*/
+		if (!make_token(e)) {
     	*success = false;
     	return 0;
  		}
@@ -387,17 +428,17 @@ word_t expr(char *e, bool *success) {
 			len++;
 	
 	// check paren
-	int paren_flag = check_parentheses(0, len-1); 
-	if (paren_flag == -1) {
+	if (check_valid_paren(0, len-1)) {
 		if (debug_flag)
-			printf("invalid parentheses (flag=%d)\n", paren_flag);
+			printf("invalid parentheses\n");
 		*success = false;
 		return 0;
 	}
 
 	if (debug_flag) {
+		print_tokens(len);
 		// print tokens before dealing with minus
-		for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		/*for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
 			type = tokens[i].type;
 			if (type != TK_EMPTY) {
 				switch (type) {
@@ -412,8 +453,9 @@ word_t expr(char *e, bool *success) {
 				}
 			}	
 		}
-		printf("\ntokens len=%d\n", len);
+		printf("\ntokens len=%d\n", len);*/
 	}
+
 	// extract negative sign from minus
 	bool next_nsign = true;
 	int nsign_times = 0;
@@ -467,8 +509,10 @@ word_t expr(char *e, bool *success) {
 
 	
 	// print tokens after dealing with minus
+	
 	if (debug_flag) {
-		for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+		print_tokens(len);
+/*		for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
 			type = tokens[i].type;
 			if (type != TK_EMPTY) {
 				switch (type) {
@@ -486,7 +530,7 @@ word_t expr(char *e, bool *success) {
 				}
 			}
 		}
-		printf("\ntokens len=%d\n", len);
+		printf("\ntokens len=%d\n", len);*/
 	}
 	
 
@@ -500,11 +544,11 @@ word_t expr(char *e, bool *success) {
 		printf("error: divided by 0\n");
 		return 0;
 	}
-	printf("cnt:%d, %d\n", cnt, result==ans);
+	//printf("cnt:%d, %d\n", cnt, result==ans);
  
-	cnt++;
-	}
-	free(line);
+	//cnt++;
+	//}
+	//free(line);
 	return 0;
 
 
