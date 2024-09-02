@@ -36,9 +36,12 @@ bool debug_flag = true;
 //bool stdin_flag = false;
 int correct_cnt = 0;
 
+// tokens init: TK_UNDEF
+// after negative sign/dereference extraction: TK_EMPTY
+
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_NUMBER, TK_EMPTY, TK_NSIGN, TK_DEREF, TK_AND, TK_HEX, TK_REG
+  TK_NOTYPE = 256, TK_EQ, TK_NEQ, TK_NUMBER, TK_EMPTY, TK_NSIGN, TK_DEREF, TK_AND, TK_HEX, TK_REG, TK_UNDEF
 
   /* TODO: Add more token types */
 
@@ -104,7 +107,7 @@ static bool make_token(char *e) {
   regmatch_t pmatch;
 
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
-		tokens[i].type = TK_EMPTY;
+		tokens[i].type = TK_UNDEF;
 	}
 
   nr_token = 0;
@@ -373,6 +376,7 @@ int power(int a, int n) {
 
 void print_tokens(int len) {
 	int i, type;
+	bool hit_end = false;
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
 		type = tokens[i].type;
 		switch (type) {
@@ -380,10 +384,11 @@ void print_tokens(int len) {
 				printf("#%d=NUM(%s) ", i, tokens[i].str);
 				break;
 			case TK_EMPTY:
-				//printf("#%d=EMPTY ", i);
+				printf("#%d=EMPTY ", i);
 				break;
-			case TK_HEX:
-				printf("#%d=HEX(%s) ", i, tokens[i].str);
+			case TK_UNDEF:
+				printf("#%d=UNDEF ", i);
+				hit_end = true;
 				break;
 			case TK_EQ:
 				printf("#%d=EQ ", i);
@@ -397,6 +402,9 @@ void print_tokens(int len) {
 			case TK_AND:
 				printf("#%d=AND ", i);
 				break;
+			case TK_HEX:
+				printf("#%d=HEX(%s) ", i, tokens[i].str);
+				break;
 			case TK_DEREF:
 				printf("#%d=DEREF ", i);
 				break;
@@ -406,8 +414,11 @@ void print_tokens(int len) {
 			default:
 				printf("#%d=%c ", i, type);
 		}	
+		if(hit_end)
+			break;
 	}
-	putchar('\n');
+	if(hit_end)
+		printf(" TOKENS_END\n");
 }
 
 
@@ -447,7 +458,7 @@ word_t expr(char *e, bool *success) {
 
 	// calculate tokens length
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++)
-		if (tokens[i].type != TK_EMPTY){
+		if (tokens[i].type != TK_UNDEF){
 			len++;
 		}
 
@@ -467,7 +478,7 @@ word_t expr(char *e, bool *success) {
 	*/
 
 	// extract dereference from multiply
-	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+	for (i=0; i<len; i++) {
 		if (tokens[i].type=='*') {
 			if (i==0){
 				tokens[i].type = TK_DEREF;
@@ -499,7 +510,7 @@ word_t expr(char *e, bool *success) {
 	bool next_nsign = true;
 	int nsign_times = 0;
 	int num;
-	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
+	for (i=0; i<len; i++) {
 		type = tokens[i].type;
 		switch (type) {
 			case TK_NUMBER:
