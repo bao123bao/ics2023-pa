@@ -258,7 +258,6 @@ int op_position(int p, int q) {
 	if(debug_flag)
 		printf("op_position(): p=%d, q=%d\n",p,q);
 	int op_pos = -1;
-	int op_type = -1;
 	int op_prior = -1;
 	int paren_flag = -1;
 	int type, prior;
@@ -270,23 +269,33 @@ int op_position(int p, int q) {
 		type = tokens[p].type;
 		prior = op_priority(type);
 
+		
+		if (type == '('){
+			paren_flag++;
+			continue;
+		}
+
+		if (type == ')'){
+			paren_flag--;
+			continue;
+		}
+			
+		
 		// not a operator, continue
 		if (prior < 0)
 			continue;
 
 		// when meet an operator first time
-		if (op_pos==-1 && prior>0) {
+		if (op_pos==-1 && prior>0 && paren_flag<0) {
 			op_pos = p;
-			op_type = type;
 			op_prior = prior;
 			continue;
 		}
 	
 		// when meet an operator more than first time
 		// update op_pos if ( current prior <= op prior )
-		if (prior <= op_prior) {
+		if (prior <= op_prior && paren_flag<0) {
 			op_pos = p;
-			op_type = type;
 			op_prior = prior;
 		}
 
