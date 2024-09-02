@@ -36,7 +36,7 @@
 #define MAX_TOKEN_LEN 50
 
 
-bool debug_flag = true;
+bool debug_flag = false;
 int correct_cnt = 0;
 bool error_flag = false;
 
