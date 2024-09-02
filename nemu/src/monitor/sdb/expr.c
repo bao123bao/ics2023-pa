@@ -128,16 +128,19 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
+				int type = rules[i].token_type;
 
-        switch (rules[i].token_type) {
+        switch (type) {
           case TK_NOTYPE:
 						// printf("spaces read, pass\n");
 						break;
 
 					case TK_NUMBER:
+					case TK_HEX:
+					case TK_REG:
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
-						tokens[nr_token].type = TK_NUMBER;
+						tokens[nr_token].type = type;
 						// printf("tokens[%d] type=number: %s\n", nr_token, tokens[nr_token].str);
 						nr_token++;
 						break;
