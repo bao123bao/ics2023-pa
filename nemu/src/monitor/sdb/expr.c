@@ -384,6 +384,7 @@ int eval(int p, int q) {
 	if (debug_flag) {
 		printf("eval: p=%d, q=%d\n", p, q);
 	}
+
 	if (p > q) {
 		// bad expr
 		if (debug_flag)
@@ -391,19 +392,23 @@ int eval(int p, int q) {
 		assert(0);
 		return -1;
 
-	}else if(p == q) {
+	}
+	else if(p == q) {
 		// single number
 		return atoi(tokens[p].str);
 
-	}else if(check_parentheses(p, q) == 1) {
+	}
+	else if(check_parentheses(p, q) == 1) {
 		// outer parentheses
 		if (debug_flag){
 			printf("outer paren (p=%d, q=%d)\n",p,q);
 		}
 		return eval(p + 1, q - 1);
-	}else if(tokens[p].type == TK_NSIGN){
+	}
+	else if(tokens[p].type == TK_NSIGN){
 		return eval(p+1, q);
-	}else{
+	}
+	else{
 		int op_pos = op_position(p, q);
 		if(debug_flag)
 			printf("eval: po_pos=%d\n", op_pos);
@@ -412,10 +417,13 @@ int eval(int p, int q) {
 		if (val1==INT_MIN || val2==INT_MIN)
 			return INT_MIN;
 		switch (tokens[op_pos].type) {
-			case ('+'): return val1 + val2;
-			case ('-'): return val1 - val2;
-			case ('*'): return val1 * val2;
-			case ('/'): {
+			case TK_EQ:	return val1 == val2;
+			case TK_NEQ: return val1 != val2;
+			case TK_AND: return val1 && val2;
+			case '+': return val1 + val2;
+			case '-': return val1 - val2;
+			case '*': return val1 * val2;
+			case '/': {
 				if (val2==0) {
 					error_flag = true;
 					return INT_MIN;	
@@ -666,7 +674,6 @@ word_t expr(char *e, bool *success) {
 		printf("main operator is %d at [%d]\n", tokens[op_pos].type ,op_pos);
 	}
 
-	return 0;
 	
 	int result = eval(0, len-1);
 	if (result==INT_MIN && error_flag) {
