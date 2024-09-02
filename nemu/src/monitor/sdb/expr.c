@@ -328,14 +328,14 @@ int mem_deref(word_t addr) {
 }
 
 
-int eval(int p, int q) {
+uint32_t eval(int p, int q) {
 	if (debug_flag) {
 		printf("eval: p=%d, q=%d\n", p, q);
 	}
 
 	if (error_flag == true){
 		printf("eval error happens\n");
-		return(-1);
+		return(0);
 	}
 
 	int type = tokens[p].type;
@@ -349,20 +349,23 @@ int eval(int p, int q) {
 	}
 	else if(p == q) {
 		// single number
-		if (type==TK_NUMBER)
-			// decimal number string
-			return atoi(tokens[p].str);
+		if (type==TK_NUMBER){
+			// decimal uint32 number string
+			uint32_t num;
+			sscanf(tokens[p].str, "%u", &num);
+			return num;
+		}
 		else if(type==TK_HEX){
 			// hex number string
-			int value;
+			uint32_t value;
 			sscanf(tokens[p].str, "%x", &value);
 			if (debug_flag)
-				printf("hex to decimal val=%d\n",value);
-			if (value < 0){
-				error_flag = true;
-				printf("int overflow\n");
-				return 0;
-			}
+				printf("hex to decimal val=%u\n",value);
+			//if (value < 0){
+			//	error_flag = true;
+			//	printf("int overflow\n");
+			//	return 0;
+			//}
 			return value;
 		}
 		else if(type==TK_REG){
@@ -374,14 +377,14 @@ int eval(int p, int q) {
 			else {
 				error_flag = true;
 				printf("Wrong register name\n");
-				return -1;
+				return 0;
 			}
 		}
 		else{
 			// other unhandled occurence
 			error_flag = true;
 			assert(0);
-			return -1;
+			return 0;
 		}
 	}
 	else if(check_parentheses(p, q) == 1) {
@@ -394,7 +397,7 @@ int eval(int p, int q) {
 	else{
 		int op_pos = op_position(p, q);
 		int type = tokens[op_pos].type;
-		int val1, val2;
+		uint32_t val1, val2;
 
 		if(debug_flag)
 			printf("eval: po_pos=%d\n", op_pos);
@@ -406,9 +409,9 @@ int eval(int p, int q) {
 		}else{
 			val1 = eval(p, op_pos - 1);
 			val2 = eval(op_pos + 1, q);
-			if (val1==INT_MIN || val2==INT_MIN) {
+			if (val1==UINT32_MAX || val2==UINT32_MAX) {
 				error_flag = true;
-				return INT_MIN;
+				return UINT32_MAX;
 			}
 		}
 			
@@ -422,7 +425,7 @@ int eval(int p, int q) {
 			case '/': 
 				if (val2==0) {
 					error_flag = true;
-					return INT_MIN;	
+					return UINT32_MAX;	
 				}
 				return val1 / val2;
 			
@@ -431,17 +434,6 @@ int eval(int p, int q) {
 	}
 }
 
-// return a^n given n>=0
-int power(int a, int n) {
-	if (n==0) 
-		return 1;
-	int i;
-	int result = a;
-	for (i=1; i<n ;i++) {
-		result *= a;
-	}
-	return result;
-}
 
 void print_tokens() {
 	int i, type, len;
@@ -528,7 +520,6 @@ void diff_multi_deref(int len) {
 void diff_minus_negative(int len) {
 	int i, type;
 	bool next_nsign = true;
-	int nsign_times = 0;
 
 	for (i=0; i<len; i++) {
 		type = tokens[i].type;
@@ -575,8 +566,10 @@ void diff_minus_negative(int len) {
 					// previous is op or '('
 					// this '-' is negative sign
 					tokens[i].type = TK_NSIGN;
-					nsign_times++;
+					printf("all result are uint32_t, no support for negative numbers now\n");
 					next_nsign = true;
+					error_flag = true;
+					return;
 				}
 				break;
 			default: ;
@@ -666,7 +659,7 @@ word_t expr(char *e, bool *success) {
 	}*/
 	
 	int result = eval(0, len-1);
-	if (result==INT_MIN && error_flag) {
+	if (result==UINT32_MAX && error_flag) {
 		printf("error: divided by 0\n");
 		*success = false;
 		return 0;
