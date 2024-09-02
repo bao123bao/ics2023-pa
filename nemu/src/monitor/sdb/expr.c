@@ -68,7 +68,7 @@ static struct rule {
   {"==", TK_EQ},        // equal
 	{"\\(", '('},         // left bracket
 	{"\\)", ')'},         // right bracket
-	{"^0[xX][0-9a-fA-F]+", TK_HEX}, // hex number 0x123123
+	{"^0[x][0-9a-fA-F]+", TK_HEX}, // hex number 0x123123
 	{"^\\$[0-9a-zA-Z]+", TK_REG},   // register names $reg
 	{"[0-9]+", TK_NUMBER},// decimal number
 	{"!=", TK_NEQ},       // not equal !=
@@ -140,9 +140,24 @@ static bool make_token(char *e) {
 						break;
 
 					case TK_NUMBER:
-					case TK_HEX:
-					case TK_REG:
+						// store decimal string (pure digits)
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = '\0';
+						tokens[nr_token].type = type;
+						nr_token++;
+						break;
+					
+					case TK_HEX:
+						// store hex string (pure digits)
+						strncpy(tokens[nr_token].str, substr_start+2, substr_len);
+						tokens[nr_token].str[substr_len] = '\0';
+						tokens[nr_token].type = type;
+						nr_token++;
+						break;
+
+					case TK_REG:
+						// store register name string (pure alpha + digits)
+						strncpy(tokens[nr_token].str, substr_start+1, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
 						tokens[nr_token].type = type;
 						nr_token++;
@@ -300,89 +315,22 @@ int op_position(int p, int q) {
 	}
 
 	return op_pos;
-
-/*
-	while (p <= q) {
-		if(debug_flag)
-			printf("in op_pos while loop: p=%d, q=%d\n", p,q);
-
-		cur_type = tokens[p].type;
-
-		if(debug_flag && op_type>0 && cur_type<256)
-			printf("p=%d, cur_type=%c, cur_op='%c'@%d\n", p, cur_type,op_type, op_pos );
-
-		switch (cur_type) {
-			// current ptr's type
-
-			case '(':
-				// enter paren area
-				paren_flag++;
-				break;
-
-			case ')':
-				// exit paren area
-				paren_flag--;
-				break;
-
-			case '+':
-			case '-':
-				// currently meet op +-
-				switch (op_type) {
-					// found op type
-
-					case -1:
-					case '+':
-					case '-':
-					case '*':
-					case '/':
-						// no previous op or previously +-
-						if (paren_flag<0) {
-							// when not in paren area
-							op_pos = p;
-							op_type = cur_type;
-						}
-						break;
-					default:
-						break;
-				}
-				break;
-
-			case '*':
-			case '/':
-				// currently meet op 
-				switch (op_type) {
-					case -1:
-					case '*':
-					case '/':
-						if (paren_flag<0) {
-							op_pos = p;
-							op_type = cur_type;
-						}
-						break;
-
-					case '+':
-					case '-':
-						if (paren_flag<0) {
-							//op_pos = p;
-							//op_type = cur_type;
-						}
-						break;
-					default:
-						break;
-				}
-				break;
-
-		}
-		p++;
-	}	*/
-	//return op_pos;
 }
 
+
+int mem_deref(word_t addr) {
+	return (int) vaddr_read(addr, 4);
+}
 
 
 int eval(int p, int q) {
 	if (debug_flag) {
 		printf("eval: p=%d, q=%d\n", p, q);
+	}
+
+	if (error_flag == true){
+		printf("eval error happens\n");
+		return(-1);
 	}
 
 	int type = tokens[p].type;
@@ -397,14 +345,31 @@ int eval(int p, int q) {
 	else if(p == q) {
 		// single number
 		if (type==TK_NUMBER)
+			// decimal number string
 			return atoi(tokens[p].str);
 		else if(type==TK_HEX){
+			// hex number string
 			int value;
-			sscanf(tokens[p].str, "0x%x", &value);
+			sscanf(tokens[p].str, "%x", &value);
 			return value;
-		}else{
+		}
+		else if(type==TK_REG){
+			// register name string
+			bool reg_success = false;
+			word_t reg_value = isa_reg_str2val(tokens[p].str, &reg_success);
+			if (reg_success)
+				return reg_value;
+			else {
+				error_flag = true;
+				assert(0);
+				return -1;
+			}
+		}
+		else{
+			// other unhandled occurence
+			error_flag = true;
 			assert(0);
-			return INT_MIN;
+			return -1;
 		}
 	}
 	else if(check_parentheses(p, q) == 1) {
@@ -414,8 +379,11 @@ int eval(int p, int q) {
 		}
 		return eval(p + 1, q - 1);
 	}
-	else if(type==TK_NSIGN || type==TK_DEREF){
-		return eval(p+1, q);
+	else if(type==TK_NSIGN){
+		return -eval(p+1, q);
+	}
+	else if(type==TK_DEREF){
+		return mem_deref((word_t) eval(p+1, q));
 	}
 	else{
 		int op_pos = op_position(p, q);
@@ -423,7 +391,10 @@ int eval(int p, int q) {
 			printf("eval: po_pos=%d\n", op_pos);
 		int val1 = eval(p, op_pos - 1);
 		int val2 = eval(op_pos + 1, q);
-		if (val1==INT_MIN || val2==INT_MIN)
+		if (val1==INT_MIN || val2==INT_MIN) {
+			error_flag = true;
+			return INT_MIN;
+		}
 			return INT_MIN;
 		switch (tokens[op_pos].type) {
 			case TK_EQ:	return val1 == val2;
@@ -511,7 +482,6 @@ void print_tokens() {
 
 void diff_multi_deref(int len) {
 	int i;	
-	vaddr_t addr;
 	for (i=0; i<len; i++) {
 
 		if (tokens[i].type=='*') {
@@ -534,33 +504,13 @@ void diff_multi_deref(int len) {
 					default:
 						break;
 				}
-			}
-			
-			if (tokens[i].type != TK_DEREF)
-				continue;
-				
-			// deref memory content @ addr
-			if (i!=len-1 && 
-					tokens[i+1].type==TK_HEX ) {
-				// turn hex into mem value
-				sscanf(tokens[i+1].str, "0x%x", &addr);
-				sprintf(tokens[i+1].str, "0x%x", vaddr_read(addr, 4));
-				if(debug_flag)
-					printf("deref addr 0x%x to value %s\n", addr, tokens[i+1].str);
-			}else{
-				// the next token is not hex addr, abort
-				error_flag = true;
-				if(debug_flag)
-					printf("invalid deref\n");
-				return;
-			}
-
-		} 
+			} 
+		}
 	}
 }
 
 void diff_minus_negative(int len) {
-	int i, type, num;
+	int i, type;
 	bool next_nsign = true;
 	int nsign_times = 0;
 
@@ -570,10 +520,10 @@ void diff_minus_negative(int len) {
 			case TK_NUMBER:
 				// next is op or ')', not negative sign
 				next_nsign = false;
-				num = atoi(tokens[i].str); // original unsigned number
-				num = num * power(-1 , nsign_times); // signed number
-				sprintf(tokens[i].str, "%d", num); // cast back to string
-				nsign_times = 0;
+				//num = atoi(tokens[i].str); // original unsigned number
+				//num = num * power(-1 , nsign_times); // signed number
+				//sprintf(tokens[i].str, "%d", num); // cast back to string
+				//nsign_times = 0;
 				break;
 
 			case TK_HEX:
@@ -694,8 +644,14 @@ word_t expr(char *e, bool *success) {
 	int result = eval(0, len-1);
 	if (result==INT_MIN && error_flag) {
 		printf("error: divided by 0\n");
+		*success = false;
+		return 0;
+	}else if(error_flag) {
+		printf("eval failed\n");
+		*success = false;
 		return 0;
 	}
+
 	printf("result=%d\n",result);
 	*success = true;
 
