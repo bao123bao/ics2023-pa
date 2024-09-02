@@ -280,8 +280,9 @@ int op_position(int p, int q) {
 	int type, prior;
 
 	while (p < q) {
-		if(debug_flag)
-			printf("in op_pos while loop: p=%d, q=%d\n", p,q);
+		
+		//if(debug_flag)
+		//	printf("in op_pos while loop: p=%d, q=%d\n", p,q);
 
 		type = tokens[p].type;
 		prior = op_priority(type);
