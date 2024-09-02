@@ -262,7 +262,7 @@ int op_position(int p, int q) {
 	int paren_flag = -1;
 	int type, prior;
 
-	while (p <= q) {
+	while (p < q) {
 		if(debug_flag)
 			printf("in op_pos while loop: p=%d, q=%d\n", p,q);
 
@@ -663,7 +663,7 @@ word_t expr(char *e, bool *success) {
 
 	int op_pos = op_position(0, len-1);
 	if (debug_flag) {
-		printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
+		printf("main operator is %d at [%d]\n", tokens[op_pos].type ,op_pos);
 	}
 
 	return 0;
