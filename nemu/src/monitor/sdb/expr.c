@@ -386,39 +386,40 @@ void print_tokens() {
 		type = tokens[i].type;
 		switch (type) {
 			case TK_NUMBER:
-				printf("#%d=NUM(%s) ", i, tokens[i].str);
+				printf("#%d:NUM(%s)", i, tokens[i].str);
 				break;
 			case TK_EMPTY:
-				printf("#%d=EMPTY ", i);
+				printf("#%d:EMPTY", i);
 				break;
 			case TK_UNDEF:
-				printf("#%d=UNDEF ", i);
+				printf("#%d:UNDEF", i);
 				hit_end = true;
 				break;
 			case TK_EQ:
-				printf("#%d=EQ ", i);
+				printf("#%d:EQ", i);
 				break;
 			case TK_NEQ:
-				printf("#%d=NEQ ", i);
+				printf("#%d:NEQ", i);
 				break;
 			case TK_REG:
-				printf("#%d=REG(%s) ", i, tokens[i].str);
+				printf("#%d:REG(%s)", i, tokens[i].str);
 				break;
 			case TK_AND:
-				printf("#%d=AND ", i);
+				printf("#%d:AND", i);
 				break;
 			case TK_HEX:
-				printf("#%d=HEX(%s) ", i, tokens[i].str);
+				printf("#%d:HEX(%s)", i, tokens[i].str);
 				break;
 			case TK_DEREF:
-				printf("#%d=DEREF ", i);
+				printf("#%d:DEREF", i);
 				break;
 			case TK_NSIGN:
-				printf("#%d=NSIGN ", i);
+				printf("#%d:NSIGN", i);
 				break;
 			default:
-				printf("#%d=%c ", i, type);
-		}	
+				printf("#%d:%c", i, type);
+		}
+		putchar('\t');
 		if(hit_end)
 			break;
 		else
