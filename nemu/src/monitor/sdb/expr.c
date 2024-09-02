@@ -363,6 +363,7 @@ int eval(int p, int q) {
 				return reg_value;
 			else {
 				error_flag = true;
+				printf("Wrong register name\n");
 				return -1;
 			}
 		}
