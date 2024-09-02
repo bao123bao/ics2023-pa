@@ -465,10 +465,12 @@ void diff_multi_deref(int len) {
 						break;
 				}
 			}
+			
+			if (tokens[i].type != TK_DEREF)
+				continue;
 				
 			// deref memory content @ addr
-			if ( tokens[i].type==TK_DEREF && 
-					i!=len-1 && 
+			if (i!=len-1 && 
 					tokens[i+1].type!=TK_HEX ) {
 				// turn hex into mem value
 				sscanf(tokens[i+1].str, "0x%x", &addr);
