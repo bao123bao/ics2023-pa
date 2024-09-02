@@ -149,7 +149,7 @@ static bool make_token(char *e) {
 					
 					case TK_HEX:
 						// store hex string (pure digits)
-						strncpy(tokens[nr_token].str, substr_start+2, substr_len);
+						strncpy(tokens[nr_token].str, substr_start+2, substr_len-2);
 						tokens[nr_token].str[substr_len] = '\0';
 						tokens[nr_token].type = type;
 						nr_token++;
@@ -157,7 +157,7 @@ static bool make_token(char *e) {
 
 					case TK_REG:
 						// store register name string (pure alpha + digits)
-						strncpy(tokens[nr_token].str, substr_start+1, substr_len);
+						strncpy(tokens[nr_token].str, substr_start+1, substr_len-1);
 						tokens[nr_token].str[substr_len] = '\0';
 						tokens[nr_token].type = type;
 						nr_token++;
