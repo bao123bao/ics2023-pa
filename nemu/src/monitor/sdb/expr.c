@@ -381,6 +381,7 @@ void print_tokens() {
 	int i, type, len;
 	bool hit_end = false;
 	len = 0;
+	printf("PRINT_TOKENS:\n");
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
 		type = tokens[i].type;
 		switch (type) {
@@ -424,7 +425,7 @@ void print_tokens() {
 			len++;
 	}
 	if(hit_end)
-		printf("\nTOKENS_END(len=%d)\n", len);
+		printf("\nTOKENS_END(len=%d)\n\n", len);
 }
 
 
