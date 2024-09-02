@@ -669,7 +669,7 @@ word_t expr(char *e, bool *success) {
 		return 0;
 	}
 
-	printf("result=%u\n",result);
+	printf("ans: %u\n",result);
 	*success = true;
 
 	/*
