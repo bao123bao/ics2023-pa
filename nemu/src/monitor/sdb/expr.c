@@ -383,37 +383,41 @@ int eval(int p, int q) {
 		}
 		return eval(p + 1, q - 1);
 	}
-	else if(type==TK_NSIGN){
-		return -eval(p+1, q);
-	}
-	else if(type==TK_DEREF){
-		return mem_deref((word_t) eval(p+1, q));
-	}
 	else{
 		int op_pos = op_position(p, q);
+		int type = tokens[op_pos].type;
+		int val1, val2;
+
 		if(debug_flag)
 			printf("eval: po_pos=%d\n", op_pos);
-		int val1 = eval(p, op_pos - 1);
-		int val2 = eval(op_pos + 1, q);
-		if (val1==INT_MIN || val2==INT_MIN) {
-			error_flag = true;
-			return INT_MIN;
+
+		if (type == TK_NSIGN) {
+			return -eval(p+1, q);	
+		}else if(type == TK_DEREF) {
+			return mem_deref((word_t) eval(p+1, q));
+		}else{
+			val1 = eval(p, op_pos - 1);
+			val2 = eval(op_pos + 1, q);
+			if (val1==INT_MIN || val2==INT_MIN) {
+				error_flag = true;
+				return INT_MIN;
+			}
 		}
 			
-		switch (tokens[op_pos].type) {
+		switch (type) {
 			case TK_EQ:	return val1 == val2;
 			case TK_NEQ: return val1 != val2;
 			case TK_AND: return val1 && val2;
 			case '+': return val1 + val2;
 			case '-': return val1 - val2;
 			case '*': return val1 * val2;
-			case '/': {
+			case '/': 
 				if (val2==0) {
 					error_flag = true;
 					return INT_MIN;	
 				}
 				return val1 / val2;
-			}
+			
 			default: assert(0); return -1;
 		}
 	}
