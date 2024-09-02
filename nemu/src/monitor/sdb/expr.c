@@ -261,6 +261,8 @@ int op_priority(int type){
 		case TK_EQ: case TK_NEQ: 	return 2; break;
 		case '+': case '-': 			return 3; break;
 		case '*': case '/': 			return 4; break;
+		case TK_DEREF:						return 5; break;
+		case TK_NSIGN:						return 6; break;
 		default: 									return -1; break;
 		// default is not operator
 	}
