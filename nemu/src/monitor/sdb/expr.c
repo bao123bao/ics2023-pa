@@ -614,7 +614,8 @@ word_t expr(char *e, bool *success) {
 		if (tokens[i].type != TK_UNDEF){
 			len++;
 		}
-
+	
+	print_tokens();
 	return 0;
 	// check paren
 	if (!check_valid_paren(0, len-1)) {
