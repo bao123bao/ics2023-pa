@@ -26,6 +26,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
+
+#include <memory/vaddr.h>
+#include <isa.h>
+#include <cpu/cpu.h>
 #include "stack.h"
 
 #define MAX_TOKENS_ARR_LEN 30 
@@ -437,6 +441,7 @@ void print_tokens() {
 
 void diff_multi_deref(int len) {
 	int i;	
+	vaddr_t addr;
 	for (i=0; i<len; i++) {
 		if (tokens[i].type=='*') {
 			if (i==0){
@@ -452,6 +457,13 @@ void diff_multi_deref(int len) {
 					case TK_NEQ:
 					case TK_AND:
 						tokens[i].type = TK_DEREF;
+						if (i==len-1 || tokens[i+1].type!=TK_HEX){
+							// turn hex into mem value
+							sscanf(tokens[i+1].str, "0x%x", &addr);
+							sprintf(tokens[i+1].str, "0x%x", vaddr_read(addr, 4));
+							if(debug_flag)
+								printf("deref addr 0x%x to value %s\n", addr, tokens[i+1].str);
+						}
 						break;
 					default:
 						break;
@@ -593,7 +605,6 @@ word_t expr(char *e, bool *success) {
 	printf("result=%d\n",result);
 	*success = true;
 
-	//cnt++;
 	/*
 	if (result == ans) {
 		correct_cnt++;
@@ -601,7 +612,6 @@ word_t expr(char *e, bool *success) {
 		printf("error@#%d, expr: %s\n", cnt, expr);
 	}
 	//printf("cnt:%d, %d\n", cnt, result==ans);
-
 	}
 
 	printf("Accuracy: %d/%d is correct\n", correct_cnt, cnt);
