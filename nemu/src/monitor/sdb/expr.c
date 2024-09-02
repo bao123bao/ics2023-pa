@@ -682,6 +682,8 @@ word_t expr(char *e, bool *success) {
 	if (debug_flag) {
 		printf("main operator is %c at [%d]\n", tokens[op_pos].type ,op_pos);
 	}
+
+	return 0;
 	
 	int result = eval(0, len-1);
 	if (result==INT_MIN && error_flag) {
