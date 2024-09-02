@@ -479,7 +479,7 @@ word_t expr(char *e, bool *success) {
 	
 	/*
 	if (debug_flag) {
-		print_tokens(len);
+		print_tokens();
 	}
 	*/
 
@@ -507,7 +507,7 @@ word_t expr(char *e, bool *success) {
 	}
 
 	if (debug_flag) {
-		print_tokens(len);
+		print_tokens();
 	}	
 	
 	return 0;
@@ -567,7 +567,7 @@ word_t expr(char *e, bool *success) {
 	// print tokens after dealing with minus
 	
 	if (debug_flag) {
-		print_tokens(len);
+		print_tokens();
 	}	
 
 	int op_pos = op_position(0, len-1);
