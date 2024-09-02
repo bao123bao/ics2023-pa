@@ -615,8 +615,9 @@ word_t expr(char *e, bool *success) {
 			len++;
 		}
 	
-	print_tokens();
-	return 0;
+	//print_tokens();
+	//return 0;
+
 	// check paren
 	if (!check_valid_paren(0, len-1)) {
 		if (debug_flag)
