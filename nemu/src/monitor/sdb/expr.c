@@ -595,6 +595,10 @@ word_t expr(char *e, bool *success) {
 			//printf("raw expr: %s\n", expr);
 			printf("a: %d\nexpr: %s\n", ans, expr);
 		}*/
+		
+	
+	// reset error flag
+	error_flag = false;
 
 		if (!make_token(e)) {
     	*success = false;
