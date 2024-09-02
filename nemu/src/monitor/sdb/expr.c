@@ -513,11 +513,11 @@ word_t expr(char *e, bool *success) {
 		} 
 	}
 
-	if (debug_flag) {
-		print_tokens();
-	}	
+
+	//if (debug_flag) {
+	//	print_tokens();
+	//}	
 	
-	return 0;
 
 	// extract negative sign from minus
 	bool next_nsign = true;
