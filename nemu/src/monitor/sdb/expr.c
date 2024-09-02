@@ -37,8 +37,8 @@
 
 
 bool debug_flag = true;
-//bool stdin_flag = false;
 int correct_cnt = 0;
+bool error_flag = false;
 
 // tokens init: TK_UNDEF
 // after negative sign/dereference extraction: TK_EMPTY
@@ -238,24 +238,77 @@ int check_parentheses(int p, int q) {
 }
 
 
+// smaller value is more likely the main op
+// higher value has higher priority
+int op_priority(int type){
+	switch (type) {
+		case TK_AND: 							return 1; break;
+		case TK_EQ: case TK_NEQ: 	return 2; break;
+		case '+': case '-': 			return 3; break;
+		case '*': case '/': 			return 4; break;
+		default: 									return -1; break;
+		// default is not operator
+	}
+}
+
+
+// return main op position
 int op_position(int p, int q) {
 
 	if(debug_flag)
 		printf("op_position(): p=%d, q=%d\n",p,q);
-	int cur_op_pos = -1;
-	int cur_op_type = -1;
+	int op_pos = -1;
+	int op_type = -1;
+	int op_prior = -1;
 	int paren_flag = -1;
-	int cur_type;
-  //	while (tokens[p].type==TK_NUMBER)
+	int type, prior;
 
+	while (p <= q) {
+		if(debug_flag)
+			printf("in op_pos while loop: p=%d, q=%d\n", p,q);
+
+		type = tokens[p].type;
+		prior = op_priority(type);
+
+		// not a operator, continue
+		if (prior < 0)
+			continue;
+
+		// when meet an operator first time
+		if (op_pos==-1 && prior>0) {
+			op_pos = p;
+			op_type = type;
+			op_prior = prior;
+			continue;
+		}
+	
+		// when meet an operator more than first time
+		// update op_pos if ( current prior <= op prior )
+		if (prior <= op_prior) {
+			op_pos = p;
+			op_type = type;
+			op_prior = prior;
+		}
+
+	}
+
+	if(op_pos < 0){
+		error_flag = true;
+		printf("invalid expression\n");
+		return -1;
+	}
+
+	return op_pos;
+
+/*
 	while (p <= q) {
 		if(debug_flag)
 			printf("in op_pos while loop: p=%d, q=%d\n", p,q);
 
 		cur_type = tokens[p].type;
 
-		if(debug_flag && cur_op_type>0 && cur_type<256)
-			printf("p=%d, cur_type=%c, cur_op='%c'@%d\n", p, cur_type,cur_op_type, cur_op_pos );
+		if(debug_flag && op_type>0 && cur_type<256)
+			printf("p=%d, cur_type=%c, cur_op='%c'@%d\n", p, cur_type,op_type, op_pos );
 
 		switch (cur_type) {
 			// current ptr's type
@@ -273,7 +326,7 @@ int op_position(int p, int q) {
 			case '+':
 			case '-':
 				// currently meet op +-
-				switch (cur_op_type) {
+				switch (op_type) {
 					// found op type
 
 					case -1:
@@ -284,8 +337,8 @@ int op_position(int p, int q) {
 						// no previous op or previously +-
 						if (paren_flag<0) {
 							// when not in paren area
-							cur_op_pos = p;
-							cur_op_type = cur_type;
+							op_pos = p;
+							op_type = cur_type;
 						}
 						break;
 					default:
@@ -296,21 +349,21 @@ int op_position(int p, int q) {
 			case '*':
 			case '/':
 				// currently meet op 
-				switch (cur_op_type) {
+				switch (op_type) {
 					case -1:
 					case '*':
 					case '/':
 						if (paren_flag<0) {
-							cur_op_pos = p;
-							cur_op_type = cur_type;
+							op_pos = p;
+							op_type = cur_type;
 						}
 						break;
 
 					case '+':
 					case '-':
 						if (paren_flag<0) {
-							//cur_op_pos = p;
-							//cur_op_type = cur_type;
+							//op_pos = p;
+							//op_type = cur_type;
 						}
 						break;
 					default:
@@ -320,12 +373,11 @@ int op_position(int p, int q) {
 
 		}
 		p++;
-	}	
-	return cur_op_pos;
+	}	*/
+	//return op_pos;
 }
 
 
-bool error_flag = false;
 
 int eval(int p, int q) {
 	if (debug_flag) {
