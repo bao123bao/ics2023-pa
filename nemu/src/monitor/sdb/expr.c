@@ -272,23 +272,28 @@ int op_position(int p, int q) {
 		
 		if (type == '('){
 			paren_flag++;
+			p++;
 			continue;
 		}
 
 		if (type == ')'){
 			paren_flag--;
+			p++;
 			continue;
 		}
 			
 		
 		// not a operator, continue
-		if (prior < 0)
+		if (prior < 0){
+			p++;
 			continue;
+		}
 
 		// when meet an operator first time
 		if (op_pos==-1 && prior>0 && paren_flag<0) {
 			op_pos = p;
 			op_prior = prior;
+			p++;
 			continue;
 		}
 	
@@ -297,7 +302,11 @@ int op_position(int p, int q) {
 		if (prior <= op_prior && paren_flag<0) {
 			op_pos = p;
 			op_prior = prior;
+			p++;
+			continue;
 		}
+
+		assert(0);
 
 	}
 
