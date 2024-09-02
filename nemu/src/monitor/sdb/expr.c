@@ -634,12 +634,13 @@ word_t expr(char *e, bool *success) {
 	if (debug_flag) {
 		print_tokens();
 	}	
-
-	int op_pos = op_position(0, len-1);
-	if (debug_flag) {
-		printf("main operator is %d at [%d]\n", tokens[op_pos].type ,op_pos);
+	
+	if (len>1){
+		int op_pos = op_position(0, len-1);
+		if (debug_flag) {
+			printf("main operator is %d at [%d]\n", tokens[op_pos].type ,op_pos);
+		}
 	}
-
 	
 	int result = eval(0, len-1);
 	if (result==INT_MIN && error_flag) {
