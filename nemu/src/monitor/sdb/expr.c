@@ -457,12 +457,17 @@ void diff_multi_deref(int len) {
 					case TK_NEQ:
 					case TK_AND:
 						tokens[i].type = TK_DEREF;
-						if (i==len-1 || tokens[i+1].type!=TK_HEX){
+						if ( (i!=len-1 && tokens[i+1].type!=TK_HEX) ) {
 							// turn hex into mem value
 							sscanf(tokens[i+1].str, "0x%x", &addr);
 							sprintf(tokens[i+1].str, "0x%x", vaddr_read(addr, 4));
 							if(debug_flag)
 								printf("deref addr 0x%x to value %s\n", addr, tokens[i+1].str);
+						}else{
+							error_flag = true;
+							if(debug_flag)
+								printf("invalid deref\n");
+							return;
 						}
 						break;
 					default:
