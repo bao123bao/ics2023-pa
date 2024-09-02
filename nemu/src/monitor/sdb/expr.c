@@ -268,46 +268,29 @@ int op_position(int p, int q) {
 
 		type = tokens[p].type;
 		prior = op_priority(type);
-
 		
 		if (type == '('){
 			paren_flag++;
-			p++;
-			continue;
-		}
-
-		if (type == ')'){
+		} 
+		else if (type == ')'){
 			paren_flag--;
-			p++;
-			continue;
 		}
-			
-		
-		// not a operator, continue
-		if (prior < 0){
-			p++;
-			continue;
+		// not a operator, do nothing
+		else if (prior < 0){
+			; // do nothing
 		}
-
 		// when meet an operator first time
-		if (op_pos==-1 && prior>0 && paren_flag<0) {
+		else if (op_pos==-1 && prior>0 && paren_flag<0) {
 			op_pos = p;
 			op_prior = prior;
-			p++;
-			continue;
 		}
-	
 		// when meet an operator more than first time
 		// update op_pos if ( current prior <= op prior )
-		if (prior <= op_prior && paren_flag<0) {
+		else if (prior <= op_prior && paren_flag<0) {
 			op_pos = p;
 			op_prior = prior;
-			p++;
-			continue;
 		}
-
-		assert(0);
-
+		p++;
 	}
 
 	if(op_pos < 0){
