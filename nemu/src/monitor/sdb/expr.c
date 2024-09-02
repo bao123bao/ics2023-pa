@@ -471,7 +471,7 @@ void diff_multi_deref(int len) {
 				
 			// deref memory content @ addr
 			if (i!=len-1 && 
-					tokens[i+1].type!=TK_HEX ) {
+					tokens[i+1].type==TK_HEX ) {
 				// turn hex into mem value
 				sscanf(tokens[i+1].str, "0x%x", &addr);
 				sprintf(tokens[i+1].str, "0x%x", vaddr_read(addr, 4));
