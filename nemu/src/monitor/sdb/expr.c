@@ -141,13 +141,18 @@ static bool make_token(char *e) {
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = '\0';
 						tokens[nr_token].type = type;
-						// printf("tokens[%d] type=number: %s\n", nr_token, tokens[nr_token].str);
+						nr_token++;
+						break;
+
+					case TK_EQ:
+					case TK_NEQ:
+					case TK_AND:
+						tokens[nr_token].type = type;
 						nr_token++;
 						break;
 
 					default:
 						tokens[nr_token].type = *substr_start;
-						// printf("tokens[%d].type='%c'\n", nr_token, tokens[nr_token].type);
 						nr_token++;
 						break;
         }
