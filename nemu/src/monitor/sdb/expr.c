@@ -395,7 +395,7 @@ int eval(int p, int q) {
 			error_flag = true;
 			return INT_MIN;
 		}
-			return INT_MIN;
+			
 		switch (tokens[op_pos].type) {
 			case TK_EQ:	return val1 == val2;
 			case TK_NEQ: return val1 != val2;
