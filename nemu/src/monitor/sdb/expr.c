@@ -123,8 +123,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        /* Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start); */
+         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+            i, rules[i].regex, position, substr_len, substr_len, substr_start); 
 
         position += substr_len;
 
@@ -615,7 +615,7 @@ word_t expr(char *e, bool *success) {
 			len++;
 		}
 
-
+	return 0;
 	// check paren
 	if (!check_valid_paren(0, len-1)) {
 		if (debug_flag)
