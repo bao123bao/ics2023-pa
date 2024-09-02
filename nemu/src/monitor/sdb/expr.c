@@ -566,7 +566,7 @@ void diff_minus_negative(int len) {
 					// previous is op or '('
 					// this '-' is negative sign
 					tokens[i].type = TK_NSIGN;
-					printf("all result are uint32_t, no support for negative numbers now\n");
+					printf("all result are uint32_t, no support for negative numbers now, please avoid signed number and enter again :)\n");
 					next_nsign = true;
 					error_flag = true;
 					return;
@@ -658,7 +658,7 @@ word_t expr(char *e, bool *success) {
 		}
 	}*/
 	
-	int result = eval(0, len-1);
+	uint32_t result = eval(0, len-1);
 	if (result==UINT32_MAX && error_flag) {
 		printf("error: divided by 0\n");
 		*success = false;
@@ -669,7 +669,7 @@ word_t expr(char *e, bool *success) {
 		return 0;
 	}
 
-	printf("result=%d\n",result);
+	printf("result=%u\n",result);
 	*success = true;
 
 	/*
