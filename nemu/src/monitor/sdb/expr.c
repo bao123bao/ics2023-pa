@@ -219,9 +219,10 @@ bool check_valid_paren(int p, int q){
 
 
 int check_parentheses(int p, int q) {
+	/*
 	if(debug_flag){
 		printf("check_paren: p=%d, q=%d\n",p,q);
-	}
+	}*/
 	
 	if ( !(tokens[p].type=='(' && tokens[q].type==')') )
 		return 0;
@@ -643,13 +644,14 @@ word_t expr(char *e, bool *success) {
 	if (debug_flag) {
 		print_tokens();
 	}	
-	
+
+	/*
 	if (len>1){
 		int op_pos = op_position(0, len-1);
 		if (debug_flag) {
 			printf("main operator is %d at [%d]\n", tokens[op_pos].type ,op_pos);
 		}
-	}
+	}*/
 	
 	int result = eval(0, len-1);
 	if (result==INT_MIN && error_flag) {
