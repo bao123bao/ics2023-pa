@@ -68,7 +68,7 @@ static struct rule {
   {"==", TK_EQ},        // equal
 	{"\\(", '('},         // left bracket
 	{"\\)", ')'},         // right bracket
-	{"^[0][x][0-9a-fA-F]+", TK_HEX}, // hex number 0x123123
+	{"^0x[0-9a-fA-F]+", TK_HEX}, // hex number 0x123123
 	{"^[$][0-9a-zA-Z]+", TK_REG},   // register names $reg
 	{"[0-9]+", TK_NUMBER},// decimal number
 	{"!=", TK_NEQ},       // not equal !=
