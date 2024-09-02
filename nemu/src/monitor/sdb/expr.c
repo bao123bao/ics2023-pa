@@ -377,9 +377,10 @@ int power(int a, int n) {
 	return result;
 }
 
-void print_tokens(int len) {
-	int i, type;
+void print_tokens() {
+	int i, type, len;
 	bool hit_end = false;
+	len = 0;
 	for (i=0; i<MAX_TOKENS_ARR_LEN; i++) {
 		type = tokens[i].type;
 		switch (type) {
@@ -419,9 +420,11 @@ void print_tokens(int len) {
 		}	
 		if(hit_end)
 			break;
+		else
+			len++;
 	}
 	if(hit_end)
-		printf(" TOKENS_END\n");
+		printf("\nTOKENS_END(len=%d)\n", len);
 }
 
 
