@@ -534,7 +534,6 @@ word_t expr(char *e, bool *success) {
 	while ((read = getline(&line, &slen, fp)) != -1) {
 		sscanf(line, "%d %[^\t\n]", &ans, expr);
 
-
 		if(debug_flag) {
 			//printf("raw expr: %s\n", expr);
 			printf("a: %d\nexpr: %s\n", ans, expr);
@@ -572,91 +571,11 @@ word_t expr(char *e, bool *success) {
 
 	// extract dereference from multiply
 	diff_multi_deref(len);
-	/*for (i=0; i<len; i++) {
-		if (tokens[i].type=='*') {
-			if (i==0){
-				tokens[i].type = TK_DEREF;
-			}else{
-				switch(tokens[i-1].type){
-					case '+':
-					case '-':
-					case '*':
-					case '/':
-					case '(':
-					case TK_EQ:
-					case TK_NEQ:
-					case TK_AND:
-						tokens[i].type = TK_DEREF;
-						break;
-					default:
-						break;
-				}
-			}
-		} 
-	}
-*/
-
-	//if (debug_flag) {
-	//	print_tokens();
-	//}	
 	
-
 	// extract negative sign from minus
 	diff_minus_negative(len);
-	/*
-	bool next_nsign = true;
-	int nsign_times = 0;
-	int num;
-	for (i=0; i<len; i++) {
-		type = tokens[i].type;
-		switch (type) {
-			case TK_NUMBER:
-				// next is op or ')', not negative sign
-				next_nsign = false;
-				num = atoi(tokens[i].str); // original unsigned number
-				num = num * power(-1 , nsign_times); // signed number
-				sprintf(tokens[i].str, "%d", num); // cast back to string
-				nsign_times = 0;
-				break;
-
-			case '(':
-				// next '-' is negative sign
-				next_nsign = true;
-				break;
-
-			case ')':
-				// next '-' is op minus
-				next_nsign = false;
-				break;
-
-			case '+':
-			case '*':
-			case '/':
-				// these signs are op
-				next_nsign = true;
-				break;
-
-			case '-':
-				if (!next_nsign) {
-					// this '-' is not negative sign
-					// remain original
-					next_nsign = true;
-				}else{
-					// previous is op or '('
-					// this '-' is negative sign
-					tokens[i].type = TK_NSIGN;
-					nsign_times++;
-					next_nsign = true;
-				}
-				break;
-			default: ;
-		}
-	}
-*/
-
 	
 	// print tokens after dealing with minus and multiply
-	
 	if (debug_flag) {
 		print_tokens();
 	}	
