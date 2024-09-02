@@ -385,18 +385,27 @@ int eval(int p, int q) {
 		printf("eval: p=%d, q=%d\n", p, q);
 	}
 
+	int type = tokens[p].type;
+
 	if (p > q) {
 		// bad expr
 		if (debug_flag)
 			printf("bad expr\n");
 		assert(0);
 		return -1;
-
 	}
 	else if(p == q) {
 		// single number
-		return atoi(tokens[p].str);
-
+		if (type==TK_NUMBER)
+			return atoi(tokens[p].str);
+		else if(type==TK_HEX){
+			int value;
+			sscanf(tokens[p].str, "0x%x", &value);
+			return value;
+		}else{
+			assert(0);
+			return INT_MIN;
+		}
 	}
 	else if(check_parentheses(p, q) == 1) {
 		// outer parentheses
@@ -405,7 +414,7 @@ int eval(int p, int q) {
 		}
 		return eval(p + 1, q - 1);
 	}
-	else if(tokens[p].type == TK_NSIGN){
+	else if(type==TK_NSIGN || type==TK_DEREF){
 		return eval(p+1, q);
 	}
 	else{
