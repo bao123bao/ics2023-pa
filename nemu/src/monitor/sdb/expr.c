@@ -576,6 +576,10 @@ void diff_minus_negative(int len) {
 				nsign_times = 0;
 				break;
 
+			case TK_HEX:
+				next_nsign=false;
+				break;
+
 			case '(':
 				// next '-' is negative sign
 				next_nsign = true;
@@ -589,6 +593,9 @@ void diff_minus_negative(int len) {
 			case '+':
 			case '*':
 			case '/':
+			case TK_EQ:
+			case TK_NEQ:
+			case TK_AND:
 				// these signs are op
 				next_nsign = true;
 				break;
