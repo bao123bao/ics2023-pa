@@ -356,7 +356,13 @@ int eval(int p, int q) {
 			// hex number string
 			int value;
 			sscanf(tokens[p].str, "%x", &value);
-			printf("hex to decimal val=%d\n",value);
+			if (debug_flag)
+				printf("hex to decimal val=%d\n",value);
+			if (value < 0){
+				error_flag = true;
+				printf("int overflow\n");
+				return 0;
+			}
 			return value;
 		}
 		else if(type==TK_REG){
