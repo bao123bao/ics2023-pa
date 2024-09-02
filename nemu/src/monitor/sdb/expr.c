@@ -356,6 +356,7 @@ int eval(int p, int q) {
 			// hex number string
 			int value;
 			sscanf(tokens[p].str, "%x", &value);
+			printf("hex to decimal val=%d\n",value);
 			return value;
 		}
 		else if(type==TK_REG){
