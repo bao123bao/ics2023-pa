@@ -181,7 +181,7 @@ void create_watchpoint(char* e){
 		strcpy(wp->str, e);
 		wp->val = val;
 		wp->val_valid = true;
-		printf("Watchpoint %d: %s (value=%u)\n", wp->NO, wp->str, val);
+		printf("Watchpoint %d: %s (value: %u = 0x%x)\n", wp->NO, wp->str, val, val);
 		if(debug_flag)
 			print_wps();
 	}else{
