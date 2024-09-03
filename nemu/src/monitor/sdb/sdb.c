@@ -18,6 +18,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <memory/vaddr.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include "sdb.h"
 
 static int is_batch_mode = false;
@@ -114,7 +116,13 @@ static int cmd_p(char *args) {
 
 	init_regex();
 	bool success;
-	expr(args,&success);
+	uint32_t result;
+	result = expr(args,&success);
+	if(success){
+		printf("ans: %u", result);
+	}else{
+		printf("Invalid expression\n");
+	}
 
 	return 0;
 }
