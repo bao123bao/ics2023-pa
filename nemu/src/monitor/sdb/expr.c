@@ -668,9 +668,10 @@ word_t expr(char *e, bool *success) {
 		*success = false;
 		return 0;
 	}
-
-	printf("ans: %u\n",result);
 	*success = true;
+
+	if(debug_flag)
+		printf("ans: %u\n",result);
 
 	/*
 	if (result == ans) {
