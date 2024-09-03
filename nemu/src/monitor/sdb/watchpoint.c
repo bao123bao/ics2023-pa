@@ -19,7 +19,8 @@
 
 #define NR_WP 5 
 
-//static bool debug_flag = true;
+static bool debug_flag = true;
+static bool first_call = true;
 
 typedef struct watchpoint {
   int NO;
@@ -80,7 +81,8 @@ void print_wps(){
 // find wp's previous in head list
 WP* find_prev(WP* head, WP* wp){
 	if(!head || !wp){
-		printf("input ptr is NULL, cannot find prev\n");
+		if(debug_flag)
+			printf("input ptr is NULL, cannot find prev\n");
 		return NULL;
 	}
 
@@ -89,7 +91,8 @@ WP* find_prev(WP* head, WP* wp){
 		temp = temp->next;
 	}
 	if(temp->next==NULL){
-		printf("cannot find wp's prev\n");
+		if(debug_flag)
+			printf("cannot find wp's prev\n");
 		return NULL;
 	}
 		
@@ -100,7 +103,8 @@ WP* find_prev(WP* head, WP* wp){
 
 WP* new_wp() {
 	if (!free_){
-		printf("No free watchpoint available, cannot new\n");
+		if(debug_flag)
+			printf("No free watchpoint available, cannot new\n");
 		return NULL;
 	}
 
@@ -122,7 +126,8 @@ WP* new_wp() {
 
 void free_wp(WP *wp) {
 	if (!wp){
-		printf("no allocated watchpoint, cannot free\n");
+		if(debug_flag)
+			printf("no allocated watchpoint, cannot free\n");
 		return;
 	}
 
@@ -160,14 +165,23 @@ void free_wp(WP *wp) {
 }
 
 void create_watchpoint(char* expr){
+	if(first_call){
+		printf("first call, init wp\n");
+		init_wp_pool();
+		first_call = false;
+	}
 	WP *wp = new_wp();
 	strcpy(wp->str, expr);
 	printf("Watchpoint %d: %s\n", wp->NO, wp->str);
-
+	print_wps();
 }
 
 void wp_test(){
-	init_wp_pool();
+	if(first_call){
+		printf("first call, init wp");
+		init_wp_pool();
+		first_call = false;
+	}
 	print_wps();
 
 	WP *wp1 = new_wp();
