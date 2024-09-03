@@ -176,6 +176,18 @@ void create_watchpoint(char* expr){
 	print_wps();
 }
 
+void info_watchpoints(){
+	WP *wp = head;
+	if(first_call || !head){
+		printf("No watchpoint created yet\n");
+		return;
+	}
+	printf("%-6s %-15s\n", "Num", "What");
+	while(wp->next){
+		printf("%6d %-15s\n", wp->NO, wp->str);
+	}
+}
+
 void wp_test(){
 	if(first_call){
 		printf("first call, init wp");

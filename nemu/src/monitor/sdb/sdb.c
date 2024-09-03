@@ -80,6 +80,10 @@ static int cmd_info(char *args) {
 				isa_reg_display();
 				break;
 
+			case 'w':
+				info_watchpoints();
+				break;
+
 			default:	
 				printf("Unknown command\n");
 				break;
@@ -131,7 +135,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Execute a step of instruction for <N> times", cmd_si},
-	{ "info", "Print registers' status with [r]", cmd_info },
+	{ "info", "Print registers' status with [r], watchpoints' info with [w]", cmd_info },
 	{ "x", "Print memory content at [EXPR] for [N]*4 bytes (x [N] [EXPR])", cmd_x},
 	{ "p", "Evaluate expression [EXPR]", cmd_p},
 	{ "w", "create watchpoint for expression [EXPR]", cmd_w}
