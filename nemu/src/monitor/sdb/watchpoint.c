@@ -19,7 +19,7 @@
 #include <stdint.h>
 #define NR_WP 5 
 
-static bool debug_flag = true;
+static bool debug_flag = false;
 static bool first_call = true;
 
 typedef struct watchpoint {
