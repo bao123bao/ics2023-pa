@@ -163,9 +163,11 @@ void wp_test(){
 	print_wps();
 
 	WP *wp1 = new_wp();
+	WP *wp2 = new_wp();
 	print_wps();
 
 	free_wp(wp1);
+	free_wp(wp2);
 	print_wps();
 
 }
