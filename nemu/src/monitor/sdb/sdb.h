@@ -23,6 +23,6 @@ word_t expr(char *e, bool *success);
 void wp_test();
 void create_watchpoint(char *expr);
 void info_watchpoints();
-
+void delete_watchpoint(int id);
 
 #endif

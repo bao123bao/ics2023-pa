@@ -124,6 +124,14 @@ static int cmd_w(char *args) {
 	return 0;
 }
 
+static int cmd_d(char *args) {
+	int id;
+	if(sscanf(args, "%d", &id)==1){
+		delete_watchpoint(id);
+	}
+	return 0;
+}
+
 
 
 static struct {
@@ -138,7 +146,8 @@ static struct {
 	{ "info", "Print registers' status with [r], watchpoints' info with [w]", cmd_info },
 	{ "x", "Print memory content at [EXPR] for [N]*4 bytes (x [N] [EXPR])", cmd_x},
 	{ "p", "Evaluate expression [EXPR]", cmd_p},
-	{ "w", "create watchpoint for expression [EXPR]", cmd_w}
+	{ "w", "Create watchpoint for expression [EXPR]", cmd_w},
+	{ "d", "Delete watchpoint [N]", cmd_d}
 
   /* TODO: Add more commands */
 

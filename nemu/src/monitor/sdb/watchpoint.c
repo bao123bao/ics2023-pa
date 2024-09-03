@@ -189,6 +189,19 @@ void info_watchpoints(){
 	}
 }
 
+void delete_watchpoint(int id){
+	WP *wp = head;
+	while ( wp && (wp->NO!=id) ){
+		wp = wp->next;
+	}
+	if(wp){
+		free_wp(wp);
+		printf("Watchpoint %d deleted\n", id);
+	}else{
+		printf("Watchpoint %d not found\n", id);
+	}
+}
+
 void wp_test(){
 	if(first_call){
 		printf("first call, init wp");
