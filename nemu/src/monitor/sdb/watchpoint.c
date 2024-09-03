@@ -45,12 +45,12 @@ void init_wp_pool() {
 /* TODO: Implement the functionality of watchpoint */
 
 void print_wps(){
+	// print list head
 	WP *wp;
-	printf("WP HEAD: \n");
+	printf("WP HEAD: ");
 	wp = head;
 	if(!wp){
-		printf("this wp list is NULL\n");
-		return;
+		printf("NULL\n");
 	}
 
 	while(wp){
@@ -58,12 +58,13 @@ void print_wps(){
 		wp = wp->next;
 	}
 	printf("END\n");
-	
+
+
+	// print list free_
 	wp = free_;
-	printf("WP FREE_: \n");
+	printf("WP FREE_: ");
 	if(!wp){
-		printf("this wp list is NULL\n");
-		return;
+		printf("NULL\n");
 	}
 
 	while(wp){
