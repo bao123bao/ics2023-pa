@@ -119,7 +119,7 @@ static int cmd_p(char *args) {
 	uint32_t result;
 	result = expr(args,&success);
 	if(success){
-		printf("ans: %u", result);
+		printf("ans: %u\n", result);
 	}else{
 		printf("Invalid expression\n");
 	}
