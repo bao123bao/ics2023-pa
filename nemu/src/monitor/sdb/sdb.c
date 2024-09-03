@@ -115,6 +115,11 @@ static int cmd_p(char *args) {
 	return 0;
 }
 
+static int cmd_w(char *args) {
+	wp_test();	
+	return 0;
+}
+
 
 
 static struct {
@@ -128,7 +133,8 @@ static struct {
   { "si", "Execute a step of instruction for <N> times", cmd_si},
 	{ "info", "Print registers' status with [r]", cmd_info },
 	{ "x", "Print memory content at [EXPR] for [N]*4 bytes (x [N] [EXPR])", cmd_x},
-	{ "p", "Evaluate expression [EXPR]", cmd_p}
+	{ "p", "Evaluate expression [EXPR]", cmd_p},
+	{ "w", "create watchpoint for expression [EXPR]", cmd_w}
 
   /* TODO: Add more commands */
 

@@ -684,7 +684,7 @@ word_t expr(char *e, bool *success) {
 	printf("Accuracy: %d/%d is correct\n", correct_cnt, cnt);
 	free(line);
 	*/
-	return 0;
+	return result;
 	
 }
 
