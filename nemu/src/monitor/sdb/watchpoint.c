@@ -170,7 +170,8 @@ void free_wp(WP *wp) {
 
 void create_watchpoint(char* e){
 	if(first_call){
-		printf("first call, init wp\n");
+		if(debug_flag)
+			printf("first call, init wp\n");
 		init_wp_pool();
 		first_call = false;
 	}
