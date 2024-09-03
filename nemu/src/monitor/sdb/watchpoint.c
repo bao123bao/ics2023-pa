@@ -185,6 +185,7 @@ void info_watchpoints(){
 	printf("%-6s %-15s\n", "Num", "What");
 	while(wp->next){
 		printf("%6d %-15s\n", wp->NO, wp->str);
+		wp = wp->next;
 	}
 }
 
