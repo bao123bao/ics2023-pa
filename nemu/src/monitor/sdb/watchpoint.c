@@ -16,7 +16,7 @@
 #include "sdb.h"
 #include <stdbool.h>
 #include <string.h>
-
+#include <stdint.h>
 #define NR_WP 5 
 
 static bool debug_flag = true;
@@ -26,6 +26,8 @@ typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
 	char str[50];
+	uint32_t val;
+	bool val_valid;
   /* TODO: Add more members if necessary */
 
 } WP;
@@ -38,6 +40,8 @@ void init_wp_pool() {
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+		wp_pool[i].str[0] = '\0';
+		wp_pool[i].val_valid = false;
   }
 
   head = NULL;
@@ -164,16 +168,27 @@ void free_wp(WP *wp) {
 	}
 }
 
-void create_watchpoint(char* expr){
+void create_watchpoint(char* e){
 	if(first_call){
 		printf("first call, init wp\n");
 		init_wp_pool();
 		first_call = false;
 	}
-	WP *wp = new_wp();
-	strcpy(wp->str, expr);
-	printf("Watchpoint %d: %s\n", wp->NO, wp->str);
-	print_wps();
+	bool success = false;
+	int val = expr(e, &success);
+	if (success) {
+		WP *wp = new_wp();
+		strcpy(wp->str, e);
+		wp->val = val;
+		wp->val_valid = true;
+		printf("Watchpoint %d: %s (value=%u)\n", wp->NO, wp->str, val);
+		if(debug_flag)
+			print_wps();
+	}else{
+		printf("Invalid expression\n");
+		if(debug_flag)
+			print_wps();
+	}
 }
 
 void info_watchpoints(){
@@ -200,6 +215,28 @@ void delete_watchpoint(int id){
 	}else{
 		printf("Watchpoint %d not found\n", id);
 	}
+}
+
+bool scan_watchpoints(){
+	WP *wp = head;
+	bool val_changed = false;
+
+	while (wp){
+		assert(wp->val_valid);
+		bool success;
+		uint32_t old_val = wp->val;
+		uint32_t new_val = expr(wp->str, &success);
+		assert(success);
+		if (new_val != old_val) {
+			printf("Watchpoint %d: %s\n", wp->NO, wp->str);
+			printf("	Old value = %u\n", old_val);
+			printf("	New value = %u\n", new_val);
+			wp->val = new_val;
+			val_changed = true;
+		}
+		wp = wp->next;
+	}
+	return val_changed;
 }
 
 void wp_test(){
