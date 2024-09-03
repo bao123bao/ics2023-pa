@@ -72,7 +72,7 @@ void print_wps(){
 		}
 		printf("END\n");
 	}
-
+	putchar('\n');
 }
 
 
