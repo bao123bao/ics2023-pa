@@ -229,8 +229,8 @@ bool scan_watchpoints(){
 		assert(success);
 		if (new_val != old_val) {
 			printf("Watchpoint %d: %s\n", wp->NO, wp->str);
-			printf("	Old value = %u\n", old_val);
-			printf("	New value = %u\n", new_val);
+			printf("	Old value = %u (%x)\n", old_val, old_val);
+			printf("	New value = %u (%x)\n", new_val, new_val);
 			wp->val = new_val;
 			val_changed = true;
 		}
