@@ -51,13 +51,13 @@ void print_wps(){
 	wp = head;
 	if(!wp){
 		printf("NULL\n");
+	}else{
+		while(wp){
+			printf("WP#%d ", wp->NO);
+			wp = wp->next;
+		}
+		printf("END\n");
 	}
-
-	while(wp){
-		printf("WP#%d ", wp->NO);
-		wp = wp->next;
-	}
-	printf("END\n");
 
 
 	// print list free_
@@ -65,13 +65,14 @@ void print_wps(){
 	printf("WP FREE_: ");
 	if(!wp){
 		printf("NULL\n");
+	}else{
+		while(wp){
+			printf("WP#%d ", wp->NO);
+			wp = wp->next;
+		}
+		printf("END\n");
 	}
 
-	while(wp){
-		printf("WP#%d ", wp->NO);
-		wp = wp->next;
-	}
-	printf("END\n");
 }
 
 
