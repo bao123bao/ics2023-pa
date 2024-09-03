@@ -15,6 +15,7 @@
 
 #include "sdb.h"
 #include <stdbool.h>
+#include <string.h>
 
 #define NR_WP 5 
 
@@ -23,7 +24,7 @@
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-
+	char str[50];
   /* TODO: Add more members if necessary */
 
 } WP;
@@ -158,6 +159,13 @@ void free_wp(WP *wp) {
 	}
 }
 
+void create_watchpoint(char* expr){
+	WP *wp = new_wp();
+	strcpy(wp->str, expr);
+	printf("Watchpoint %d: %s\n", wp->NO, wp->str);
+
+}
+
 void wp_test(){
 	init_wp_pool();
 	print_wps();
@@ -171,18 +179,3 @@ void wp_test(){
 	print_wps();
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
