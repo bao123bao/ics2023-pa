@@ -42,8 +42,8 @@ gdb: run-env
 	gdb -s $(BINARY) --args $(NEMU_EXEC)
 
 count:
-	echo "non-blank lines count of .c and .h files in nemu:"
-	find . -name "*c" -o -name "*.h" -print0 | xargs -0 grep -v "^\s$$" | wc -l 
+	@echo "non-blank lines count of .c and .h files in nemu:"
+	@find . -name "*.[ch]" -print0 | xargs -0 grep -v "^\s$$" | wc -l 
 
 clean-tools = $(dir $(shell find ./tools -maxdepth 2 -mindepth 2 -name "Makefile"))
 $(clean-tools):
