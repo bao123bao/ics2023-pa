@@ -28,8 +28,8 @@ enum {
   TYPE_N, // none
 };
 
-#define src1R() do { *src1 = R(rs1); printf("src1R: *src1=%d\n", *src1); } while (0)
-#define src2R() do { *src2 = R(rs2); printf("src2R: *src2=%d\n", *src2); } while (0)
+#define src1R() do { *src1 = R(rs1); printf("src1R: *src1=%d(%x)\n", *src1, *src1); } while (0)
+#define src2R() do { *src2 = R(rs2); printf("src2R: *src2=%d(%x)\n", *src2, *src2); } while (0)
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
