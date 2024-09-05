@@ -43,6 +43,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   switch (type) {
     case TYPE_I: 
 			src1R();
+			printf("decode_operand switch: *src1=%d\n", *src1);
 			immI(); 
 			break;
     case TYPE_U:                   
