@@ -52,6 +52,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 			break;
 		case TYPE_J:
 			immJ();
+			printf("imm=0x%x\n", *imm);
 			break;
     case TYPE_S: 
 			src1R(); 
