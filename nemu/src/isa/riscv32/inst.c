@@ -45,10 +45,12 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_I: 
 			src1R();
 			printf("decode_operand switch: rs1=%d, *src1=%d\n",rs1, *src1);
-			immI(); 
+			immI();
+			printf("imm=0x%x\n", *imm);
 			break;
     case TYPE_U:                   
 			immU(); 
+			printf("imm=0x%x\n", *imm);
 			break;
 		case TYPE_J:
 			immJ();
