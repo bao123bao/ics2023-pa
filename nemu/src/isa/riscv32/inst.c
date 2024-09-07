@@ -40,11 +40,11 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   int rs1 = BITS(i, 19, 15);
   int rs2 = BITS(i, 24, 20);
   *rd     = BITS(i, 11, 7);
-	printf("deocde_operand: rs1=%d, rs2=%d, rd=%d\n", rs1, rs2, *rd);
+//	printf("deocde_operand: rs1=%d, rs2=%d, rd=%d\n", rs1, rs2, *rd);
   switch (type) {
     case TYPE_I: 
 			src1R();
-			printf("decode_operand switch: rs1=%d, *src1=%d\n",rs1, *src1);
+	//		printf("decode_operand switch: rs1=%d, *src1=%d\n",rs1, *src1);
 			immI();
 			printf("imm=0x%x\n", *imm);
 			break;
