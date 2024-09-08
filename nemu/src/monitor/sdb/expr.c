@@ -15,7 +15,7 @@
 ***************************************************************************************/
 
 #include <isa.h>
-
+#include <memory/paddr.h>
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
@@ -324,7 +324,13 @@ int op_position(int p, int q) {
 
 
 int mem_deref(word_t addr) {
-	return (int) vaddr_read(addr, 4);
+	if (in_pmem(addr))
+		return (int) vaddr_read(addr, 4);
+	else{
+		printf("addr out of bound\n");
+		error_flag = true;
+		return 0;
+	}
 }
 
 
