@@ -28,8 +28,8 @@ enum {
   TYPE_N, // none
 };
 
-#define src1R() do { *src1 = R(rs1); printf("src1R: *src1=%d(0x%x)\n", *src1, *src1); } while (0)
-#define src2R() do { *src2 = R(rs2); printf("src2R: *src2=%d(0x%x)\n", *src2, *src2); } while (0)
+#define src1R() do { *src1 = R(rs1); } while (0)
+#define src2R() do { *src2 = R(rs2); } while (0)
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1)<<20) | (BITS(i, 19, 12)<<12) | (BITS(i, 20, 20)<<11) | BITS(i, 30, 21) << 1; } while(0)
@@ -47,15 +47,15 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 			src1R();
 	//		printf("decode_operand switch: rs1=%d, *src1=%d\n",rs1, *src1);
 			immI();
-			printf("imm=0x%x\n", *imm);
+			//printf("imm=0x%x\n", *imm);
 			break;
     case TYPE_U:                   
 			immU(); 
-			printf("imm=0x%x\n", *imm);
+			//printf("imm=0x%x\n", *imm);
 			break;
 		case TYPE_J:
 			immJ();
-			printf("imm=0x%x\n", *imm);
+			//printf("imm=0x%x\n", *imm);
 			break;
     case TYPE_S: 
 			src1R(); 
@@ -131,7 +131,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
-	printf("s->dnpc=0x%x, s->pc=0x%x, imm=0x%x, rd=0x%x\n", s->dnpc, s->pc,imm, R(rd));
+//	printf("s->dnpc=0x%x, s->pc=0x%x, imm=0x%x, rd=0x%x\n", s->dnpc, s->pc,imm, R(rd));
   R(0) = 0; // reset $zero to 0
 
   return 0;
