@@ -41,7 +41,6 @@ void int2str(char *buf, int *len, int num) {
 		buf[q] = t;
 		p++;
 		q--;
-		cnt++;
 	}
 	*len = cnt;
 	//printf("final str: %s\n", buf);
