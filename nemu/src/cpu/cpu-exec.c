@@ -19,7 +19,7 @@
 #include <locale.h>
 #include <stdbool.h>
 #include "../monitor/sdb/sdb.h"
-
+#include "iringbuf.h"
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
  * This is useful when you use the `si' command.
@@ -31,6 +31,9 @@ CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
+
+ringbuf rbuf;
+bool first_call = true;
 
 void device_update();
 
@@ -53,7 +56,9 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
+	// read exec once funciton
   isa_exec_once(s);
+	// continue some other works
   cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
@@ -78,6 +83,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
+	
+	// add asm info into ring buffer
+	update_ringbuf(&rbuf, s->logbuf);
+
+	
 #endif
 }
 
@@ -108,6 +118,11 @@ void assert_fail_msg() {
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
+	if(first_call){
+		init_ringbuf(&rbuf);
+		first_call = false;
+	}
+
   g_print_step = (n < MAX_INST_TO_PRINT);
   switch (nemu_state.state) {
     case NEMU_END: case NEMU_ABORT:
@@ -127,6 +142,10 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
+			// print ring buffer asms
+			print_ringbuf(&rbuf);
+
+			// print failure log info
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
