@@ -13,13 +13,87 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   panic("Not implemented");
 }
 
-int sprintf(char *out, const char *fmt, ...) {
-  panic("Not implemented");
+void int2str(char *buf, int *len, int num) {
+	int digit;
+	int cnt = 0, p = 0;
+
+	if(num<0){
+		buf[p] = '-';
+		p++;
+		cnt++;
+	}
+
+	while(num > 10) {
+		digit = num % 10;
+		buf[cnt++] = '0' + digit;
+		num /= 10;
+	}
+
+	buf[cnt] = '\0';
+	int q = cnt-1;
+	char t;
+
+	while(p<q){
+		t = buf[p];
+		buf[p] = buf[q];
+		buf[q] = t;
+		p++;
+		q--;
+		cnt++;
+	}
+	*len = cnt;
 }
+
+
+
+int sprintf(char *out, const char *fmt, ...) {
+  va_list args;
+	va_start(args, fmt);
+
+	char fmt_type;
+	char c;
+	char *p = out;
+	
+	int i;
+	int fmt_cnt = 0;
+	int len = strlen(fmt);
+	
+	for(i=0; i<len; i++){
+		c = fmt[i];
+		if(c=='%' && i<len-1){
+			fmt_type = fmt[i+1];
+			switch (fmt_type) {
+				case 's':
+					char *sp = va_arg(args, char*);
+					strcpy(p, sp);
+					p += strlen(sp);
+					fmt_cnt++;
+					break;
+				case 'd':
+					int num = va_arg(args, int);
+					int numlen;
+					int2str(p, &numlen, num);
+					p += numlen;
+					fmt_cnt++;
+					break;
+				default:
+					break;
+			}
+		}else{
+			*p = c;
+			p++;
+		}
+	}
+	va_end(args);
+	*p = '\0';
+	return fmt_cnt;
+}
+
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
   panic("Not implemented");
 }
+
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
