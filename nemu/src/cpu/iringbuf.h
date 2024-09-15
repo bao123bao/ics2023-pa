@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-#define RING_BUF_SIZE 5 
-#define BUF_INST_SIZE 50
+#define RING_BUF_SIZE 10 
+#define BUF_INST_SIZE 100
 
 typedef struct {
 	char * queue[RING_BUF_SIZE];
