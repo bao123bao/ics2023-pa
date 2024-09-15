@@ -28,8 +28,10 @@ void int2str(char *buf, int *len, int num) {
 		buf[cnt++] = '0' + digit;
 		num /= 10;
 	}
-
+	buf[cnt++] = '0' + num;
 	buf[cnt] = '\0';
+	//printf("initial str: %s\n",buf);
+
 	int q = cnt-1;
 	char t;
 
@@ -42,6 +44,7 @@ void int2str(char *buf, int *len, int num) {
 		cnt++;
 	}
 	*len = cnt;
+	//printf("final str: %s\n", buf);
 }
 
 
@@ -54,14 +57,15 @@ int sprintf(char *out, const char *fmt, ...) {
 	char c;
 	char *p = out;
 	
-	int i;
+	int i=0;
 	int fmt_cnt = 0;
 	int len = strlen(fmt);
 	
-	for(i=0; i<len; i++){
+	while(i<len){
 		c = fmt[i];
 		if(c=='%' && i<len-1){
 			fmt_type = fmt[i+1];
+
 			switch (fmt_type) {
 				case 's':
 					char *sp = va_arg(args, char*);
@@ -77,11 +81,15 @@ int sprintf(char *out, const char *fmt, ...) {
 					fmt_cnt++;
 					break;
 				default:
-					break;
+					assert(0);
 			}
+
+			i += 2;
+
 		}else{
 			*p = c;
 			p++;
+			i++;
 		}
 	}
 	va_end(args);
