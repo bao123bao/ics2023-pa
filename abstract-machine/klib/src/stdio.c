@@ -84,23 +84,12 @@ int sprintf(char *out, const char *fmt, ...) {
 					assert(0);
 			}
 			i += 2;
-		}else if(c=='\\' && i<len-1){
-			switch(fmt[i+1]){
-				case 'n':
-					*p = '\n';
-					p++;
-					break;
-				default:
-					assert(0);
-					break;
-			}
-			i += 2;
-
 		}else{
 			*p = c;
 			p++;
 			i++;
 		}
+		
 	}
 	va_end(args);
 	*p = '\0';
