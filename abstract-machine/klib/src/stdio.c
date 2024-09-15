@@ -23,7 +23,7 @@ void int2str(char *buf, int *len, int num) {
 		cnt++;
 	}
 
-	while(num > 10) {
+	while(num >= 10) {
 		digit = num % 10;
 		buf[cnt++] = '0' + digit;
 		num /= 10;
@@ -41,7 +41,6 @@ void int2str(char *buf, int *len, int num) {
 		buf[q] = t;
 		p++;
 		q--;
-		cnt++;
 	}
 	*len = cnt;
 	//printf("final str: %s\n", buf);
