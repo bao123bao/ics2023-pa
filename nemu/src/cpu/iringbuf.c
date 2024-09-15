@@ -36,7 +36,7 @@ void override_ringbuf(ringbuf *pbuf, char *info) {
 }
 
 void print_ringbuf(ringbuf *pbuf){
-	printf("iringbuf asm log:\n");
+	printf("\niringbuf asm log:\n");
 	if(pbuf->size==0)
 		return;
 	int i = pbuf->front;
