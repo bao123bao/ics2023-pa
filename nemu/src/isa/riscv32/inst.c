@@ -161,11 +161,11 @@ static int decode_exec(Decode *s) {
 			//printf("expected return addr: 0x%x\n", ret_addr);
 		}else if(s->dnpc == ret_addr) {	
 			// check for function return 
+			indent_level--;
 			for(i=0; i<indent_level; i++){
 				printf("    ");
 			}
 			printf("return\n");
-			indent_level--;
 		}
 		ja_flag = false;
 	}
