@@ -142,8 +142,9 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
-			// print ring buffer asms
-			print_ringbuf(&rbuf);
+			// print ring buffer asms when error happens
+			if(nemu_state.state == NEMU_ABORT || nemu_state.halt_ret != 0)
+				print_ringbuf(&rbuf);
 
 			// print failure log info
       Log("nemu: %s at pc = " FMT_WORD,
