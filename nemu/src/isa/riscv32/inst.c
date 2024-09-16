@@ -147,9 +147,9 @@ static int decode_exec(Decode *s) {
 	int i;
 	// check for function call or return
 	if(ja_flag){
-		printf("ja_flag==true\n");
+		//printf("ja_flag==true\n");
 		// check for funcion call
-		printf("s->dnpc=0x%x, ret_addr=0x%x\n", s->dnpc, ret_addr);
+		//printf("s->dnpc=0x%x, ret_addr=0x%x\n", s->dnpc, ret_addr);
 		if((func_idx = check_func_sym(s->dnpc, funcs, func_sym_len)) > 0){
 			// have a function call
 			for(i=0; i<indent_level; i++){
@@ -158,7 +158,7 @@ static int decode_exec(Decode *s) {
 			printf("call <%s> @0x%u\n", funcs[func_idx].sym_name, s->dnpc);
 			ret_addr = s->snpc;
 			indent_level++;
-			printf("expected return addr: 0x%x\n", ret_addr);
+			//printf("expected return addr: 0x%x\n", ret_addr);
 		}else if(s->dnpc == ret_addr) {	
 			// check for function return 
 			for(i=0; i<indent_level; i++){
