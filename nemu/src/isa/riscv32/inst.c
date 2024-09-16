@@ -18,6 +18,7 @@
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
 #include <stdio.h>
+#include "../../monitor/elf-read.h"
 
 #define R(i) gpr(i)
 #define Mr vaddr_read
