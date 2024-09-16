@@ -145,7 +145,9 @@ static int decode_exec(Decode *s) {
 
 	// check for function call or return
 	if(ja_flag){
+		printf("ja_flag==true\n");
 		// check for funcion call
+		printf("s->dnpc=0x%x, s->snpc=0x%x\n", s->dnpc, s->snpc);
 		if(check_func_sym(s->dnpc, funcs, func_sym_len) > 0){
 			// have a function call
 			//printf("call detected\n");
