@@ -65,7 +65,6 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	rb = fread(symtabs, sizeof(Elf32_Sym), symtabs_len, fp);
 	assert(rb == symtabs_len);
 	
-	printf("symtab FUNC entries:\n");
 	for(i=0; i<symtabs_len; i++){
 		if(ELF32_ST_TYPE(symtabs[i].st_info) == STT_FUNC){
 			funcs[func_cnt].sym_addr = symtabs[i].st_value;
