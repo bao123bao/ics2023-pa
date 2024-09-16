@@ -150,11 +150,12 @@ static int decode_exec(Decode *s) {
 			// have a function call
 			printf("call detected\n");
 			ret_addr = s->snpc;
-			ja_flag = false;
-		}else if(s->dnpc == s->pc) {	
+		}else if(s->dnpc == s->snpc) {	
 			// check for function return 
 			printf("return\n");
 		}
+
+		ja_flag = false;
 	}
 
 
