@@ -51,14 +51,54 @@ void init_mem() {
 }
 
 word_t paddr_read(paddr_t addr, int len) {
-  if (likely(in_pmem(addr))) return pmem_read(addr, len);
-  IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
+	word_t ret;
+
+  if (likely(in_pmem(addr))) {
+		ret =  pmem_read(addr, len);
+#ifdef CONFIG_MTRACE
+		printf("Read %02x (%d byte) from pmem 0x%02x\n", ret, len, addr);
+#endif
+		return ret;
+	}
+
+#ifdef CONFIG_DEVICE  
+	ret = mmio_read(addr, len);
+#ifdef CONFIG_MTRACE
+	printf("Read %02x (%d byte) from mmio 0x%02x\n", ret, len, addr);
+#endif
+	return ret;
+#endif
+
+
+#ifdef CONFIG_MTRACE
+	printf("Cannot read %02x (%d byte) from mem 0x%02x, out of bound\n", ret, len, addr);
+#endif
+
   out_of_bound(addr);
   return 0;
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
-  IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
+  
+	if (likely(in_pmem(addr))) { 
+#ifdef CONFIG_MTRACE
+		printf("Write %02x (%d byte) to pmem 0x%02x\n", data, len, addr);
+#endif
+		pmem_write(addr, len, data); 
+		return;
+	}
+
+#ifdef CONFIG_DEVICE
+#ifdef CONFIG_MTRACE
+	printf("Write %02x (%d byte) to mmio 0x%02x\n", data, len, addr);
+#endif
+  mmio_write(addr, len, data);
+	return;
+#endif
+
+#ifdef CONFIG_MTRACE
+	printf("Cannot write %02x (%d byte) to mem 0x%02x, out of bound\n", data, len, addr);
+#endif
+
   out_of_bound(addr);
 }
