@@ -13,6 +13,11 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	
 	FILE *fp;
 	fp = fopen("./add-riscv32-nemu.elf", "r");
+	if(!fp){
+		printf("elf file read failure\n");
+		return;
+	}
+
 	rb = fread((Elf32_Ehdr*)&ehdr, sizeof(Elf32_Ehdr), 1, fp);
 	assert(rb == sizeof(Elf32_Ehdr));
 	// read section header by e_shoff
