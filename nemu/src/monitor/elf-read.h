@@ -9,6 +9,8 @@ typedef struct {
 	char sym_name[50];
 } func_sym;
 
+extern func_sym funcs[100];
+extern int func_sym_len;
 
 void read_func_symbols(char *filename, func_sym *funcs, int *len);
 

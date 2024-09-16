@@ -48,8 +48,8 @@ static char *img_file = NULL;
 static char *elf_file = NULL;
 static int difftest_port = 1234;
 
-static func_sym funcs[100];
-static int func_sym_len;
+func_sym funcs[100];
+int func_sym_len = 0;
 
 static long load_img() {
   if (img_file == NULL) {
