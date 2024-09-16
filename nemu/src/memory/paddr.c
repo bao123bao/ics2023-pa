@@ -18,6 +18,7 @@
 #include <device/mmio.h>
 #include <isa.h>
 
+
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
@@ -50,30 +51,41 @@ void init_mem() {
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
+void print_mtrace(bool isread, bool success,char *mem_type, paddr_t addr, int len, word_t data){
+#ifndef CONFIG_MTRACE
+		return;
+#endif
+
+	if(isread) {
+		if(success)
+			printf("Read 0x%08x (%d bytes) from %s 0x%08x\n", data, len, mem_type, addr);
+		else
+			printf("Cannot read %d bytes from %s 0x%08x\n", len, mem_type, addr);
+		return;
+	}
+
+	if(success)
+		printf("Write 0x%08x (%d bytes) to %s 0x%08x\n", data, len, mem_type, addr);
+	else
+		printf("Cannot write %d bytes to %s 0x%08x\n", len, mem_type, addr);
+}
+
 word_t paddr_read(paddr_t addr, int len) {
 	word_t ret;
 
   if (likely(in_pmem(addr))) {
 		ret =  pmem_read(addr, len);
-#ifdef CONFIG_MTRACE
-		printf("Read %02x (%d byte) from pmem 0x%02x\n", ret, len, addr);
-#endif
+		print_mtrace(true, true, "pmem", addr, len, ret);
 		return ret;
 	}
 
 #ifdef CONFIG_DEVICE  
 	ret = mmio_read(addr, len);
-#ifdef CONFIG_MTRACE
-	printf("Read %02x (%d byte) from mmio 0x%02x\n", ret, len, addr);
-#endif
+	print_mtrace(true, true, "mmio", addr, len, ret);
 	return ret;
 #endif
 
-
-#ifdef CONFIG_MTRACE
-	printf("Cannot read %02x (%d byte) from mem 0x%02x, out of bound\n", ret, len, addr);
-#endif
-
+	print_mtrace(true, false, "pmem", addr, len, 0);
   out_of_bound(addr);
   return 0;
 }
@@ -81,24 +93,17 @@ word_t paddr_read(paddr_t addr, int len) {
 void paddr_write(paddr_t addr, int len, word_t data) {
   
 	if (likely(in_pmem(addr))) { 
-#ifdef CONFIG_MTRACE
-		printf("Write %02x (%d byte) to pmem 0x%02x\n", data, len, addr);
-#endif
 		pmem_write(addr, len, data); 
+		print_mtrace(false, true, "pmem", addr, len, data);
 		return;
 	}
 
 #ifdef CONFIG_DEVICE
-#ifdef CONFIG_MTRACE
-	printf("Write %02x (%d byte) to mmio 0x%02x\n", data, len, addr);
-#endif
   mmio_write(addr, len, data);
+	print_mtrace(false, true, "mmio", addr, len, data);
 	return;
 #endif
 
-#ifdef CONFIG_MTRACE
-	printf("Cannot write %02x (%d byte) to mem 0x%02x, out of bound\n", data, len, addr);
-#endif
-
+	print_mtrace(false, false, "pmem", addr, len, 0);
   out_of_bound(addr);
 }
