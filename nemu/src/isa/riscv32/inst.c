@@ -148,7 +148,7 @@ static int decode_exec(Decode *s) {
 		// check for funcion call
 		if(check_func_sym(s->dnpc, funcs, func_sym_len) > 0){
 			// have a function call
-			printf("call detected\n");
+			//printf("call detected\n");
 			ret_addr = s->snpc;
 		}else if(s->dnpc == s->snpc) {	
 			// check for function return 
