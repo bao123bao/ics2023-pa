@@ -153,7 +153,7 @@ static int decode_exec(Decode *s) {
 			//printf("call detected\n");
 			ret_addr = s->snpc;
 			printf("expected return addr: 0x%x\n", ret_addr);
-		}else if(s->dnpc == s->snpc) {	
+		}else if(s->dnpc == ret_addr) {	
 			// check for function return 
 			printf("return\n");
 		}
