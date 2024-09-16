@@ -12,7 +12,7 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	size_t rb;
 	
 	FILE *fp;
-	fp = fopen("./add-riscv32-nemu.elf", "r");
+	fp = fopen(filename, "r");
 	if(!fp){
 		printf("elf file read failure\n");
 		return;
