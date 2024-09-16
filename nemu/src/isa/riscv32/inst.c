@@ -35,7 +35,7 @@ word_t ret_addr;
 
 // flag for jal and jalr
 bool ja_flag = false;
-
+int indent_level = 0;
 
 #define src1R() do { *src1 = R(rs1); } while (0)
 #define src2R() do { *src2 = R(rs2); } while (0)
@@ -84,7 +84,8 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 }
 
 static int decode_exec(Decode *s) {
-  int rd = 0;
+	int func_idx;
+	int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
 
@@ -142,27 +143,32 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 //	printf("s->dnpc=0x%x, s->pc=0x%x, imm=0x%x, rd=0x%x\n", s->dnpc, s->pc,imm, R(rd));
   R(0) = 0; // reset $zero to 0
-
+	
+	int i;
 	// check for function call or return
 	if(ja_flag){
 		printf("ja_flag==true\n");
 		// check for funcion call
 		printf("s->dnpc=0x%x, ret_addr=0x%x\n", s->dnpc, ret_addr);
-		if(check_func_sym(s->dnpc, funcs, func_sym_len) > 0){
+		if((func_idx = check_func_sym(s->dnpc, funcs, func_sym_len)) > 0){
 			// have a function call
-			//printf("call detected\n");
+			for(i=0; i<indent_level; i++){
+				printf("    ");
+			}
+			printf("call <%s> @0x%u\n", funcs[func_idx].sym_name, s->dnpc);
 			ret_addr = s->snpc;
+			indent_level++;
 			printf("expected return addr: 0x%x\n", ret_addr);
 		}else if(s->dnpc == ret_addr) {	
 			// check for function return 
+			for(i=0; i<indent_level; i++){
+				printf("    ");
+			}
 			printf("return\n");
+			indent_level--;
 		}
-
 		ja_flag = false;
 	}
-
-
-
 
   return 0;
 }
