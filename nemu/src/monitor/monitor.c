@@ -48,8 +48,8 @@ static char *img_file = NULL;
 static char *elf_file = NULL;
 static int difftest_port = 1234;
 
-static func_sym funcs[100];
-static int func_sym_len;
+//static func_sym funcs[100];
+//static int func_sym_len;
 
 static long load_img() {
   if (img_file == NULL) {
@@ -114,7 +114,7 @@ void init_monitor(int argc, char *argv[]) {
   
   // read function symbols from elf
   if(elf_file){
-	  read_func_symbols(elf_file, funcs, &func_sym_len);
+	  //read_func_symbols(elf_file, funcs, &func_sym_len);
 	  printf("elf file readed: %s\n", elf_file);
 	}
 	
