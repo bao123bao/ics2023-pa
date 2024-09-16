@@ -18,6 +18,7 @@
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include "../../monitor/elf-read.h"
 
 #define R(i) gpr(i)
@@ -28,6 +29,13 @@ enum {
   TYPE_I, TYPE_U, TYPE_S, TYPE_J, TYPE_R, TYPE_B, 
   TYPE_N, // none
 };
+
+// return addr of function call
+word_t ret_addr;
+
+// flag for jal and jalr
+bool ja_flag = false;
+
 
 #define src1R() do { *src1 = R(rs1); } while (0)
 #define src2R() do { *src2 = R(rs2); } while (0)
@@ -113,8 +121,8 @@ static int decode_exec(Decode *s) {
 	INSTPAT("0100000 ????? ????? 101 ????? 00100 11", srai   , I, R(rd) = (int32_t)src1 >> imm);
 	INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(rd) = ((uint32_t)src1 < (uint32_t)imm) ? 1 : 0);
 	INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(rd) = src1 - src2);
-	INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc; s->dnpc = s->pc + imm; );
-	INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(rd) = s->snpc; s->dnpc = (src1 + imm) & ~1);
+	INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc; s->dnpc = s->pc + imm;       ja_flag = true);
+	INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(rd) = s->snpc; s->dnpc = (src1 + imm) & ~1; ja_flag = true);
 	INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));
 	INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if(src1 == src2) s->dnpc = s->pc + imm);
 	INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(src1 != src2) s->dnpc = s->pc + imm);
@@ -135,10 +143,22 @@ static int decode_exec(Decode *s) {
 //	printf("s->dnpc=0x%x, s->pc=0x%x, imm=0x%x, rd=0x%x\n", s->dnpc, s->pc,imm, R(rd));
   R(0) = 0; // reset $zero to 0
 
-	// check for function call
-	if(check_func_sym(s->dnpc, funcs, func_sym_len) > 0){
-		printf("call detected\n");
+	// check for function call or return
+	if(ja_flag){
+		// check for funcion call
+		if(check_func_sym(s->dnpc, funcs, func_sym_len) > 0){
+			// have a function call
+			printf("call detected\n");
+			ret_addr = s->snpc;
+			ja_flag = false;
+		}else if(s->dnpc == s->pc) {	
+			// check for function return 
+			printf("return\n");
+		}
 	}
+
+
+
 
   return 0;
 }
