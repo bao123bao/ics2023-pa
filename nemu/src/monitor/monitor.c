@@ -116,6 +116,7 @@ void init_monitor(int argc, char *argv[]) {
   if(elf_file){
 	  read_func_symbols(elf_file, funcs, &func_sym_len);
 	  printf("elf file readed: %s\n", elf_file);
+		print_func_syms(funcs, func_sym_len);
 	}
 	
   /* Set random seed. */

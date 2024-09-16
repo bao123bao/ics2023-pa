@@ -12,4 +12,6 @@ typedef struct {
 
 void read_func_symbols(char *filename, func_sym *funcs, int *len);
 
+void print_func_syms(func_sym *funcs, int len);
+
 

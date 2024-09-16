@@ -76,6 +76,15 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	*len = func_cnt;
 }
 
+
+void print_func_syms(func_sym *funcs, int len){
+	int i;
+	printf("func syms:\n");
+	for(i=0; i<len; i++){
+		printf("[%2d] 0x%x, %s\n", i, funcs[i].sym_addr, funcs[i].sym_name);
+	}
+}
+
 /*
 
 int main(){
