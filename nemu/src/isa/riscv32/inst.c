@@ -135,6 +135,11 @@ static int decode_exec(Decode *s) {
 //	printf("s->dnpc=0x%x, s->pc=0x%x, imm=0x%x, rd=0x%x\n", s->dnpc, s->pc,imm, R(rd));
   R(0) = 0; // reset $zero to 0
 
+	// check for function call
+	if(check_func_sym(s->dnpc, funcs, func_sym_len) > 0){
+		printf("call detected\n");
+	}
+
   return 0;
 }
 

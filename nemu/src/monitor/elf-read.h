@@ -3,6 +3,7 @@
 #include <elf.h>
 #include <string.h>
 #include <assert.h>
+#include <common.h>
 
 typedef struct {
 	Elf32_Addr sym_addr;
@@ -16,4 +17,4 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len);
 
 void print_func_syms(func_sym *funcs, int len);
 
-
+int check_func_sym(word_t addr, func_sym *funcs, int len);
