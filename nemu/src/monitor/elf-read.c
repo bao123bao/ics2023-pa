@@ -19,12 +19,12 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	}
 
 	rb = fread((Elf32_Ehdr*)&ehdr, sizeof(Elf32_Ehdr), 1, fp);
-	assert(rb == sizeof(Elf32_Ehdr));
+	assert(rb == 1);
 	// read section header by e_shoff
 	shdrs = (Elf32_Shdr *) malloc(ehdr.e_shnum * sizeof(Elf32_Shdr));
 	fseek(fp, ehdr.e_shoff, SEEK_SET);
 	rb = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp);
-	assert(rb == ehdr.e_shnum * sizeof(Elf32_Shdr));
+	assert(rb == ehdr.e_shnum);
 	
 	int i;
 	size_t str_lens[2];
@@ -50,12 +50,12 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	// read .strtab string
 	fseek(fp, str_offs[0], SEEK_SET);
 	rb = fread(strtab, str_lens[0], 1, fp);
-	assert(rb == str_lens[0]);
+	assert(rb == 1);
 
 	// read .shstrtab string
 	fseek(fp, str_offs[1], SEEK_SET);
 	rb = fread(shstrtab, str_lens[1], 1, fp);
-	assert(rb == str_lens[1]);
+	assert(rb == 1);
 
 	// read symbol table
 	symtabs_len = sym_len / sizeof(Elf32_Sym);
@@ -63,7 +63,7 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	symtabs = (Elf32_Sym *) malloc(symtabs_len*sizeof(Elf32_Sym));
 	fseek(fp, sym_off, SEEK_SET);
 	rb = fread(symtabs, sizeof(Elf32_Sym), symtabs_len, fp);
-	assert(rb == symtabs_len * sizeof(Elf32_Sym));
+	assert(rb == symtabs_len);
 	
 	printf("symtab FUNC entries:\n");
 	for(i=0; i<symtabs_len; i++){
