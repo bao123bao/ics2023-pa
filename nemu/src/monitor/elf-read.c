@@ -85,13 +85,12 @@ void print_func_syms(func_sym *funcs, int len){
 	}
 }
 
-// check if the addr is start of a function
+// check if the addr is start of a function, return found idx, else -1
 int check_func_sym(word_t addr, func_sym *funcs, int len) {
 	int i;
 	for(i=0; i<len; i++){
 		if(funcs[i].sym_addr == addr){
-			printf("call function <%s> @0x%u\n", funcs[i].sym_name, addr);
-			return 1;
+			return i;
 		}
 	}
 	return -1;
