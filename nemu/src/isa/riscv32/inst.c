@@ -84,7 +84,6 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 }
 
 static int decode_exec(Decode *s) {
-	int func_idx;
 	int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
@@ -143,7 +142,10 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 //	printf("s->dnpc=0x%x, s->pc=0x%x, imm=0x%x, rd=0x%x\n", s->dnpc, s->pc,imm, R(rd));
   R(0) = 0; // reset $zero to 0
+
 	
+#ifdef CONFIG_FTRACE
+	int func_idx;
 	int i;
 	// check for function call or return
 	if(ja_flag){
@@ -169,6 +171,8 @@ static int decode_exec(Decode *s) {
 		}
 		ja_flag = false;
 	}
+
+#endif
 
   return 0;
 }

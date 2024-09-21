@@ -171,6 +171,10 @@ config MTRACE
 	bool "Enable memory access tracer"
 	default y
 
+config FTRACE
+	depends on TRACE
+	bool "Enable function call tracer"
+	default y
 
 choice
   prompt "Reference design"
