@@ -113,11 +113,13 @@ void init_monitor(int argc, char *argv[]) {
   parse_args(argc, argv);
   
   // read function symbols from elf
+#ifdef CONFIG_FTRACE
   if(elf_file){
 	  read_func_symbols(elf_file, funcs, &func_sym_len);
 	  printf("\nelf file readed: %s\n", elf_file);
 		print_func_syms(funcs, func_sym_len);
 	}
+#endif
 	
   /* Set random seed. */
   init_rand();
