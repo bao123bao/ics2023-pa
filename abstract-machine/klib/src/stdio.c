@@ -2,6 +2,7 @@
 #include <klib.h>
 #include <klib-macros.h>
 #include <stdarg.h>
+#include <limits.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
@@ -17,8 +18,21 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 void int2str(char *buf, int *len, int num) {
 	int digit;
 	int cnt = 0, p = 0;
+	
+	if(num == INT_MIN){
+		char *temp = "-2147483648";
+		int i;
+		for(i=0; i<11; i++){
+			buf[i] = temp[i];
+		}
+		buf[i] = '\0';
+		*len = 11;
+		return;
+	}
+
 
 	if(num<0){
+		num = -num;
 		buf[p] = '-';
 		p++;
 		cnt++;
@@ -36,6 +50,7 @@ void int2str(char *buf, int *len, int num) {
 	int q = cnt-1;
 	char t;
 
+	// swap the digits to true order
 	while(p<q){
 		t = buf[p];
 		buf[p] = buf[q];
