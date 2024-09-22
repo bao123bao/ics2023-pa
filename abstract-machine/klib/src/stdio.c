@@ -59,7 +59,7 @@ int printf(const char *fmt, ...) {
 	va_start(args, fmt);
 	
 	char buf[1000];
-	int cnt = sprintf(buf, fmt, args);
+	int cnt = vsprintf(buf, fmt, args);
 	int i;
 	for(i=0; i<cnt; i++){
 		putch(buf[i]);
@@ -87,13 +87,16 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 				case 's':
 					char *sp = va_arg(ap, char*);
 					strcpy(p, sp);
-					p += strlen(sp);
+					int slen = strlen(sp);
+					p += slen;
+					cnt += slen;
 					break;
 				case 'd':
 					int num = va_arg(ap, int);
 					int numlen;
 					int2str(p, &numlen, num);
 					p += numlen;
+					cnt += numlen;
 					break;
 				default:
 					assert(0);
@@ -103,8 +106,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 			*p = c;
 			p++;
 			i++;
+			cnt++;
 		}
-	cnt++;
 	}
 	*p = '\0';
 	return cnt;
