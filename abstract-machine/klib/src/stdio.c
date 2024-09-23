@@ -98,15 +98,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 					p += numlen;
 					cnt += numlen;
 					break;
-				case 'c':
-					char ch = (char) va_arg(ap, int);
-					*p = ch;
-					p++;
-					cnt++;
-					break;
 				default:
-					putch(c);
-					putch(fmt_type);
 					assert(0);
 			}
 			i += 2;
