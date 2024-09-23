@@ -105,6 +105,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 					cnt++;
 					break;
 				default:
+					putch(fmt_type);
 					assert(0);
 			}
 			i += 2;
