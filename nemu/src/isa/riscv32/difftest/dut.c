@@ -27,7 +27,7 @@ const char *regs_r[] = {
 void isa_reg_r_display(CPU_state *ref_r) {
 	int i;
 	printf("===Nemu vs ref gpr values===\n");
-	printf("id %-20s %-20s\n", "nemu (dut)", "ref");
+	printf("id          %-20s %-20s\n", "nemu (dut)", "ref");
 	for (i=0; i<32; i++){
 		printf("[%2d]%-7s 0x%-20x 0x%-20x\n", i, regs_r[i], cpu.gpr[i], ref_r->gpr[i]);
 	}
