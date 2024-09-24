@@ -53,13 +53,13 @@ char *strcat(char *dst, const char *src) {
 int strcmp(const char *s1, const char *s2) {
   const char *p = s1;
 	const char *q = s2;
-	while(*p!='\0' && *q!='\0'){
+	do {
 		if(*p != *q){
 			return (*p) - (*q);
 		}
 		p++;
 		q++;
-	}
+	} while(*p!='\0' && *q!='\0');
 	return 0;
 }
 
