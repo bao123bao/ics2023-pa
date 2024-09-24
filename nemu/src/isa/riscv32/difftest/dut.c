@@ -20,11 +20,13 @@
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   int i;
 	for(i=0; i<32; i++){
-		if(ref_r->gpr[i] != cpu.gpr[i])
+		if(ref_r->gpr[i] != cpu.gpr[i]){
 			return false;
+		}
 	}
 
-	//printf("dut pc=0x%x, ref pc=0x%x\n", pc, ref_r->pc);
+	printf("ref pc=0x%x, s->dnpc=0x%x, cpu.pc=0x%x\n", ref_r->pc, pc, cpu.pc);
+	assert(pc == cpu.pc);
 
 //	if(ref_r->pc != pc)
 //		return false;
