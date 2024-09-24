@@ -23,7 +23,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 	int i;
 	for(i=0; i<32; i++){
 		if(ref_r->gpr[i] != cpu.gpr[i]){
-			printf("Error at pc=0x%x, gpr[%d] check failed\n", i, pc);
+			printf("Error at pc=0x%x, gpr[%d] check failed\n",pc, i);
 			return false;
 		}
 	}
