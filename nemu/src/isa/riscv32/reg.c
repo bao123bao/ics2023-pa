@@ -27,7 +27,7 @@ void isa_reg_display() {
 	int i;
 	printf("nemu gpr values:\n");
 	for (i=0; i<32; i++){
-		printf("%-7s 0x%-20x\n", regs[i], cpu.gpr[i]);
+		printf("[%2d]%-7s 0x%-20x\n", i, regs[i], cpu.gpr[i]);
 	}
 	printf("%-7s 0x%-20x\n", "pc", cpu.pc);
 }
