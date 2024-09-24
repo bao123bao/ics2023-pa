@@ -18,15 +18,22 @@
 #include "../local-include/reg.h"
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
-  int i;
+  // pc is current instruction's address
+	// ref_r->pc is dnpc value updated by ref
+	int i;
 	for(i=0; i<32; i++){
 		if(ref_r->gpr[i] != cpu.gpr[i]){
+			printf("Error at pc=0x%x, gpr[%d] check failed\n", i, pc);
 			return false;
 		}
 	}
-
-	printf("ref pc=0x%x, s->pc=0x%x, cpu.pc=0x%x\n", ref_r->pc, pc, cpu.pc);
-	assert(ref_r->pc == cpu.pc);
+	if(ref_r->pc != cpu.pc){
+		printf("Error at pc=0x%x, dnpc check failed\n", pc);
+		printf("ref->pc=0x%x, dut->dnpc=0x%x\n", ref_r->pc, cpu.pc);
+		return false;
+	}
+//	printf("ref pc=0x%x, s->pc=0x%x, cpu.pc=0x%x\n", ref_r->pc, pc, cpu.pc);
+	//assert(ref_r->pc == cpu.pc);
 
 //	if(ref_r->pc != pc)
 //		return false;
