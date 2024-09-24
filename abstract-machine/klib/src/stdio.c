@@ -98,6 +98,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 					p += numlen;
 					cnt += numlen;
 					break;
+				case 'c':
+					char ch = (char) va_arg(ap, int);
+					*p = ch;
+					p++;
+					cnt++;
 				default:
 					putch(fmt_type);
 					assert(0);
@@ -115,7 +120,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 }
 
 
-
 int sprintf(char *out, const char *fmt, ...) {
  	va_list args;
 	va_start(args, fmt);
@@ -124,55 +128,7 @@ int sprintf(char *out, const char *fmt, ...) {
 	va_end(args);
 	
   return cnt;
-  
-  
-  /*
-  va_list args;
-	va_start(args, fmt);
-
-	char fmt_type;
-	char c;
-	char *p = out;
-	
-	int i=0;
-	int fmt_cnt = 0;
-	int len = strlen(fmt);
-	
-	while(i<len){
-		c = fmt[i];
-		if(c=='%' && i<len-1){
-			fmt_type = fmt[i+1];
-
-			switch (fmt_type) {
-				case 's':
-					char *sp = va_arg(args, char*);
-					strcpy(p, sp);
-					p += strlen(sp);
-					fmt_cnt++;
-					break;
-				case 'd':
-					int num = va_arg(args, int);
-					int numlen;
-					int2str(p, &numlen, num);
-					p += numlen;
-					fmt_cnt++;
-					break;
-				default:
-					assert(0);
-			}
-			i += 2;
-		}else{
-			*p = c;
-			p++;
-			i++;
-		}
-		
-	}
-	va_end(args);
-	*p = '\0';
-	return fmt_cnt;
-	*/
-}
+}  
 
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
