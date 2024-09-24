@@ -31,7 +31,7 @@ void isa_reg_r_display(CPU_state *ref_r) {
 	for (i=0; i<32; i++){
 		printf("[%2d]%-7s 0x%-20x 0x%-20x\n", i, regs_r[i], cpu.gpr[i], ref_r->gpr[i]);
 	}
-	printf("%-7s 0x%-20x\n 0x%-20x", "pc", cpu.pc, ref_r->pc);
+	printf("%-7s 0x%-20x 0x%-20x\n", "pc", cpu.pc, ref_r->pc);
 }
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
