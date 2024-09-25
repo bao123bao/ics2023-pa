@@ -23,7 +23,9 @@ word_t vaddr_read(vaddr_t addr, int len);
 void vaddr_write(vaddr_t addr, int len, word_t data);
 
 #define PAGE_SHIFT        12
+// page size is 4kb
 #define PAGE_SIZE         (1ul << PAGE_SHIFT)
+// page mask is 12-bit ones
 #define PAGE_MASK         (PAGE_SIZE - 1)
 
 #endif
