@@ -69,7 +69,7 @@ void send_key(uint8_t scancode, bool is_keydown) {
     uint32_t am_scancode = keymap[scancode] | (is_keydown ? KEYDOWN_MASK : 0);
 
     key_enqueue(am_scancode);
-		printf("send key scancode: 0x%x\n", am_scancode);
+		//printf("send key scancode: 0x%x\n", am_scancode);
   }
 }
 #else // !CONFIG_TARGET_AM
