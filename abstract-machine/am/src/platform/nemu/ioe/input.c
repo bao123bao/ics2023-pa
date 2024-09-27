@@ -5,7 +5,7 @@
 
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
 	
-	kbd->keycode = inl(KBD_ADDR);
+	kbd->keycode = (int)inl(KBD_ADDR);
 	if(kbd->keycode != 0){
 		kbd->keydown = 1;
 	}else{
