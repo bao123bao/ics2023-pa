@@ -86,6 +86,7 @@ static void i8042_data_io_handler(uint32_t offset, int len, bool is_write) {
   assert(!is_write);
   assert(offset == 0);
   i8042_data_port_base[0] = key_dequeue();
+	Log("kbd base written %d\n", i8042_data_port_base[0]);
 }
 
 void init_i8042() {
