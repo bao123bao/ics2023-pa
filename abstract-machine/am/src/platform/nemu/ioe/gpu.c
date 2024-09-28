@@ -1,6 +1,6 @@
 #include <am.h>
 #include <nemu.h>
-
+#include <klib.h>
 #define SYNC_ADDR (VGACTL_ADDR + 4)
 
 
@@ -48,6 +48,9 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	__am_screen_size(&size);
 
 	uint32_t color = ((uint32_t *)(uintptr_t) ctl->pixels)[0];
+	
+	//printf("offset=%di, x=%d, y=%d, w=%d, h=%d\n", 
+	//		offset, ctl->x, ctl->y, ctl->w, ctl->w);
 
 	for(i = 0; i < ctl->h; i++){
 		for(j = 0; i < ctl->w; j++){
