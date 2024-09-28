@@ -49,6 +49,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 
 	AM_SCREEN_SIZE_T size;
 	__am_screen_size(&size);
+	printf("screen width=%d, height=%d\n", size.width, size.height);
 
 	if (ctl->pixels) {
 		colorbuf = ((uint32_t *)(uintptr_t) ctl->pixels);
@@ -56,7 +57,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 // 			ctl->x, ctl->y, ctl->w, ctl->h);
 	for(i = 0; i < ctl->h; i++){
 		for(j = 0; j < ctl->w; j++){
-			offset = (ctl->y + i)*size.width + (ctl->x + j);
+			offset = (ctl->y + i) * size.width + (ctl->x + j);
 //			printf("i=%d, j=%d, offset=%d, x=%d, y=%d, w=%d, h=%d\n", 
 //				i, j, offset, ctl->x, ctl->y, ctl->w, ctl->h);
 			outl(FB_ADDR + offset, colorbuf[color_idx++]);
