@@ -53,8 +53,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 		for(j = 0; j < ctl->w; j++){
 			offset = (ctl->y + i)*size.width + (ctl->x + j);
 			
-			printf("i=%d, j=%d, offset=%d, x=%d, y=%d, w=%d, h=%d\n", 
-				i, j, offset, ctl->x, ctl->y, ctl->w, ctl->h);
+//			printf("i=%d, j=%d, offset=%d, x=%d, y=%d, w=%d, h=%d\n", 
+	//			i, j, offset, ctl->x, ctl->y, ctl->w, ctl->h);
 			
 			outl(FB_ADDR + offset, color);
 		}
