@@ -45,22 +45,32 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	int i, j;
 	int offset = 0;
 	uint32_t *colorbuf;
+	//uint32_t *fb;
 	int color_idx = 0;
+	int w, h, x, y;
 
 	AM_SCREEN_SIZE_T size;
 	__am_screen_size(&size);
-	printf("screen width=%d, height=%d\n", size.width, size.height);
+//	printf("screen width=%d, height=%d\n", size.width, size.height);
+
+	w = size.width;
+	h = size.height;
+
+	x = ctl->x;
+	y = ctl->y;
 
 	if (ctl->pixels) {
+//		fb = (uint32_t *)(uintptr_t)FB_ADDR;
 		colorbuf = ((uint32_t *)(uintptr_t) ctl->pixels);
 //		printf("x=%d, y=%d, w=%d, h=%d\n",
 // 			ctl->x, ctl->y, ctl->w, ctl->h);
-	for(i = 0; i < ctl->h; i++){
-		for(j = 0; j < ctl->w; j++){
-			offset = (ctl->y + i) * size.width + (ctl->x + j);
+	for(i = 0; i < h; i++){
+		for(j = 0; j < w; j++){
+			offset = (y + i) * w + (x + j);
 //			printf("i=%d, j=%d, offset=%d, x=%d, y=%d, w=%d, h=%d\n", 
 //				i, j, offset, ctl->x, ctl->y, ctl->w, ctl->h);
-			outl(FB_ADDR + offset, colorbuf[color_idx++]);
+//			fd[] = colorbuf[];
+			outl(FB_ADDR + offset*4, colorbuf[color_idx++]);
 		}
 	}
 	}
