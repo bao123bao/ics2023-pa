@@ -18,6 +18,7 @@ void __am_screen_sync(AM_SCREEN_SYNC_T *sync) {
 
 // existed regs
 void __am_gpu_init() {
+	return;
 	int i;
 	AM_SCREEN_SIZE_T size;
 	__am_screen_size(&size);
