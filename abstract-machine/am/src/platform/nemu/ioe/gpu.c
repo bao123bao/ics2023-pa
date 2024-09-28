@@ -43,11 +43,13 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	int i, j;
 	int offset = 0;
-	
+	uint32_t color;
+
 	AM_SCREEN_SIZE_T size;
 	__am_screen_size(&size);
 
-	uint32_t color = ((uint32_t *)(uintptr_t) ctl->pixels)[0];
+	if (ctl->pixels) {
+		color = ((uint32_t *)(uintptr_t) ctl->pixels)[0];
 
 	for(i = 0; i < ctl->h; i++){
 		for(j = 0; j < ctl->w; j++){
@@ -61,6 +63,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 			outl(FB_ADDR + offset, color);
 		}
 	}
+	}
+
 	if (ctl->sync) {
 		printf("fbdraw sync\n");
     outl(SYNC_ADDR, 1);
