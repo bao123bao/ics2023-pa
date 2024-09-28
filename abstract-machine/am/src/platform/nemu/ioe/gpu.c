@@ -50,7 +50,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	uint32_t color = ((uint32_t *)(uintptr_t) ctl->pixels)[0];
 
 	for(i = 0; i < ctl->h; i++){
-		for(j = 0; i < ctl->w; j++){
+		for(j = 0; j < ctl->w; j++){
 			offset = (ctl->y + i)*size.width + (ctl->x + j);
 			
 			printf("i=%d, j=%d, offset=%d, x=%d, y=%d, w=%d, h=%d\n", 
