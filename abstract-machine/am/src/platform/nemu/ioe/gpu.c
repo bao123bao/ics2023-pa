@@ -63,7 +63,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 //		fb = (uint32_t *)(uintptr_t)FB_ADDR;
 		colorbuf = ((uint32_t *)(uintptr_t) ctl->pixels);
 		printf("x=%d, y=%d, w=%d, h=%d\n",
- 			ctl->x, ctl->y, ctl->w, ctl->h);
+ 			x,y,w,h);
 	for(i = 0; i < h; i++){
 		for(j = 0; j < w; j++){
 			offset = (y + i) * w + (x + j);
