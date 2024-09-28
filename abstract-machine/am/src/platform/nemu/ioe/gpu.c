@@ -51,8 +51,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 	if (ctl->pixels) {
 		color = ((uint32_t *)(uintptr_t) ctl->pixels)[0];
 
-		printf("x=%d, y=%d, w=%d, h=%d\n",
- 			ctl->x, ctl->y, ctl->w, ctl->h);
+//		printf("x=%d, y=%d, w=%d, h=%d\n",
+// 			ctl->x, ctl->y, ctl->w, ctl->h);
 
 
 	for(i = 0; i < ctl->h; i++){
