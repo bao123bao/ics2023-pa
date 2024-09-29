@@ -50,6 +50,8 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 
 	}
 
+	printf("string loop\n");
+
 	// read .strtab string
 	fseek(fp, str_offs[0], SEEK_SET);
 	rb = fread(strtab, str_lens[0], 1, fp);
