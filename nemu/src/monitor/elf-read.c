@@ -27,7 +27,8 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	fseek(fp, ehdr.e_shoff, SEEK_SET);
 	rb = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp);
 	assert(rb == ehdr.e_shnum);
-	
+
+
 	int i;
 	size_t str_lens[2];
 	size_t sym_len = 0;
@@ -66,7 +67,9 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	fseek(fp, sym_off, SEEK_SET);
 	rb = fread(symtabs, sizeof(Elf32_Sym), symtabs_len, fp);
 	assert(rb == symtabs_len);
-	
+		
+	printf("symbol table readed\n");
+
 	for(i=0; i<symtabs_len; i++){
 		if(ELF32_ST_TYPE(symtabs[i].st_info) == STT_FUNC){
 			funcs[func_cnt].sym_addr = symtabs[i].st_value;
