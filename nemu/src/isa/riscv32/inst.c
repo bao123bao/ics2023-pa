@@ -173,7 +173,8 @@ static int decode_exec(Decode *s) {
 
 			indent_level++;
 			//printf("expected return addr: 0x%x\n", ret_addr);
-		}else if(s->dnpc == ret_addr_stack[stack_top--]) {	
+		}else if(s->dnpc == ret_addr_stack[stack_top]) {	
+			stack_top--;
 			// check for function return 
 			indent_level--;
 			for(i=0; i<indent_level; i++){
