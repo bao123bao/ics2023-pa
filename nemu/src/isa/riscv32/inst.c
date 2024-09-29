@@ -170,7 +170,7 @@ static int decode_exec(Decode *s) {
 			for(i=0; i<indent_level; i++){
 				printf("    ");
 			}
-			printf("return\n");
+			printf("return, to addr=0x%x\n", s->dnpc);
 		}
 		ja_flag = false;
 	}
