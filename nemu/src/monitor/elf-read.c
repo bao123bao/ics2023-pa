@@ -52,6 +52,8 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 
 	printf("string loop\n");
 
+	printf("str_lens: %lu, %lu\n", str_lens[0], str_lens[1]);
+
 	// read .strtab string
 	fseek(fp, str_offs[0], SEEK_SET);
 	rb = fread(strtab, str_lens[0], 1, fp);
