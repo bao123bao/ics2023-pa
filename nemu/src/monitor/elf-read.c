@@ -4,8 +4,8 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 
 	Elf32_Ehdr ehdr;
 	Elf32_Shdr *shdrs;
-	char strtab[500];
-	char shstrtab[500];
+	char strtab[1000];
+	char shstrtab[1000];
 	Elf32_Sym *symtabs;
 	uint32_t symtabs_len;
 	int func_cnt = 0;
