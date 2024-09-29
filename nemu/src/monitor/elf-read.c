@@ -19,7 +19,7 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 		return;
 	}
 
-	printf("elf file read success\n");
+	//printf("elf file read success\n");
 
 	rb = fread((Elf32_Ehdr*)&ehdr, sizeof(Elf32_Ehdr), 1, fp);
 	assert(rb == 1);
@@ -29,7 +29,7 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	rb = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp);
 	assert(rb == ehdr.e_shnum);
 
-	printf("section header readed\n");
+	//printf("section header readed\n");
 	int i;
 	size_t str_lens[2];
 	size_t sym_len = 0;
@@ -51,9 +51,9 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 
 	}
 
-	printf("string loop\n");
+	//printf("string loop\n");
 
-	printf("str_lens: %lu, %lu\n", str_lens[0], str_lens[1]);
+	//printf("str_lens: %lu, %lu\n", str_lens[0], str_lens[1]);
 
 	strtab = (char *) malloc(str_lens[0] * sizeof(char));
 	shstrtab = (char *) malloc(str_lens[1] * sizeof(char));
@@ -63,14 +63,14 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	rb = fread(strtab, str_lens[0], 1, fp);
 	assert(rb == 1);
 	
-	printf("strtab read\n");
+	//printf("strtab read\n");
 
 	// read .shstrtab string
 	fseek(fp, str_offs[1], SEEK_SET);
 	rb = fread(shstrtab, str_lens[1], 1, fp);
 	assert(rb == 1);
 
-	printf("shstrtab read\n");
+	//printf("shstrtab read\n");
 
 	// read symbol table
 	symtabs_len = sym_len / sizeof(Elf32_Sym);
@@ -80,7 +80,7 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	rb = fread(symtabs, sizeof(Elf32_Sym), symtabs_len, fp);
 	assert(rb == symtabs_len);
 		
-	printf("symbol table readed\n");
+	//printf("symbol table readed\n");
 
 	for(i=0; i<symtabs_len; i++){
 		if(ELF32_ST_TYPE(symtabs[i].st_info) == STT_FUNC){
