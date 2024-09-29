@@ -119,6 +119,9 @@ void init_monitor(int argc, char *argv[]) {
 	  printf("\nelf file readed: %s\n", elf_file);
 		print_func_syms(funcs, func_sym_len);
 	}
+	else{
+		printf("elf file not found\n");
+	}
 #endif
 	
   /* Set random seed. */
