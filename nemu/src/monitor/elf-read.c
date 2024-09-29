@@ -28,7 +28,7 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	rb = fread(shdrs, sizeof(Elf32_Shdr), ehdr.e_shnum, fp);
 	assert(rb == ehdr.e_shnum);
 
-
+	printf("section header readed\n");
 	int i;
 	size_t str_lens[2];
 	size_t sym_len = 0;
