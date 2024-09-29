@@ -1,11 +1,12 @@
 #include "elf-read.h"
+#include <stdlib.h>
 
 void read_func_symbols(char *filename, func_sym *funcs, int *len){
 
 	Elf32_Ehdr ehdr;
 	Elf32_Shdr *shdrs;
-	char strtab[1000];
-	char shstrtab[1000];
+	char *strtab;
+	char *shstrtab;
 	Elf32_Sym *symtabs;
 	uint32_t symtabs_len;
 	int func_cnt = 0;
@@ -53,6 +54,9 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	printf("string loop\n");
 
 	printf("str_lens: %lu, %lu\n", str_lens[0], str_lens[1]);
+
+	strtab = (char *) malloc(str_lens[0] * sizeof(char));
+	shstrtab = (char *) malloc(str_lens[1] * sizeof(char));
 
 	// read .strtab string
 	fseek(fp, str_offs[0], SEEK_SET);
