@@ -149,6 +149,10 @@ static int decode_exec(Decode *s) {
 #ifdef CONFIG_FTRACE
 	int func_idx;
 	int i;
+
+	vaddr_t ret_addr_stack[100];
+	int stack_top = -1;
+
 	// check for function call or return
 	if(ja_flag){
 		//printf("ja_flag==true\n");
@@ -161,10 +165,15 @@ static int decode_exec(Decode *s) {
 			}
 			printf("call <%s> @0x%x, ret_addr=0x%x\n", 
 				funcs[func_idx].sym_name, s->dnpc, s->snpc);
-			ret_addr = s->snpc;
+//			ret_addr = s->snpc;
+			
+			// push in return address into stack
+			ret_addr_stack[++stack_top] = s->snpc;
+			assert(stack_top < 100-1);
+
 			indent_level++;
 			//printf("expected return addr: 0x%x\n", ret_addr);
-		}else if(s->dnpc == ret_addr) {	
+		}else if(s->dnpc == ret_addr_stack[stack_top--]) {	
 			// check for function return 
 			indent_level--;
 			for(i=0; i<indent_level; i++){
