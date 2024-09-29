@@ -7,7 +7,7 @@
 
 typedef struct {
 	Elf32_Addr sym_addr;
-	char sym_name[50];
+	char sym_name[100];
 } func_sym;
 
 extern func_sym funcs[100];

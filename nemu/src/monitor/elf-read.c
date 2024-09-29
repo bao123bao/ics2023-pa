@@ -18,6 +18,8 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 		return;
 	}
 
+	printf("elf file read success\n");
+
 	rb = fread((Elf32_Ehdr*)&ehdr, sizeof(Elf32_Ehdr), 1, fp);
 	assert(rb == 1);
 	// read section header by e_shoff
