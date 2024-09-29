@@ -159,7 +159,8 @@ static int decode_exec(Decode *s) {
 			for(i=0; i<indent_level; i++){
 				printf("    ");
 			}
-			printf("call <%s> @0x%x\n", funcs[func_idx].sym_name, s->dnpc);
+			printf("call <%s> @0x%x, ret_addr=0x%x\n", 
+				funcs[func_idx].sym_name, s->dnpc, s->snpc);
 			ret_addr = s->snpc;
 			indent_level++;
 			//printf("expected return addr: 0x%x\n", ret_addr);
