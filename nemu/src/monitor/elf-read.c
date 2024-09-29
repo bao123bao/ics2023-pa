@@ -56,11 +56,15 @@ void read_func_symbols(char *filename, func_sym *funcs, int *len){
 	fseek(fp, str_offs[0], SEEK_SET);
 	rb = fread(strtab, str_lens[0], 1, fp);
 	assert(rb == 1);
+	
+	printf("strtab read\n");
 
 	// read .shstrtab string
 	fseek(fp, str_offs[1], SEEK_SET);
 	rb = fread(shstrtab, str_lens[1], 1, fp);
 	assert(rb == 1);
+
+	printf("shstrtab read\n");
 
 	// read symbol table
 	symtabs_len = sym_len / sizeof(Elf32_Sym);
