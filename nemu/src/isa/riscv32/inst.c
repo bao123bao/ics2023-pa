@@ -33,7 +33,9 @@ enum {
 // return addr of function call
 static vaddr_t ret_addr;
 static int stack_top = -1;
-vaddr_t ret_addr_stack[100];
+static int idx_stack_top = -1;
+static vaddr_t ret_addr_stack[100];
+static int idx_stack[100];
 
 // flag for jal and jalr
 static bool ja_flag = false;
@@ -163,26 +165,27 @@ static int decode_exec(Decode *s) {
 			for(i=0; i<indent_level; i++){
 				printf("    ");
 			}
-			printf("call <%s> @0x%x, ret_addr=0x%x\n", 
+			printf("call <%s> @ 0x%x, ret_addr=0x%x\n", 
 				funcs[func_idx].sym_name, s->dnpc, s->snpc);
 			ret_addr = s->snpc;
 			
 			// push in return address into stack
-			printf("push 0x%x\n", s->snpc);
+//			printf("push 0x%x\n", s->snpc);
 			ret_addr_stack[++stack_top] = s->snpc;
+			idx_stack[++idx_stack_top] = func_idx;
 			assert(stack_top < 100-1);
 
 			indent_level++;
 			//printf("expected return addr: 0x%x\n", ret_addr);
 		}else if(s->dnpc == ret_addr_stack[stack_top]) {	
-			printf("pop 0x%x\n", ret_addr_stack[stack_top]);
+	//		printf("pop 0x%x\n", ret_addr_stack[stack_top]);
 			stack_top--;
 			// check for function return 
 			indent_level--;
 			for(i=0; i<indent_level; i++){
 				printf("    ");
 			}
-			printf("return, to addr=0x%x\n", s->dnpc);
+			printf("<%s> return, to addr=0x%x\n", funcs[idx_stack[++idx_stack_top]].sym_name, s->dnpc);
 		}
 		ja_flag = false;
 	}
