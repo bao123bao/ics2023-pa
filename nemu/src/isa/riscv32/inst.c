@@ -31,7 +31,7 @@ enum {
 };
 
 // return addr of function call
-word_t ret_addr;
+vaddr_t ret_addr;
 
 // flag for jal and jalr
 bool ja_flag = false;
@@ -149,6 +149,7 @@ static int decode_exec(Decode *s) {
 #ifdef CONFIG_FTRACE
 	int func_idx;
 	int i;
+	
 
 	vaddr_t ret_addr_stack[100];
 	int stack_top = -1;
@@ -165,7 +166,7 @@ static int decode_exec(Decode *s) {
 			}
 			printf("call <%s> @0x%x, ret_addr=0x%x\n", 
 				funcs[func_idx].sym_name, s->dnpc, s->snpc);
-//			ret_addr = s->snpc;
+			ret_addr = s->snpc;
 			
 			// push in return address into stack
 			printf("push 0x%x\n", s->snpc);
@@ -174,7 +175,7 @@ static int decode_exec(Decode *s) {
 
 			indent_level++;
 			//printf("expected return addr: 0x%x\n", ret_addr);
-		}else if(s->dnpc == ret_addr_stack[stack_top]) {	
+		}else if(s->dnpc == ret_addr) {	
 			printf("pop 0x%x\n", ret_addr_stack[stack_top]);
 			stack_top--;
 			// check for function return 
