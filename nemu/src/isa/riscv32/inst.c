@@ -185,7 +185,7 @@ static int decode_exec(Decode *s) {
 			for(i=0; i<indent_level; i++){
 				printf("    ");
 			}
-			printf("<%s> return, to addr=0x%x\n", funcs[idx_stack[++idx_stack_top]].sym_name, s->dnpc);
+			printf("<%s> return, to addr=0x%x\n", funcs[idx_stack[idx_stack_top--]].sym_name, s->dnpc);
 		}
 		ja_flag = false;
 	}
