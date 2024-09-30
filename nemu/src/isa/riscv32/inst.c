@@ -31,11 +31,13 @@ enum {
 };
 
 // return addr of function call
-vaddr_t ret_addr;
+static vaddr_t ret_addr;
+static int stack_top = -1;
+vaddr_t ret_addr_stack[100];
 
 // flag for jal and jalr
-bool ja_flag = false;
-int indent_level = 0;
+static bool ja_flag = false;
+static int indent_level = 0;
 
 #define src1R() do { *src1 = R(rs1); } while (0)
 #define src2R() do { *src2 = R(rs2); } while (0)
@@ -149,10 +151,7 @@ static int decode_exec(Decode *s) {
 #ifdef CONFIG_FTRACE
 	int func_idx;
 	int i;
-	
 
-	vaddr_t ret_addr_stack[100];
-	int stack_top = -1;
 
 	// check for function call or return
 	if(ja_flag){
