@@ -168,12 +168,14 @@ static int decode_exec(Decode *s) {
 //			ret_addr = s->snpc;
 			
 			// push in return address into stack
+			printf("push 0x%x\n", s->snpc);
 			ret_addr_stack[++stack_top] = s->snpc;
 			assert(stack_top < 100-1);
 
 			indent_level++;
 			//printf("expected return addr: 0x%x\n", ret_addr);
 		}else if(s->dnpc == ret_addr_stack[stack_top]) {	
+			printf("pop 0x%x\n", ret_addr_stack[stack_top]);
 			stack_top--;
 			// check for function return 
 			indent_level--;
