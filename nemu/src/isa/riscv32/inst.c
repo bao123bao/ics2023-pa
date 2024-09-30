@@ -24,6 +24,7 @@
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
+#define STACK_SIZE 200
 
 enum {
   TYPE_I, TYPE_U, TYPE_S, TYPE_J, TYPE_R, TYPE_B, 
@@ -34,8 +35,8 @@ enum {
 static vaddr_t ret_addr;
 static int stack_top = -1;
 static int idx_stack_top = -1;
-static vaddr_t ret_addr_stack[100];
-static int idx_stack[100];
+static vaddr_t ret_addr_stack[STACK_SIZE];
+static int idx_stack[STACK_SIZE];
 
 // flag for jal and jalr
 static bool ja_flag = false;
@@ -173,7 +174,7 @@ static int decode_exec(Decode *s) {
 //			printf("push 0x%x\n", s->snpc);
 			ret_addr_stack[++stack_top] = s->snpc;
 			idx_stack[++idx_stack_top] = func_idx;
-			assert(stack_top < 100-1);
+			assert(stack_top < STACK_SIZE-1);
 
 			indent_level++;
 			//printf("expected return addr: 0x%x\n", ret_addr);
