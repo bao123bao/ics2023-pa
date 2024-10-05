@@ -31,16 +31,20 @@ enum {
   TYPE_N, // none
 };
 
+
+#ifdef CONFIG_FTRACE
 // return addr of function call
 static vaddr_t ret_addr;
 static int stack_top = -1;
 static int idx_stack_top = -1;
 static vaddr_t ret_addr_stack[STACK_SIZE];
 static int idx_stack[STACK_SIZE];
+static int indent_level = 0;
+
+#endif
 
 // flag for jal and jalr
 static bool ja_flag = false;
-static int indent_level = 0;
 
 #define src1R() do { *src1 = R(rs1); } while (0)
 #define src2R() do { *src2 = R(rs2); } while (0)
