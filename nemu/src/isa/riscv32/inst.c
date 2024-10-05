@@ -155,6 +155,7 @@ static int decode_exec(Decode *s) {
 	INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu   , R, R(rd) = (uint32_t)src1 % (uint32_t)src2);
 
 	INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, 
+		printf("csrrw called\n");
 		word_t *csrp;
 		switch(imm){
 			case 0x300: csrp = &cpu.mstatus; break;
@@ -171,7 +172,8 @@ static int decode_exec(Decode *s) {
 		*csrp = src1;
 	);	
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, 
-		s->dnpc=isa_raise_intr(EVENT_YIELD, s->pc);
+		printf("ecall called\n");
+		s->dnpc = isa_raise_intr(EVENT_YIELD, s->pc);
 		);
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
