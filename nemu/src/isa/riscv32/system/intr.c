@@ -23,7 +23,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 	cpu.mcause = NO;
 	cpu.mepc = (word_t) epc;
 	printf("mcause NO = %d\n", NO);
-  return cpu.mtvec;
+  return cpu.mtvec + 4;
 }
 
 word_t isa_query_intr() {

@@ -189,6 +189,8 @@ static int decode_exec(Decode *s) {
 		printf("ecall event = %d\n", EVENT_YIELD);
 		s->dnpc = isa_raise_intr(EVENT_YIELD, s->pc);
 	);
+	
+	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc );
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
