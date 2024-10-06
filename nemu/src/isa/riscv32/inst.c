@@ -188,7 +188,7 @@ static int decode_exec(Decode *s) {
 #ifdef CONFIG_ETRACE
 		printf("exception raised by ecall @ 0x%x\n", s->pc);
 #endif
-		s->dnpc = isa_raise_intr(EVENT_YIELD, s->pc);
+		s->dnpc = isa_raise_intr(0xb, s->pc);
 	);
 	
 	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc );
