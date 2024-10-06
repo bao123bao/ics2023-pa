@@ -198,6 +198,12 @@ static int decode_exec(Decode *s) {
 	
 	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, 
 		s->dnpc = cpu.mepc;
+		uint32_t mask_MPP = (1U << 12) | (1U << 11);
+		uint32_t mask_MPIE = (1U  << 7);
+		// reset bit 12 to 11
+		cpu.mstatus &= ~mask_MPP;
+		// set bit 7
+		cpu.mstatus |= mask_MPIE;
 		//yield_flag = false;
 	);
 
