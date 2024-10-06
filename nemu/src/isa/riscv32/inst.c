@@ -179,6 +179,7 @@ static int decode_exec(Decode *s) {
 			case 0x342: csrp = &cpu.mcause;  break;
 			default: printf("csr idx error\n"); assert(0);
 		}
+		printf("csr0x%x = %d\n",imm,*csrp);
 		R(rd) = *csrp;
 		*csrp = 0xFFFFFFFF & (uint32_t)src1;
 	);
