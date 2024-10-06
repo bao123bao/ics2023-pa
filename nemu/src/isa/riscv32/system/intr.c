@@ -22,7 +22,16 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    */
 	cpu.mcause = NO;
 	cpu.mepc = (word_t) epc;
+
+	uint32_t mask_MPP = (1U << 12) | (1U << 11);
+  uint32_t mask_MPIE = (1U  << 7);
+	// set bit 12 to 11
+	cpu.mstatus |= mask_MPP;
+	// reset bit 7
+	cpu.mstatus &= ~mask_MPIE;
+
 	printf("riase NO = %d, cpu.mcause=%d,  epc=%d\n", NO, cpu.mcause, epc);
+
   return cpu.mtvec;
 }
 
