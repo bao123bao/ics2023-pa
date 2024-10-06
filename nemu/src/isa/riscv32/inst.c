@@ -162,7 +162,7 @@ static int decode_exec(Decode *s) {
 			case 0x305: csrp = &cpu.mtvec;   break;
 			case 0x341: csrp = &cpu.mepc;    break;
 			case 0x342: csrp = &cpu.mcause;  break;
-			default: printf("csr idx error\n"); assert(0);
+			default: assert(0);
 		}
 		if(rd!=0){
 			R(rd) = *csrp;
@@ -177,9 +177,9 @@ static int decode_exec(Decode *s) {
 			case 0x305: csrp = &cpu.mtvec;   break;
 			case 0x341: csrp = &cpu.mepc;    break;
 			case 0x342: csrp = &cpu.mcause;  break;
-			default: printf("csr idx error\n"); assert(0);
+			default: assert(0);
 		}
-		printf("csr0x%x = 0x%x\n",imm,*csrp);
+//		printf("csr0x%x = 0x%x\n",imm,*csrp);
 		R(rd) = *csrp;
 		*csrp = 0xFFFFFFFF & (uint32_t)src1;
 	);
