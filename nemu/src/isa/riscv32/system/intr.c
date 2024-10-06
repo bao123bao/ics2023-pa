@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include <isa.h>
+#include <stdio.h>
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
@@ -21,7 +22,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    */
 	cpu.mcause = NO;
 	cpu.mepc = (word_t) epc;
-
+	printf("mcause NO = %d\n", NO);
   return cpu.mtvec;
 }
 
