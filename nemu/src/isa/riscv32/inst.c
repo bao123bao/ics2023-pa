@@ -183,7 +183,8 @@ static int decode_exec(Decode *s) {
 		}
 //		printf("csr0x%x = 0x%x\n",imm,*csrp);
 		R(rd) = *csrp;
-		*csrp = 0xFFFFFFFF & (uint32_t)src1;
+		//printf("rd=%d, csr0x%x = 0x%x\n",)
+		*csrp = *csrp | (uint32_t)src1;
 	);
 
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, 
@@ -191,6 +192,7 @@ static int decode_exec(Decode *s) {
 		printf("exception raised by ecall @ 0x%x\n", s->pc);
 #endif
 		//yield_flag = true;
+		printf("ecall inst runned\n");
 		s->dnpc = isa_raise_intr(0xb, s->pc);
 	);
 	
