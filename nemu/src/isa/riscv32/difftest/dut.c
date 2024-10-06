@@ -56,7 +56,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 		isa_reg_r_display(ref_r);
 		return false;
 	}
-	/*	
+/*		
 	if(ref_r->mstatus != cpu.mstatus){
 		printf("Error at pc=0x%x, CSR mstatus check failed\n", pc);
 		printf("ref->mstatus=0x%x, dut->mstatus=0x%x\n", ref_r->mstatus, cpu.mstatus);
@@ -72,25 +72,20 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 		return false;
 	}
 	*/
-	/*
+	
 	if(ref_r->mepc != cpu.mepc){
 		printf("Error at pc=0x%x, CSR mepc check failed\n", pc);
 		printf("ref->mepc=0x%x, dut->mepc=0x%x\n", ref_r->mepc, cpu.mepc);
 		isa_reg_r_display(ref_r);
 		return false;
 	}
-	*/
+	
 	if(ref_r->mtvec != cpu.mtvec){
 		printf("Error at pc=0x%x, CSR mtvec check failed\n", pc);
 		printf("ref->mtvec=0x%x, dut->mtvec=0x%x\n", ref_r->mtvec, cpu.mtvec);
 		isa_reg_r_display(ref_r);
 		return false;
 	}
-//	printf("ref pc=0x%x, s->pc=0x%x, cpu.pc=0x%x\n", ref_r->pc, pc, cpu.pc);
-	//assert(ref_r->pc == cpu.pc);
-
-//	if(ref_r->pc != pc)
-//		return false;
 		
 	return true;
 }
