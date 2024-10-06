@@ -51,8 +51,8 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 		}
 	}
 	if(ref_r->pc != cpu.pc){
-		printf("Error at pc=0x%x, dnpc check failed\n", pc);
-		printf("ref->pc=0x%x, dut->dnpc=0x%x\n", ref_r->pc, cpu.pc);
+		printf("Error at pc=0x%x, pc check failed\n", pc);
+		printf("ref->pc=0x%x, dut->pc=0x%x\n", ref_r->pc, cpu.pc);
 		isa_reg_r_display(ref_r);
 		return false;
 	}
