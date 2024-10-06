@@ -37,6 +37,8 @@ enum {
  	EVENT_IRQ_TIMER, EVENT_IRQ_IODEV,
 };
 
+static bool yield_flag = false;
+
 
 #ifdef CONFIG_FTRACE
 // return addr of function call
@@ -188,10 +190,18 @@ static int decode_exec(Decode *s) {
 #ifdef CONFIG_ETRACE
 		printf("exception raised by ecall @ 0x%x\n", s->pc);
 #endif
+		yield_flag = true;
 		s->dnpc = isa_raise_intr(0xb, s->pc);
 	);
 	
-	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc );
+	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, 
+		if(yield_flag){
+			s->dnpc = cpu.mepc+4; 
+		}else{
+			s->dnpc = cpu.mepc;
+		}
+		yield_flag = false;
+	);
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, 
 #ifdef CONFIG_ETRACE

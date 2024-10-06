@@ -21,7 +21,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    * Then return the address of the interrupt/exception vector.
    */
 	cpu.mcause = NO;
-	cpu.mepc = (word_t) epc + 4;
+	cpu.mepc = (word_t) epc;
 //	printf("mcause NO = %d\n", NO);
   return cpu.mtvec;
 }
