@@ -185,14 +185,20 @@ static int decode_exec(Decode *s) {
 	);
 
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, 
-//		printf("ecall called\n");
-//		printf("ecall event = %d\n", EVENT_YIELD);
+#ifdef CONFIG_ETRACE
+		printf("exception raised by ecall @ 0x%x\n", s->pc);
+#endif
 		s->dnpc = isa_raise_intr(EVENT_YIELD, s->pc);
 	);
 	
 	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = cpu.mepc );
 
-  INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
+  INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, 
+#ifdef CONFIG_ETRACE
+		printf("exception raised by ebreak @ 0x%x\n", s->pc);
+#endif	
+		NEMUTRAP(s->pc, R(10));
+	); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 //	printf("s->dnpc=0x%x, s->pc=0x%x, imm=0x%x, rd=0x%x\n", s->dnpc, s->pc,imm, R(rd));
