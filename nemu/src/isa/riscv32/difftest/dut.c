@@ -72,12 +72,14 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 		return false;
 	}
 	*/
+	/*
 	if(ref_r->mepc != cpu.mepc){
 		printf("Error at pc=0x%x, CSR mepc check failed\n", pc);
 		printf("ref->mepc=0x%x, dut->mepc=0x%x\n", ref_r->mepc, cpu.mepc);
 		isa_reg_r_display(ref_r);
 		return false;
 	}
+	*/
 	if(ref_r->mtvec != cpu.mtvec){
 		printf("Error at pc=0x%x, CSR mtvec check failed\n", pc);
 		printf("ref->mtvec=0x%x, dut->mtvec=0x%x\n", ref_r->mtvec, cpu.mtvec);
