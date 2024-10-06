@@ -185,6 +185,7 @@ static int decode_exec(Decode *s) {
 
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, 
 		printf("ecall called\n");
+		printf("ecall event = %d\n", EVENT_YIELD);
 		s->dnpc = isa_raise_intr(EVENT_YIELD, s->pc);
 	);
 
