@@ -32,6 +32,11 @@ void isa_reg_r_display(CPU_state *ref_r) {
 		printf("[%2d]%-7s 0x%-20x 0x%-20x\n", i, regs_r[i], cpu.gpr[i], ref_r->gpr[i]);
 	}
 	printf("%-7s 0x%-20x 0x%-20x\n", "pc", cpu.pc, ref_r->pc);
+	// print CSRs
+	printf("%-7s 0x%-20x 0x%-20x\n", "mcause", cpu.mcause, ref_r->mcause);
+	printf("%-7s 0x%-20x 0x%-20x\n", "mstatus", cpu.mstatus, ref_r->mstatus);
+	printf("%-7s 0x%-20x 0x%-20x\n", "mepc", cpu.mepc, ref_r->mepc);
+	printf("%-7s 0x%-20x 0x%-20x\n", "mtvec", cpu.mtvec, ref_r->mtvec);
 }
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
@@ -48,6 +53,26 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
 	if(ref_r->pc != cpu.pc){
 		printf("Error at pc=0x%x, dnpc check failed\n", pc);
 		printf("ref->pc=0x%x, dut->dnpc=0x%x\n", ref_r->pc, cpu.pc);
+		return false;
+	}
+	if(ref_r->mstatus != cpu.mstatus){
+		printf("Error at pc=0x%x, CSR mstatus check failed\n", pc);
+		printf("ref->mstatus=0x%x, dut->mstatus=0x%x\n", ref_r->mstatus, cpu.mstatus);
+		return false;
+	}
+	if(ref_r->mcause != cpu.mcause){
+		printf("Error at pc=0x%x, CSR mcause check failed\n", pc);
+		printf("ref->mcause=0x%x, dut->mcause=0x%x\n", ref_r->mcause, cpu.mcause);
+		return false;
+	}
+	if(ref_r->mepc != cpu.mepc){
+		printf("Error at pc=0x%x, CSR mepc check failed\n", pc);
+		printf("ref->mepc=0x%x, dut->mepc=0x%x\n", ref_r->mepc, cpu.mepc);
+		return false;
+	}
+	if(ref_r->mtvec != cpu.mtvec){
+		printf("Error at pc=0x%x, CSR mtvec check failed\n", pc);
+		printf("ref->mtvec=0x%x, dut->mtvec=0x%x\n", ref_r->mtvec, cpu.mtvec);
 		return false;
 	}
 //	printf("ref pc=0x%x, s->pc=0x%x, cpu.pc=0x%x\n", ref_r->pc, pc, cpu.pc);
