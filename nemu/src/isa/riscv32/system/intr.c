@@ -30,7 +30,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
 	// reset bit 7
 	cpu.mstatus &= ~mask_MPIE;
 
-	printf("riase NO = %d, cpu.mcause=%d,  epc=%d\n", NO, cpu.mcause, epc);
+	//printf("riase NO = %d, cpu.mcause=%d,  epc=%d\n", NO, cpu.mcause, epc);
 
   return cpu.mtvec;
 }
