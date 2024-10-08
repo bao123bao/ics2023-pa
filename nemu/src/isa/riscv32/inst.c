@@ -189,10 +189,10 @@ static int decode_exec(Decode *s) {
 
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, 
 #ifdef CONFIG_ETRACE
-		printf("exception raised by ecall @ 0x%x\n", s->pc);
+//		printf("exception raised by ecall @ 0x%x\n", s->pc);
 #endif
 		//yield_flag = true;
-		printf("ecall inst runned\n");
+	//	printf("ecall inst runned\n");
 		s->dnpc = isa_raise_intr(0xb, s->pc);
 	);
 	
