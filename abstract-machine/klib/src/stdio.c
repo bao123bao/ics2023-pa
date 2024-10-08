@@ -4,6 +4,8 @@
 #include <stdarg.h>
 #include <limits.h>
 
+#define BUF_SIZE 5000
+
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 void int2str(char *buf, int *len, int num) {
@@ -58,7 +60,7 @@ int printf(const char *fmt, ...) {
   va_list args;
 	va_start(args, fmt);
 	
-	char buf[1000];
+	char buf[BUF_SIZE];
 	int cnt = vsprintf(buf, fmt, args);
 	int i;
 	for(i=0; i<cnt; i++){
