@@ -14,6 +14,8 @@
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
+	
+	uintptr_t ret_addr = (uintptr_t)NULL;
 
 	Elf_Ehdr ehdr;
 	ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
@@ -29,9 +31,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
 	printf("phnum=%d, phentsize=%d\n", phnum, phentsize);
 	int i;
+	bool first_load = true;
 	for(i=0; i<phnum; i++){
 		printf("[%d] type=%d, offset=%d, vaddr=%d\n", 
-			phdr[i].p_type, phdr[i].p_offset, phdr[i].p_vaddr);
+			i, phdr[i].p_type, phdr[i].p_offset, phdr[i].p_vaddr);
 		if (phdr[i].p_type == PT_LOAD) {
 			
 			// copy from ramrisk to memory
@@ -40,10 +43,19 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			// set zeros
 			memset((void *)phdr[i].p_vaddr + phdr[i].p_filesz, 0, phdr[i].p_memsz - phdr[i].p_filesz);
 
+			if(first_load){
+				ret_addr = (uintptr_t) phdr[i].p_vaddr;
+				first_load = false;
+				printf("jmp ret addr = %d\n", ret_addr);
+			}
 			printf("load the above\n");
+
 		}
 	}
-  return 0;
+	if(ret_addr)
+	  return ret_addr;
+	else 
+		return 0;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
