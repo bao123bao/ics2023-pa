@@ -19,7 +19,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
 	
 	uint16_t phnum = ehdr.e_phnum;
-	uint16_t phentsize = ehdr.e_phentsize;
+//	uint16_t phentsize = ehdr.e_phentsize;
 
 //	assert(*(uint32_t *)ehdr.e_ident == 0x7f454c46);
 //	printf("assert passed\n");
@@ -27,11 +27,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	Elf_Phdr phdr[phnum];
 	ramdisk_read(&phdr, 0 + ehdr.e_phoff, phnum*sizeof(Elf_Phdr));
 
-	printf("phnum=%d, phentsize=%d\n", phnum, phentsize);
+//	printf("phnum=%d, phentsize=%d\n", phnum, phentsize);
 	int i;
 	for(i=0; i<phnum; i++){
-		printf("[%d] type=%d, offset=%d, vaddr=%d\n", 
-			i, phdr[i].p_type, phdr[i].p_offset, phdr[i].p_vaddr);
+//		printf("[%d] type=%d, offset=%d, vaddr=%d\n", 
+//			i, phdr[i].p_type, phdr[i].p_offset, phdr[i].p_vaddr);
 		if (phdr[i].p_type == PT_LOAD) {
 			
 			// copy from ramrisk to memory

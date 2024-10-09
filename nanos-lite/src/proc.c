@@ -28,6 +28,8 @@ void init_proc() {
 
   // load program here
 	naive_uload(NULL, NULL);
+
+	Log("naive loaded\n");
 }
 
 Context* schedule(Context *prev) {
