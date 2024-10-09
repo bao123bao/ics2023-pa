@@ -30,7 +30,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	printf("phnum=%d, phentsize=%d\n", phnum, phentsize);
 	int i;
 	for(i=0; i<phnum; i++){
-		printf("[%2d] type=%d, offset=%d, vaddr=%d\n", 
+		printf("[%d] type=%d, offset=%d, vaddr=%d\n", 
 			phdr[i].p_type, phdr[i].p_offset, phdr[i].p_vaddr);
 
 	}
