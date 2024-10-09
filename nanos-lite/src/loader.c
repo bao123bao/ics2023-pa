@@ -1,6 +1,6 @@
 #include <proc.h>
 #include <elf.h>
-#include <assert.h>
+//#include <assert.h>
 
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -18,14 +18,15 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	Elf_Ehdr ehdr;
 	ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
 	
+	uint16_t phnum = ehdr.e_phnum;
+	uint16_t phentsize = ehdr.e_phentsize;
 
 	assert(*(uint32_t *)ehdr.e_ident == 0x7f454c46);
 	printf("assert passed\n");
-/*
-	Elf_Phdr *phdr = (Elf_Phdr*) (&ramdisk_start + ehdr->e_phoff);
 
-	uint16_t phnum = ehdr->e_phnum;
-	uint16_t phentsize = ehdr->e_phentsize;
+	Elf_Phdr phdr[phnum];
+	ramdisk_read(&phdr, 0 + ehdr.e_phoff, phnum*sizeof(Elf_Phdr));
+
 	printf("phnum=%d, phentsize=%d\n", phnum, phentsize);
 	int i;
 	for(i=0; i<phnum; i++){
@@ -34,7 +35,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
 	}
 
-*/
+
   return 0;
 }
 
