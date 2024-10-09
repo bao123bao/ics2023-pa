@@ -32,10 +32,17 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	for(i=0; i<phnum; i++){
 		printf("[%d] type=%d, offset=%d, vaddr=%d\n", 
 			phdr[i].p_type, phdr[i].p_offset, phdr[i].p_vaddr);
+		if (phdr[i].p_type == PT_LOAD) {
+			
+			// copy from ramrisk to memory
+			ramdisk_read((void *)phdr[i].p_vaddr, 0 + phdr[i].p_offset, phdr[i].p_filesz);
+			
+			// set zeros
+			memset((void *)phdr[i].p_vaddr + phdr[i].p_filesz, 0, phdr[i].p_memsz - phdr[i].p_filesz);
 
+			printf("load the above\n");
+		}
 	}
-
-
   return 0;
 }
 
