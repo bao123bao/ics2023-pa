@@ -5,7 +5,7 @@ static Context* do_event(Event e, Context* c) {
     case EVENT_YIELD: printf("catch event yield from nanos\n"); break;
 		default: panic("Unhandled event ID = %d", e.event);
   }
-
+	c->mepc += 4;
   return c;
 }
 
