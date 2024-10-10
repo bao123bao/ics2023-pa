@@ -167,23 +167,23 @@ config DIFFTEST
     Note that this will significantly reduce the performance of NEMU.
 
 config MTRACE
-	depends on TRACE
 	bool "Enable memory access tracer"
 	default y
 
 config FTRACE
-	depends on TRACE
 	bool "Enable function call tracer"
 	default y
 
 config DTRACE
-	depends on TRACE
 	bool "Enable divice access tracer"
 	default y
 
 config ETRACE
-	depends on TRACE
 	bool "Enable exception tracer"
+	default y
+
+config STRACE
+	bool "Enable nanos syscall tracer"
 	default y
 
 choice
