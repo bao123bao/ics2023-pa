@@ -193,7 +193,10 @@ static int decode_exec(Decode *s) {
 #endif
 		//yield_flag = true;
 	//	printf("ecall inst runned\n");
-		s->dnpc = isa_raise_intr(0xb, s->pc);
+
+		// should read exception number from a7
+		bool reg_success;
+		s->dnpc = isa_raise_intr(isa_reg_str2val("a7", &reg_success), s->pc);
 	);
 	
 	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, 
