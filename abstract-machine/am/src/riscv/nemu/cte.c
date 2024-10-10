@@ -9,6 +9,8 @@ Context* __am_irq_handle(Context *c) {
 //    printf("in __am_irq_handle:\nc->mcause=%d, mstatus=%d, mepc=%d\n", c->mcause, c->mstatus, c->mepc);
 		Event ev = {0};
     switch (c->mcause) {
+			case 1: case 3: case 5: case 7: case 9:
+				ev.event = EVENT_SYSCALL; break;
 			case 0xb: ev.event = EVENT_YIELD; break;
       default: ev.event = EVENT_ERROR; break;
     }
