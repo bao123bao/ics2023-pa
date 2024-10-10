@@ -189,14 +189,12 @@ static int decode_exec(Decode *s) {
 
 	INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, 
 #ifdef CONFIG_ETRACE
-//		printf("exception raised by ecall @ 0x%x\n", s->pc);
+		printf("exception raised by ecall @ 0x%x\n", s->pc);
 #endif
-		//yield_flag = true;
-	//	printf("ecall inst runned\n");
-
 		// should read exception number from a7
-		bool reg_success;
-		s->dnpc = isa_raise_intr(isa_reg_str2val("a7", &reg_success), s->pc);
+		//bool reg_success;
+		//s->dnpc = isa_raise_intr(isa_reg_str2val("a7", &reg_success), s->pc);
+		s->dnpc = isa_raise_intr(11, s->pc);
 	);
 	
 	INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, 
@@ -216,6 +214,7 @@ static int decode_exec(Decode *s) {
 #endif	
 		NEMUTRAP(s->pc, R(10));
 	); // R(10) is $a0
+
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 //	printf("s->dnpc=0x%x, s->pc=0x%x, imm=0x%x, rd=0x%x\n", s->dnpc, s->pc,imm, R(rd));
