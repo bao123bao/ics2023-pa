@@ -182,9 +182,6 @@ config ETRACE
 	bool "Enable exception tracer"
 	default y
 
-config STRACE
-	bool "Enable nanos syscall tracer"
-	default y
 
 choice
   prompt "Reference design"

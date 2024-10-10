@@ -1,6 +1,8 @@
 #include <common.h>
 #include "syscall.h"
 
+#define CONFIG_STRACE 1
+
 int sys_yield() {
 	yield();
 	return 0;
@@ -13,6 +15,7 @@ int sys_exit(int status) {
 
 void do_syscall(Context *c) {
   int ret_val = 0;
+//	printf("STRACE=%d\n",CONFIG_STRACE);
 	uintptr_t a[4];
   a[0] = c->GPR1;
 	a[1] = c->GPR2;
