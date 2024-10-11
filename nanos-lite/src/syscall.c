@@ -79,5 +79,5 @@ void do_syscall(Context *c) {
   }
 	// set a0 to return value
 	c->GPRx = ret_val;
-	printf("ret_val=%d\n");
+//	printf("ret_val=%d\n");
 }
