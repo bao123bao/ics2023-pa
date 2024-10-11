@@ -27,6 +27,12 @@ int sys_write(int fd, const void *buf, size_t count) {
 	return -1;
 }
 
+extern char _end;
+
+int sys_brk(void *addr){
+	return 0;
+}
+
 void do_syscall(Context *c) {
   int ret_val = 0;
 //	printf("STRACE=%d\n",CONFIG_STRACE);
@@ -37,7 +43,14 @@ void do_syscall(Context *c) {
 	a[3] = c->GPR4;
 
   switch (a[0]) {
-		
+		case SYS_brk:
+			ret_val = sys_brk((void *)a[1]);
+#ifdef CONFIG_STRACE
+			printf("syscall: brk (args: %d, %d, %d, ret_val=%d)\n", 
+				a[1], a[2], a[3], ret_val);
+#endif
+			break;
+
 		case SYS_yield:
 			ret_val = sys_yield();
 #ifdef CONFIG_STRACE
@@ -66,4 +79,5 @@ void do_syscall(Context *c) {
   }
 	// set a0 to return value
 	c->GPRx = ret_val;
+	printf("ret_val=%d\n");
 }

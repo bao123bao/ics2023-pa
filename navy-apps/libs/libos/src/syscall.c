@@ -69,8 +69,32 @@ int _write(int fd, void *buf, size_t count) {
   return _syscall_(SYS_write, fd, buf, count);
 }
 
-void *_sbrk(intptr_t increment) {
-  return (void *)-1;
+
+extern char end;
+
+void* _sbrk(intptr_t increment) {
+  static char *cur_brk = &end;
+ 	char *last_brk;
+ 
+ 	if(increment == 0){
+ 		return (void *)cur_brk;
+ 	}
+ 
+ 	if(increment < 0){
+ 		return (void *)-1;
+ 	}
+ 	// save last break
+	last_brk = cur_brk;
+ 
+	// get new brk
+	intptr_t new_brk = cur_brk + increment;
+	// call syscall brk
+	int ret_val = _syscall_(SYS_brk, new_brk, 0, 0)
+ 	
+	// update current break
+ 	cur_brk = new_brk;
+	
+  return last_addr;
 }
 
 int _read(int fd, void *buf, size_t count) {
