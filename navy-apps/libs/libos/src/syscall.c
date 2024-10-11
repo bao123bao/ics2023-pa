@@ -66,7 +66,7 @@ int _open(const char *path, int flags, mode_t mode) {
 }
 
 int _write(int fd, void *buf, size_t count) {
-  return _syscall_(SYS_write, fd, buf, count);
+  return _syscall_(SYS_write, fd, (intptr_t) buf, count);
 }
 
 
@@ -87,14 +87,14 @@ void* _sbrk(intptr_t increment) {
 	last_brk = cur_brk;
  
 	// get new brk
-	intptr_t new_brk = cur_brk + increment;
+	char *new_brk = cur_brk + increment;
 	// call syscall brk
-	int ret_val = _syscall_(SYS_brk, new_brk, 0, 0)
+	int ret_val = _syscall_(SYS_brk, (intptr_t) new_brk, 0, 0);
  	
 	// update current break
  	cur_brk = new_brk;
 	
-  return last_addr;
+  return last_brk;
 }
 
 int _read(int fd, void *buf, size_t count) {
