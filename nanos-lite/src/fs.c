@@ -94,7 +94,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 		return -1;
 	}
 	printf("fs_write called, fd=%d, len=%d\n",fd,len);
-	/*
+	
 	if(fd==FD_STDOUT || fd==FD_STDERR){
 		printf("using write to print to stdout, len=%d\n",len);
 		int i;
@@ -105,7 +105,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 		open_offsets[fd] += len;
 		return len;
 	}
-	*/
+	
 	if(fd==FD_STDIN){
 		return -1;
 	}
