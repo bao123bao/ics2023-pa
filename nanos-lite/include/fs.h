@@ -22,8 +22,6 @@ typedef struct {
 
 extern Finfo file_table[];
 
-
-
 int fs_open(const char *pathname, int flags, int mode);
 size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
