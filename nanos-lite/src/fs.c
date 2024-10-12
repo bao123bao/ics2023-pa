@@ -81,7 +81,9 @@ size_t fs_read(int fd, void *buf, size_t len) {
 	}
 
 	size_t offset = file_table[fd].disk_offset + open_offsets[fd];
+	printf("before lseek: open_offsets[%d] = %d\n", fd, open_offsets[fd]);
 	open_offsets[fd] += len;
+	printf("after lseek: open_offsets[%d] = %d\n", fd, open_offsets[fd]);
 	assert(open_offsets[fd] <= file_table[fd].size);
 	return ramdisk_read(buf, offset, len);
 }
