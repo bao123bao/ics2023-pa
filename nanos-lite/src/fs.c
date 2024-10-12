@@ -100,6 +100,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 		for(i=0; i<len; i++){
 			putch(chars[i]);
 		}
+		open_offsets[fd] += len;
 		return len;
 	}
 
