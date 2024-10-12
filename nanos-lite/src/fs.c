@@ -58,7 +58,7 @@ int fs_open(const char *pathname, int flags, int mode) {
 	int files_num = sizeof(file_table) / sizeof(Finfo);
 	for (i=0; i<files_num; i++){
 		printf("%s vs %s\n", file_table[i].name, pathname);
-		if ( strcpy(file_table[i].name, pathname) == 0 ){
+		if ( strcmp(file_table[i].name, pathname) == 0 ){
 			return i;
 		}
 	}
