@@ -69,9 +69,9 @@ int fs_open(const char *pathname, int flags, int mode) {
 
 size_t fs_read(int fd, void *buf, size_t len) {
 	// exceeds file size
-	if(open_offsets[fd] >= file_table[fd].size){
-		return -1;
-	}
+	//if(open_offsets[fd] >= file_table[fd].size){
+	//	return -1;
+	//}
 
 	if(fd==FD_STDOUT){
 		return -1;
@@ -82,10 +82,21 @@ size_t fs_read(int fd, void *buf, size_t len) {
 	}
 
 	size_t offset = file_table[fd].disk_offset + open_offsets[fd];
+	size_t remain_len = file_table[fd].size - open_offsets[fd];
+
+	// if len to read will exceed EOF
+	if(len > remain_len){
+		// only read the remaining part
+		open_offsets[fd] += remain_len;
+		return ramdisk_read(buf, offset, remain_len);
+	}
+
+	// if the remaining part is enough for len
 	open_offsets[fd] += len;
-	//printf("after lseek: open_offsets[%d] = %d, size=%d\n", fd, open_offsets[fd], file_table[fd].size);
-	assert(open_offsets[fd] <= file_table[fd].size);
-	return ramdisk_read(buf, offset, len);
+	return ramdisk_read(buf, offset, len); 
+	//open_offsets[fd] += len;
+	//assert(open_offsets[fd] <= file_table[fd].size);
+	//return ramdisk_read(buf, offset, len);
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
