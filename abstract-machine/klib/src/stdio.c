@@ -3,15 +3,19 @@
 #include <klib-macros.h>
 #include <stdarg.h>
 #include <limits.h>
-
+#include <stdbool.h>
+#include <stdint.h>
 #define BUF_SIZE 5000
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-void int2str(char *buf, int *len, int num) {
+void num2str(char *buf, int *len, int num, bool is_hex) {
 	int digit;
 	int cnt = 0, p = 0;
 	
+	// to decimal num string
+	if(!is_hex){
+
 	if(num == INT_MIN){
 		char *temp = "-2147483648";
 		int i;
@@ -22,7 +26,6 @@ void int2str(char *buf, int *len, int num) {
 		*len = 11;
 		return;
 	}
-
 
 	if(num<0){
 		num = -num;
@@ -45,13 +48,40 @@ void int2str(char *buf, int *len, int num) {
 
 	// swap the digits to true order
 	while(p<q){
-		t = buf[p];
-		buf[p] = buf[q];
-		buf[q] = t;
-		p++;
-		q--;
+		t = buf[p]; buf[p] = buf[q]; buf[q] = t;
+		p++; q--;
 	}
 	*len = cnt;
+	
+	} else { // to heximal num stirng
+		
+	uint32_t u_num = (uint32_t) num;
+	
+	buf[0] = '0'; buf[1] = 'x';
+	cnt += 2; p = 2;
+
+	while(u_num >= 16) {
+		digit = num % 16;
+		if(digit<=9) buf[cnt++] = '0' + digit;
+		else         buf[cnt++] = 'a' + (digit - 10);
+		num /= 16;
+	}
+	if(u_num <= 9) buf[cnt++] = '0' + u_num;
+	else           buf[cnt++] = 'a' + (u_num - 10);
+	buf[cnt] = '\0';
+	//printf("initial str: %s\n",buf);
+
+	int q = cnt-1;
+	char t;
+
+	// swap the digits to true order
+	while(p<q){
+		t = buf[p]; buf[p] = buf[q]; buf[q] = t; 
+		p++; q--;
+	}
+	*len = cnt;
+	
+	}
 	//printf("final str: %s\n", buf);
 }
 
@@ -96,7 +126,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 				case 'd':
 					int num = va_arg(ap, int);
 					int numlen;
-					int2str(p, &numlen, num);
+					num2str(p, &numlen, num, false);
 					p += numlen;
 					cnt += numlen;
 					break;
@@ -105,6 +135,13 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 					*p = ch;
 					p++;
 					cnt++;
+					break;
+				case 'p':
+					uint32_t u_num = va_arg(ap, uint32_t);
+					int u_numlen;
+					num2str(p, &u_numlen, u_num, true);
+					p += u_numlen;
+					cnt += u_numlen;
 					break;
 				default:
 					putch(fmt_type);
