@@ -193,8 +193,6 @@ static int decode_exec(Decode *s) {
 		printf("exception raised by ecall @ 0x%x\n", s->pc);
 #endif
 		// should read exception number from a7
-		//bool reg_success;
-		//s->dnpc = isa_raise_intr(isa_reg_str2val("a7", &reg_success), s->pc);
 		s->dnpc = isa_raise_intr(11, s->pc);
 	);
 	

@@ -100,13 +100,8 @@ size_t fs_read(int fd, void *buf, size_t len) {
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
-	//if(open_offsets[fd] >= file_table[fd].size){
-	//	return -1;
-	//}
-	//printf("fs_write called, fd=%d, len=%d\n",fd,len);
 	
 	if(fd==FD_STDOUT || fd==FD_STDERR){
-		//printf("using write to print to stdout, len=%d\n",len);
 		int i;
 		char *chars = (char *)buf;
 		for(i=0; i<len; i++){
