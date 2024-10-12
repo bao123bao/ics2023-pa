@@ -83,8 +83,8 @@ void do_syscall(Context *c) {
 		case SYS_open:
 			ret_val = sys_open((const char *)a[1], a[2], a[3]);
 #ifdef CONFIG_STRACE
-			//printf("syscall: open (args: %d<%s>, %d, %d), ret_val=%d)\n", 
-				//a[1], file_table[a[1]].name, a[2], a[3], ret_val);
+			printf("syscall: open (args: %d<%s>, %d, %d), ret_val=%d)\n", 
+				a[1], file_table[a[1]].name, a[2], a[3], ret_val);
 #endif
 			break;
 
