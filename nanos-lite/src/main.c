@@ -9,20 +9,15 @@ void init_proc(void);
 
 int main() {
   extern const char logo[];
-//  printf("before logo\n");
 	printf("%s", logo);
-//  printf("before log\n");
 
 	Log("'Hello World!' from Nanos-lite");
   Log("Build time: %s, %s", __TIME__, __DATE__);
 	
-	printf("start init mm\n");
   init_mm();
 	
-	printf("start init device\n");
   init_device();
 	
-	printf("start init ramdisk\n");
   init_ramdisk();
 
 #ifdef HAS_CTE

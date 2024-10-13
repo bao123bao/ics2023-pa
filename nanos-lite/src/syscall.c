@@ -11,10 +11,26 @@ size_t fs_write(int fd, const void *buf, size_t len);
 size_t fs_lseek(int fd, size_t offset, int whence);
 int fs_close(int fd);
 
-int sys_gettimeofday(struct timeval *tv, struct timezone *tz){
-	
-}
+struct timeval {
+	uint64_t tv_sec;
+	uint64_t tv_usec;
+};
 
+struct timezone {
+	int tz_minuteswest;
+	int tz_dsttime;
+};
+
+int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
+	if(!tv)
+		return -1;
+
+	AM_TIMER_UPTIME_T uptime = io_read(AM_TIMER_UPTIME);
+	uint64_t us = uptime.us;
+	tv->tv_sec = us / 1000000;
+	tv->tv_usec = us % tv->tv_sec;
+	return 0;
+}
 
 int sys_yield() {
 	yield();
@@ -62,9 +78,15 @@ void do_syscall(Context *c) {
 	a[3] = c->GPR4;
 
   switch (a[0]) {
+		case SYS_gettimeofday:
+			ret_val = sys_gettimeofday((struct timeval *)a[1], (struct timezone *)a[2]);
+#ifdef CONFIG_STRACE
+			printf("syscall: gettimeofday (args: %p, %p, ret_val=%d)\n", a[1], a[2], ret_val);
+#endif
+			break;
+
 		case SYS_brk:
 			ret_val = sys_brk((void *)a[1]);
-			 
 #ifdef CONFIG_STRACE
 			printf("syscall: brk (args: %p, ret_val=%d)\n", a[1], ret_val);
 #endif

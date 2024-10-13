@@ -3,6 +3,8 @@
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 
+size_t serial_write(const void *buf, size_t offset, size_t len);
+
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
   return 0;
@@ -20,7 +22,6 @@ Finfo file_table[] __attribute__((used)) = {
   [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
 #include "files.h"
 };
-
 
 enum {FS_SEEK_SET, FS_SEEK_CUR, FS_SEEK_END};
 
@@ -41,6 +42,7 @@ void init_fs() {
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
+	// orinary files
 	int i;
 	int files_num = sizeof(file_table) / sizeof(Finfo);
 	for (i=0; i<files_num; i++){
@@ -53,15 +55,13 @@ int fs_open(const char *pathname, int flags, int mode) {
 }
 
 size_t fs_read(int fd, void *buf, size_t len) {
-/*
-	if(fd==FD_STDOUT){
-		return -1;
+
+	// special files
+	if(file_table[fd].read != NULL) {
+		return file_table[fd].read(buf, 0, len);
 	}
 
-	if(fd==FD_STDIN || fd==FD_STDERR){
-		return 0;
-	}
-*/
+	// ordinary files
 	size_t offset = file_table[fd].disk_offset + open_offsets[fd];
 	size_t remain_len = file_table[fd].size - open_offsets[fd];
 
@@ -75,24 +75,15 @@ size_t fs_read(int fd, void *buf, size_t len) {
 	// if the remaining part is enough for len
 	open_offsets[fd] += len;
 	return ramdisk_read(buf, offset, len); 
+	
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
-/*	
-	if(fd==FD_STDOUT || fd==FD_STDERR){
-		int i;
-		char *chars = (char *)buf;
-		for(i=0; i<len; i++){
-			putch(chars[i]);
-		}
-		open_offsets[fd] += len;
-		return len;
+	// special files
+	if(file_table[fd].write != NULL) {
+		return file_table[fd].write(buf, 0, len);
 	}
 
-	if(fd==FD_STDIN){
-		return -1;
-	}
-*/
 	size_t offset = file_table[fd].disk_offset + open_offsets[fd];
 	open_offsets[fd] += len;
 	assert(open_offsets[fd] <= file_table[fd].size);
