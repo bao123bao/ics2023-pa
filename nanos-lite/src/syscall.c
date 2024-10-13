@@ -2,7 +2,7 @@
 #include <fs.h>
 #include "syscall.h"
 
-#define CONFIG_STRACE 1
+//#define CONFIG_STRACE 1
 
 
 int fs_open(const char *pathname, int flags, int mode);
@@ -22,7 +22,7 @@ struct timezone {
 };
 
 int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
-	printf("in sys_gettimeofday\n");
+//	printf("in sys_gettimeofday\n");
 	if(!tv)
 		return -1;
 
