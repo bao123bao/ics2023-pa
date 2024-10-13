@@ -6,7 +6,7 @@ int main() {
   printf("Hello Timer!\n");
   
 	struct timeval tv, last_tv;
-	last_tv.tv_usec = 0;
+	gettimeofday(&last_tv, NULL);
 	while (1) {
 		gettimeofday(&tv, NULL);
 
