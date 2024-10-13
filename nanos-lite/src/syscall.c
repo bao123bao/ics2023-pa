@@ -28,7 +28,7 @@ int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
 
 	AM_TIMER_UPTIME_T uptime = io_read(AM_TIMER_UPTIME);
 	uint64_t us = uptime.us;
-	printf("uptime.us=%d\n", (int)us);
+//	printf("uptime.us=%d\n", (int)us);
 	tv->tv_sec = us / 1000000;
 	tv->tv_usec = tv->tv_sec==0 ? us : us % tv->tv_sec;
 	return 0;
@@ -81,7 +81,7 @@ void do_syscall(Context *c) {
 
   switch (a[0]) {
 		case SYS_gettimeofday:
-			printf("switch to SYS_gettime\n");
+	//		printf("switch to SYS_gettime\n");
 			ret_val = sys_gettimeofday((struct timeval *)a[1], (struct timezone *)a[2]);
 #ifdef CONFIG_STRACE
 			printf("syscall: gettimeofday (args: %p, %p, ret_val=%d)\n", a[1], a[2], ret_val);
