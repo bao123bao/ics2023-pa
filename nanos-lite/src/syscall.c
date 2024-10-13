@@ -12,8 +12,8 @@ size_t fs_lseek(int fd, size_t offset, int whence);
 int fs_close(int fd);
 
 struct timeval {
-	uint64_t tv_sec;
-	uint64_t tv_usec;
+	uint32_t tv_sec;
+	uint32_t tv_usec;
 };
 
 struct timezone {
