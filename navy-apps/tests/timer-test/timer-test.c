@@ -6,9 +6,8 @@ int main() {
   printf("Hello Timer!\n");
   
 	struct timeval tv, last_tv;
-//	int last_sec = -1;
+	last_tv.tv_usec = 0;
 	while (1) {
-//		printf("ready to call getimte\n");
 		gettimeofday(&tv, NULL);
 
     if (tv.tv_usec - last_tv.tv_usec >= 500000) {
