@@ -28,9 +28,10 @@ int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
 
 	AM_TIMER_UPTIME_T uptime = io_read(AM_TIMER_UPTIME);
 	uint64_t us = uptime.us;
-//	printf("uptime.us=%d\n", (int)us);
 	tv->tv_sec  = us / 1000000;
 	tv->tv_usec = us % 1000000;
+	printf("uptime.us=%d, tv_sec=%d, tv_usec=%d\n", 
+		(int)us, (int)tv->tv_sec, (int)tv->tv_usec);
 	return 0;
 }
 
