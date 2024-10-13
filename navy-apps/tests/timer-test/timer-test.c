@@ -6,13 +6,14 @@ int main() {
   printf("Hello Timer!\n");
   
 	struct timeval tv;
-
+	int last_sec = -1;
 	while (1) {
 //		printf("ready to call getimte\n");
 		gettimeofday(&tv, NULL);
 
-    if (tv.tv_usec % 1000000 == 0) {
+    if (tv.tv_sec != last_sec) {
       printf("Hello Timer from Navy-apps @ %d sec %d usec\n", (int)tv.tv_sec, (int)tv.tv_usec);
+			last_sec = tv.tv_sec;
     }
   }
   return 0;
