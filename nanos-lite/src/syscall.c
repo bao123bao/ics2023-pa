@@ -2,7 +2,7 @@
 #include <fs.h>
 #include "syscall.h"
 
-#define CONFIG_STRACE 1
+//#define CONFIG_STRACE 1
 
 
 int fs_open(const char *pathname, int flags, int mode);
@@ -30,8 +30,8 @@ int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
 	uint64_t us = uptime.us;
 	tv->tv_sec  = us / 1000000;
 	tv->tv_usec = us % 1000000;
-//	printf("uptime.us=%d, tv_sec=%d, tv_usec=%d\n", 
-	//	(int)us, (int)tv->tv_sec, (int)tv->tv_usec);
+	printf("uptime.us=%d, tv_sec=%d, tv_usec=%d\n", 
+		(int)us, (int)tv->tv_sec, (int)tv->tv_usec);
 	return 0;
 }
 
