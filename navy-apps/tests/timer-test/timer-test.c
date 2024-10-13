@@ -11,7 +11,7 @@ int main() {
 //		printf("ready to call getimte\n");
 		gettimeofday(&tv, NULL);
 
-    if (tv.tv_usec % 500000 == 0) {
+    if (tv.tv_usec % 1000000 == 0) {
       printf("Hello Timer from Navy-apps @ %d sec %d usec\n", (int)tv.tv_sec, (int)tv.tv_usec);
     }
   }
