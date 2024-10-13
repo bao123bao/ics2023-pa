@@ -7,6 +7,7 @@ int main() {
   
 	struct timeval tv, last_tv;
 	gettimeofday(&last_tv, NULL);
+	printf("start time: %d, %d\n", (int)last_tv.tv_sec, (int)last_tv.tv_usec);
 	while (1) {
 		gettimeofday(&tv, NULL);
 		printf("tv-last = %d\n", tv.tv_usec - last_tv.tv_usec);
