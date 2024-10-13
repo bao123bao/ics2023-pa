@@ -22,6 +22,7 @@ struct timezone {
 };
 
 int sys_gettimeofday(struct timeval *tv, struct timezone *tz) {
+	printf("in sys_gettimeofday\n");
 	if(!tv)
 		return -1;
 
