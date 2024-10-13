@@ -2,7 +2,7 @@
 #include <fs.h>
 #include "syscall.h"
 
-//#define CONFIG_STRACE 1
+#define CONFIG_STRACE 1
 
 
 int fs_open(const char *pathname, int flags, int mode);
