@@ -61,10 +61,10 @@ void num2str(char *buf, int *len, int num, bool is_hex) {
 	cnt += 2; p = 2;
 
 	while(u_num >= 16) {
-		digit = num % 16;
+		digit = u_num % 16;
 		if(digit<=9) buf[cnt++] = '0' + digit;
 		else         buf[cnt++] = 'a' + (digit - 10);
-		num /= 16;
+		u_num /= 16;
 	}
 	if(u_num <= 9) buf[cnt++] = '0' + u_num;
 	else           buf[cnt++] = 'a' + (u_num - 10);
