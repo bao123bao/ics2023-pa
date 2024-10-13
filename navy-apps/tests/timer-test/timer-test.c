@@ -8,6 +8,7 @@ int main() {
 	struct timeval tv;
 
 	while (1) {
+		printf("ready to call getimte\n");
 		gettimeofday(&tv, NULL);
 
     if (tv.tv_usec % 500000 == 0) {
