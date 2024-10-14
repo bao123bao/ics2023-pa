@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <NDL.h>
+#include <assert.h>
+
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
@@ -19,7 +21,15 @@ uint32_t NDL_GetTicks() {
 }
 
 int NDL_PollEvent(char *buf, int len) {
-  return 0;
+	// read 0 bytes, return 0
+	if(len == 0)
+		return 0;
+
+	// read from device events
+	int fd = open("/dev/events", 0, 0);
+	assert(fd != -1);
+
+	return read(fd, (void *)buf, len);
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
