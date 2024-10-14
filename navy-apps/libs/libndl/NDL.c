@@ -48,11 +48,16 @@ void NDL_OpenCanvas(int *w, int *h) {
       buf[nread] = '\0';
       if (strcmp(buf, "mmap ok") == 0) break;
     }
-    close(fbctl);
+  	close(fbctl);
   }
+
+	printf("in open_canvas: screen width: w=%d, h=%d\n", screen_w, screen_h);
+
+	
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+	
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
@@ -73,7 +78,21 @@ int NDL_Init(uint32_t flags) {
   
 	// set timeval_init
 	gettimeofday(&tv_init, NULL);
+	
+	// read screen size
+	char temp[50];
+	
+	int fd = open("/proc/dispinfo", 0);
 
+	int cnt = read(fd, temp, 50);
+	assert(cnt > 0);
+
+	cnt = sscanf(temp, "WIDTH:%d HEIGHT:%d", &screen_w, &screen_h);
+	assert(cnt == 2);
+	 
+	// 
+	printf("in sdl_init: screen width: w=%d, h=%d\n", screen_w, screen_h);
+	
 	if (getenv("NWM_APP")) {
     evtdev = 3;
 	
