@@ -34,10 +34,10 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 
 	if(ev.keydown){
 		cnt = sprintf(buf, "kd %s\n", keyname[ev.keycode]); 
-		printf("evens_read: catch\n");
+//		printf("evens_read: catch\n");
 	}else{
 		cnt = sprintf(buf, "ku %s\n", keyname[ev.keycode]);
-		printf("evens_read: catch\n");
+	//	printf("evens_read: catch\n");
 	}
 	assert(cnt < len);
 //	strcpy(buf, temp);
