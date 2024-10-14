@@ -1,7 +1,6 @@
 #include <proc.h>
 #include <elf.h>
 #include <fs.h>
-//#include <assert.h>
 
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -11,7 +10,6 @@
 # define Elf_Phdr Elf32_Phdr
 #endif
 
-//extern uint8_t ramdisk_start;
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 int fs_open(const char *pathname, int flags, int mode);
@@ -25,7 +23,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	int fd = fs_open(filename, 0, 0);
 	
 	Elf_Ehdr ehdr;
-//	ramdisk_read(&ehdr, 0, sizeof(Elf_Ehdr));
 	
 	size_t rd_len = fs_read(fd, &ehdr, sizeof(Elf_Ehdr));
 	assert(rd_len == sizeof(Elf_Ehdr));
@@ -47,7 +44,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 			
 			fs_lseek(fd, phdr[i].p_offset, SEEK_SET);
 			fs_read(fd, (void *)phdr[i].p_vaddr, phdr[i].p_filesz);
-			//ramdisk_read((void *)phdr[i].p_vaddr, 0 + phdr[i].p_offset, phdr[i].p_filesz);
 			
 			// set zeros
 			memset((void *)phdr[i].p_vaddr + phdr[i].p_filesz, 0, phdr[i].p_memsz - phdr[i].p_filesz);
@@ -59,7 +55,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
-  uintptr_t entry = loader(pcb, filename);
+  Log("naive_uload, filename=%s\n", filename);
+	uintptr_t entry = loader(pcb, filename);
   Log("Jump to entry = %p", entry);
   ((void(*)())entry) ();
 }
