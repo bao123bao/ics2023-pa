@@ -14,6 +14,8 @@ static const char *keyname[256] __attribute__((used)) = {
   AM_KEYS(NAME)
 };
 
+static int screen_w, screen_h;
+
 size_t serial_write(const void *buf, size_t offset, size_t len) {
   char *chars = (char *)buf;
 	int i;
@@ -46,14 +48,28 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-  int w = io_read(AM_GPU_CONFIG).width;
-  int h = io_read(AM_GPU_CONFIG).height;
-	int ret = sprintf(buf, "WIDTH:%d\nHEIGHT:%d", w, h);
+  screen_w = io_read(AM_GPU_CONFIG).width;
+  screen_h = io_read(AM_GPU_CONFIG).height;
+	int ret = sprintf(buf, "WIDTH:%d\nHEIGHT:%d", screen_w, screen_h);
 	return ret;
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-  return 0;
+	
+	// only write one line
+	int x, y;
+
+	y = (offset+1) / screen_w;
+	x = ((offset+1) % screen_w) - 1;
+
+	// if exceeds boundary, return 0
+	if (x >= screen_w || y >= screen_h)
+		return 0;
+	
+	// if not exceed, write to vmem and return len
+	io_write(AM_GPU_FBDRAW, x, y, buf, len, 1, true);
+
+	return len;
 }
 
 void init_device() {

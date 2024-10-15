@@ -10,6 +10,9 @@
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
+static int canvas_w = 0, canvas_h = 0;
+
+static int fd_fb = -1, fd_dispinfo = -1, fd_event = -1;
 
 static struct timeval tv_init = {};
 
@@ -26,14 +29,14 @@ int NDL_PollEvent(char *buf, int len) {
 		return 0;
 
 	// read from device events
-	int fd = open("/dev/events", 0, 0);
-	assert(fd != -1);
-
-	return read(fd, (void *)buf, len);
+	assert(fd_event != -1);
+	int cnt = read(fd_event, (void *)buf, len);
+	return cnt;
 }
 
 void NDL_OpenCanvas(int *w, int *h) {
-  if (getenv("NWM_APP")) {
+  // something not know
+	if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
     screen_w = *w; screen_h = *h;
@@ -51,13 +54,32 @@ void NDL_OpenCanvas(int *w, int *h) {
   	close(fbctl);
   }
 
-	printf("in open_canvas: screen width: w=%d, h=%d\n", screen_w, screen_h);
+	// add function of pa3
+	// if w and w equal 0
+	if (*w == 0 && *h == 0){
+		canvas_w = screen_w;
+		*w = screen_w;
 
-	
+		canvas_h = screen_h;
+		*h = screen_h;
+		return;
+	}
+
+	// if w and w are specified
+	canvas_w = *w;
+	canvas_h = *h;
+
+	printf("in open_canvas: canvas size: w=%d, h=%d\n", canvas_w, canvas_h);
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
-	
+	int i, offset;
+	int fd = open("/dev/fb", 0);
+	for(i=0; i<h; i++){
+		offset = (y+i) * canvas_w + x;
+		lseek(fd, offset, SEEK_SET);
+		write(fd, pixels+ w*i, w);
+	}
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
@@ -79,26 +101,31 @@ int NDL_Init(uint32_t flags) {
 	// set timeval_init
 	gettimeofday(&tv_init, NULL);
 	
-	// read screen size
+	// temporarily store screen size
 	char temp[50];
 	
-	int fd = open("/proc/dispinfo", 0);
-
-	int cnt = read(fd, temp, 50);
+	// open device files
+	fd_dispinfo = open("/proc/dispinfo", 0, 0);
+	fd_event    = open("/dev/events", 0, 0);
+	fd_fb       = open("/dev/fb", 0, 0);
+	
+	// read screen size
+	int cnt = read(fd_dispinfo, temp, 50);
 	assert(cnt > 0);
 
 	cnt = sscanf(temp, "WIDTH:%d HEIGHT:%d", &screen_w, &screen_h);
 	assert(cnt == 2);
-	 
-	// 
+	
 	printf("in sdl_init: screen width: w=%d, h=%d\n", screen_w, screen_h);
 	
 	if (getenv("NWM_APP")) {
     evtdev = 3;
-	
   }
   return 0;
 }
 
 void NDL_Quit() {
+	close(fd_event);
+	close(fd_fb);
+	close(fd_dispinfo);
 }
