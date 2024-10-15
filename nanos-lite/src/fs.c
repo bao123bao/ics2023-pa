@@ -23,7 +23,7 @@ Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin",        0, 0, invalid_read, invalid_write},
   [FD_STDOUT] = {"stdout",       0, 0, invalid_read, serial_write},
   [FD_STDERR] = {"stderr",       0, 0, invalid_read, serial_write},
-	[FD_EVENT]  = {"/dev/events",  0, 0, invalid_read, fb_write},
+	[FD_EVENT]  = {"/dev/events",  0, 0, events_read, invalid_write},
 	[FD_FB]     = {"/dev/fb",         0, 0, invalid_read, fb_write},
 	[FD_DISPINFO]={"/proc/dispinfo",  0, 0, dispinfo_read, invalid_write}, 
 #include "files.h"
@@ -67,7 +67,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
 
 	// special files
 	if(file_table[fd].read != NULL) {
-		int cnt = file_table[fd].read(buf, 0, len);
+		int cnt = file_table[fd].read(buf, open_offsets[fd], len);
 		open_offsets[fd] += cnt;
 		return cnt;
 	}
@@ -92,7 +92,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
 size_t fs_write(int fd, const void *buf, size_t len) {
 	// special files
 	if(file_table[fd].write != NULL) {
-		int cnt = file_table[fd].write(buf, 0, len);
+		int cnt = file_table[fd].write(buf, open_offsets[fd], len);
 		open_offsets[fd] += cnt;
 		return cnt;
 	}
