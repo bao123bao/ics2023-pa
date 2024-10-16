@@ -24,6 +24,7 @@ void render() {
     SDL_FreeSurface(slide);
   }
   char fname[256];
+	printf("in bmp render: cur=%d\n",cur);
   sprintf(fname, path, cur);
   slide = SDL_LoadBMP(fname);
   assert(slide);
