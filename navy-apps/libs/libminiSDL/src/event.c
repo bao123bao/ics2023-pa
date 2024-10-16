@@ -41,9 +41,10 @@ int SDL_WaitEvent(SDL_Event *event) {
 		namebuf = buf + 3;
 	}else{
 		printf("SDL: key act type error!\n");
+		assert(0);
 	}
-
-//	int scnt = sscanf(buf, "kd %s", namebuf);
+	
+	printf("keyname=%s\n",namebuf);
 	
 	int i, nlen;
 	nlen = sizeof(keyname);
@@ -51,7 +52,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 		if(strcmp(keyname[i], namebuf) == 0){
 			assert(i != 0);
 			event->key.keysym.sym = i;
-			printf("SDL key catch: %s\n", keyname[i]);
+			printf("SDL key catch: %s\n", namebuf);
 			return 1;
 		}
 	}
