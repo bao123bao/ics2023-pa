@@ -20,22 +20,30 @@ int SDL_PollEvent(SDL_Event *ev) {
 
 int SDL_WaitEvent(SDL_Event *event) {
 	char buf[50];
-	char namebuf[30];
+	char *namebuf;
+	char key_act;
 	int cnt;
+	
 	while(1) {
-		if((cnt = NDL_PollEvent(buf, sizeof(buf))) != 0)
+		if(NDL_PollEvent(buf, sizeof(buf)))
 			break;
 	}
-	
+
 	printf("SDL event from NDL, cnt=%d: %s\n", cnt, buf);
 	
-	int scnt = sscanf(buf, "kd %s", namebuf);
-	
-	if(scnt!=1){
-		return 0;
+	// get key up or down
+	key_act = buf[1];
+	if(key_act == 'u'){
+		event->type = SDL_KEYUP;
+		namebuf = buf + 3;
+	}else if(key_act == 'd'){
+		event->type = SDL_KEYDOWN;
+		namebuf = buf + 3;
+	}else{
+		printf("SDL: key act type error!\n");
 	}
 
-	event->type = SDL_KEYDOWN;
+//	int scnt = sscanf(buf, "kd %s", namebuf);
 	
 	int i, nlen;
 	nlen = sizeof(keyname);
