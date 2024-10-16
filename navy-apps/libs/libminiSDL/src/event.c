@@ -47,13 +47,13 @@ int SDL_WaitEvent(SDL_Event *event) {
 	printf("keyname=%s\n",namebuf);
 	
 	int i, nlen;
-	nlen = sizeof(keyname);
+	nlen = sizeof(keyname) / sizeof(char*);
 	printf("nlen=%d\n", nlen);
 
 	for(i=0; i<nlen; i++){
+		printf("keyname[%d]=%s vs namebuf=%s:\n", i, keyname[i], namebuf);
 		if(strcmp(keyname[i], namebuf) == 0){
 			assert(i != 0);
-			printf("keyname[%d]=%s vs namebuf=%s:\n", i, keyname[i], namebuf);
 			event->key.keysym.sym = i;
 			printf("SDL key catch: %s\n", namebuf);
 			return 1;
