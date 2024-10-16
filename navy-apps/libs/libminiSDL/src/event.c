@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #define keyname(k) #k,
 
 static const char *keyname[] = {
@@ -35,6 +36,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 	nlen = sizeof(keyname);
 	for(i=0; i<nlen; i++){
 		if(strcmp(keyname[i], namebuf) == 0){
+			assert(i != 0);
 			event->key.keysym.sym = i;
 			printf("SDL key catch: %s\n", keyname[i]);
 			return 1;
