@@ -21,7 +21,12 @@ int SDL_PollEvent(SDL_Event *ev) {
 int SDL_WaitEvent(SDL_Event *event) {
 	char buf[50];
 	char namebuf[30];
-	int cnt = NDL_PollEvent(buf, sizeof(buf));
+	int cnt;
+	while(1) {
+		if((cnt = NDL_PollEvent(buf, sizeof(buf))) != 0)
+			break;
+	}
+	
 	printf("SDL event from NDL, cnt=%d: %s\n", cnt, buf);
 	
 	int scnt = sscanf(buf, "kd %s", namebuf);
@@ -42,7 +47,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 			return 1;
 		}
 	}
-	
+
 	printf("no keyname matched\n");
 
 	return 0;
