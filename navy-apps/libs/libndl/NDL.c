@@ -73,6 +73,7 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+	
 	printf("now in NDL_drawrect: x=%d, y=%d, w=%d, h=%d\n", x,y,w,h);
 	int i, offset, lseek_ret, cnt;
 	int fd = open("/dev/fb", 0);
@@ -82,6 +83,10 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 		lseek_ret = lseek(fd, offset, SEEK_SET);
 		cnt = write(fd, pixels + w*i, w);
 		printf("NDL_drawrect: lseek to offset=%d, write %d pixels from pixels+%d*%d\n", lseek_ret, cnt, w,i);
+		//printf("pixels:  ");
+		//for(j=0; j<canvas_w; j++){
+		//	printf("%x ", ((uint32_t*)(pixels+i*w))[j]);
+		//}
 	}
 }
 

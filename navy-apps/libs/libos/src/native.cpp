@@ -61,6 +61,8 @@ static inline void get_fsimg_path(char *newpath, const char *path) {
   if (scancode == SDL_SCANCODE_##k) name = #k;
 
 static void update_screen() {
+//	fprintf(stdout, "update screen using fd=%p\n", fb);
+//	memset(fb, 0xABCDEFFF, FB_SIZE);
   SDL_UpdateTexture(texture, NULL, fb, disp_w * sizeof(Uint32));
   SDL_RenderClear(renderer);
   SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -119,11 +121,13 @@ static void open_display() {
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, disp_w, disp_h);
 
   fb_memfd = memfd_create("fb", 0);
+	//fprintf(stdout, "fb_memfd=%d created\n", fb_memfd);
   assert(fb_memfd != -1);
   int ret = ftruncate(fb_memfd, FB_SIZE);
   assert(ret == 0);
   fb = (uint32_t *)mmap(NULL, FB_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fb_memfd, 0);
   assert(fb != (void *)-1);
+	//fprintf(stdout, "FB MMAP SET: fb=%p\n",fb);
   memset(fb, 0, FB_SIZE);
   lseek(fb_memfd, 0, SEEK_SET);
 }
@@ -233,7 +237,7 @@ ssize_t write(int fd, const void *buf, size_t count) {
     SDL_PauseAudio(0);
     return count;
   }
-	//fprintf(stdout, "native: write called\n");
+	//fprintf(stdout, "native: write(%d, %p, %d) called\n", fd, buf, count);
   return glibc_write(fd, buf, count);
 }
 
