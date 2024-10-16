@@ -31,7 +31,7 @@ int NDL_PollEvent(char *buf, int len) {
 	// read from device events
 	assert(fd_event != -1);
 	int cnt = read(fd_event, (void *)buf, len);
-	printf("NDL_Pollenvent\n");
+//	printf("NDL_Pollenvent\n");
 	return cnt;
 }
 

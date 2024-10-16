@@ -54,7 +54,8 @@ int main() {
   render();
 
   while (1) {
-    SDL_Event e;
+    printf("new while loop\n");
+		SDL_Event e;
     SDL_WaitEvent(&e);
 
     if (e.type == SDL_KEYDOWN) {
