@@ -1,5 +1,6 @@
 #include <NDL.h>
 #include <SDL.h>
+#include <stdio.h>
 
 #define keyname(k) #k,
 
@@ -17,7 +18,32 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  return 1;
+	char buf[50];
+	char namebuf[30];
+	int cnt = NDL_PollEvent(buf, sizeof(buf));
+	printf("SDL event from NDL: %s\n", buf);
+	
+	int scnt = sscanf(buf, "kd %s", namebuf);
+	
+	if(scnt!=1){
+		return 0;
+	}
+
+	e->type = SDL_KEYDOWN;
+	
+	int i, nlen;
+	nlen = sizeof(keyname);
+	for(i=0; i<nlen; i++){
+		if(strcmp(keyname[i], namebuf) == 0){
+			e->keysym.sym = i;
+			printf("SDL key catch: %s\n", keyname[i]);
+			return 1;
+		}
+	}
+	
+	printf("no keyname matched\n");
+
+	return 0;
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
