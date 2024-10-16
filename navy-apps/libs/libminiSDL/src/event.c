@@ -1,7 +1,7 @@
 #include <NDL.h>
 #include <SDL.h>
 #include <stdio.h>
-
+#include <string.h>
 #define keyname(k) #k,
 
 static const char *keyname[] = {
@@ -29,13 +29,13 @@ int SDL_WaitEvent(SDL_Event *event) {
 		return 0;
 	}
 
-	e->type = SDL_KEYDOWN;
+	event->type = SDL_KEYDOWN;
 	
 	int i, nlen;
 	nlen = sizeof(keyname);
 	for(i=0; i<nlen; i++){
 		if(strcmp(keyname[i], namebuf) == 0){
-			e->keysym.sym = i;
+			event->key.keysym.sym = i;
 			printf("SDL key catch: %s\n", keyname[i]);
 			return 1;
 		}
