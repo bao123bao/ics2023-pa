@@ -22,7 +22,7 @@ int SDL_WaitEvent(SDL_Event *event) {
 	char buf[50];
 	char namebuf[30];
 	int cnt = NDL_PollEvent(buf, sizeof(buf));
-	printf("SDL event from NDL: %s\n", buf);
+	printf("SDL event from NDL, cnt=%d: %s\n", cnt, buf);
 	
 	int scnt = sscanf(buf, "kd %s", namebuf);
 	
