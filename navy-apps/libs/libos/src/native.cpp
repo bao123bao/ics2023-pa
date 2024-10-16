@@ -233,6 +233,7 @@ ssize_t write(int fd, const void *buf, size_t count) {
     SDL_PauseAudio(0);
     return count;
   }
+	//fprintf(stdout, "native: write called\n");
   return glibc_write(fd, buf, count);
 }
 
