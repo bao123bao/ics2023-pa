@@ -52,11 +52,15 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode) {
 	// orinary files
 	printf("fs_open: <%s>\n", pathname);
+	
+
 	int i;
 	int files_num = sizeof(file_table) / sizeof(Finfo);
 	for (i=0; i<files_num; i++){
 		//printf("%s vs %s\n", file_table[i].name, pathname);
 		if ( strcmp(file_table[i].name, pathname) == 0 ){
+			// reset open_offset
+			open_offsets[i] = 0;
 			return i;
 		}
 	}
