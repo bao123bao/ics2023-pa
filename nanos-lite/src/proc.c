@@ -27,7 +27,7 @@ void init_proc() {
   Log("Initializing processes...");
 
   // load program here
-	naive_uload(NULL, "/bin/sdl-e-test");
+	naive_uload(NULL, "/bin/nslider");
 
 	Log("naive loaded\n");
 }
