@@ -51,7 +51,7 @@ void init_fs() {
 
 int fs_open(const char *pathname, int flags, int mode) {
 	// orinary files
-	printf("fs_open: <%s>\n", pathname);
+	//printf("fs_open: <%s>\n", pathname);
 	
 
 	int i;
