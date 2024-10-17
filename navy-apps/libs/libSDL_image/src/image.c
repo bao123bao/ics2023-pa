@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
 #define SDL_malloc  malloc
 #define SDL_free    free
@@ -15,7 +16,7 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
 }
 
 SDL_Surface* IMG_Load(const char *filename) {
-	SDL_Surface *psf;
+	SDL_Surface *psf = NULL;
 	FILE *f = fopen(filename, "r");
 
 	fseek(f, 0, SEEK_END);
@@ -23,8 +24,10 @@ SDL_Surface* IMG_Load(const char *filename) {
 	fseek(f, 0, SEEK_SET);
 
 	unsigned char *buf = malloc(fsize);
+	assert(buf);
 	printf("IMG_load: filename=<%s>, fsize=%d\n", filename, fsize);
 	psf = STBIMG_LoadFromMemory(buf, fsize);
+	assert(psf);
 	
 	fclose(f);
 	free(buf);
