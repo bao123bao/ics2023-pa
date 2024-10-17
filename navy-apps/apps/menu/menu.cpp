@@ -75,7 +75,9 @@ int main(int argc, char *argv[], char *envp[]) {
   logo_sf = SDL_LoadBMP("/share/pictures/projectn.bmp");
   assert(logo_sf);
   set_i_max();
-
+	
+	//display_menu(1);
+	
   while (1) {
     display_menu(i_max);
 
@@ -83,6 +85,8 @@ int main(int argc, char *argv[], char *envp[]) {
     do {
       SDL_WaitEvent(&e);
     } while (e.type != SDL_KEYDOWN);
+	
+		/*
 
     int i = -1;
     switch (e.key.keysym.sym) {
@@ -99,7 +103,7 @@ int main(int argc, char *argv[], char *envp[]) {
       case SDLK_LEFT: prev(); break;
       case SDLK_RIGHT: next(); break;
     }
-
+		
     if (i != -1 && i <= i_max) {
       i += page * 10;
       auto *item = &items[i];
@@ -114,6 +118,7 @@ int main(int argc, char *argv[], char *envp[]) {
     } else {
       fprintf(stderr, "Choose a number between %d and %d\n\n", 0, i_max);
     }
+	*/	
   }
   return -1;
 }
