@@ -30,8 +30,10 @@ int main(int argc, char *argv[], char *envp[]) {
   
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
   printf("MAIN: screen size=(%d,%d)\n",screen->w,screen->h);
-
-	//clear_display();
+	
+	printf("navy: call Fillrect\n");
+	clear_display();
+	printf("navy: Fillrect done\n");
 	//SDL_Rect rect = { .x = screen->w - logo_sf->w, .y = 0 };
 	
 	//printf("navy: call blit\n");
