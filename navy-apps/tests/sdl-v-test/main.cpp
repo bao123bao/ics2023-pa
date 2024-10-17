@@ -34,10 +34,10 @@ int main(int argc, char *argv[], char *envp[]) {
 	printf("navy: call Fillrect\n");
 	clear_display();
 	printf("navy: Fillrect done\n");
-	//SDL_Rect rect = { .x = screen->w - logo_sf->w, .y = 0 };
+	SDL_Rect rect = { .x = screen->w - logo_sf->w, .y = 0 };
 	
-	//printf("navy: call blit\n");
-	//SDL_BlitSurface(logo_sf, NULL, screen, &rect);
+	printf("navy: call blit\n");
+	SDL_BlitSurface(logo_sf, NULL, screen, &rect);
 	printf("navy: call updaterect\n");
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
 	printf("navy: updaterect done\n");
