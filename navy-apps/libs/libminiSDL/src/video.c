@@ -59,14 +59,29 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	printf("int sdl_fillrect\n");
-	int i, j;
+	int i, j, di, dj;
+	int di_start, dj_start, w_len, h_len;
 	uint32_t *pixel_ptr;
-
+	
+	if(dstrect){
+		di_start = dstrect->y;
+		dj_start = dstrect->x;
+		w_len = dstrect->w;
+		h_len = dstrect->h;
+	}else{
+		di_start = 0;
+		dj_start = 0;
+		w_len = dst->w;
+		h_len = dst->h;
+	}
+	
 	// update pixels in dst surface to color
-	for(i = dstrect->y; i < dstrect->y + dstrect->h; i++){
-		for(j = dstrect->x; j < dstrect->x + dstrect->w; j++){
-			pixel_ptr = (uint32_t *)dst->pixels + i * dst->w + j;
-			printf("rectfill: ptr=%p\n", pixel_ptr);
+	for(i = 0; i < h_len; i++){
+		di = di_start + i;
+		for(j = 0; j < w_len; j++){
+			dj = dj_start + i;
+			pixel_ptr = (uint32_t *)dst->pixels + di * dst->w + dj;
+			//printf("rectfill: ptr=%p\n", pixel_ptr);
 			*pixel_ptr = color;
 		}
 	}
