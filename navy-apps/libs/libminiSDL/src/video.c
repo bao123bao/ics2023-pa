@@ -66,9 +66,11 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	for(i = dstrect->y; i < dstrect->y + dstrect->h; i++){
 		for(j = dstrect->x; j < dstrect->x + dstrect->w; j++){
 			pixel_ptr = (uint32_t *)dst->pixels + i * dst->w + j;
+			printf("rectfill: ptr=%p\n", pixel_ptr);
 			*pixel_ptr = color;
 		}
 	}
+	printf("rectfill return");
 	// update the NDL canvas using dst's pixels
 	//NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
 }
