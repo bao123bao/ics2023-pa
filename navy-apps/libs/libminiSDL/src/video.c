@@ -5,14 +5,73 @@
 #include <stdlib.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
-  assert(dst && src);
+	// ensure the validity of args
+	assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+	
+	int di, dj, si, sj;
+	int di_start, dj_start, si_start, sj_start;
+	int w_len, h_len;
+	int i, j;
+	uint32_t *dst_pixel_ptr;
+	uint32_t *src_pixel_ptr;
+	
+	// set src rect location and size
+	if (srcrect){
+		si_start = srcrect->y;
+		sj_start = srcrect->x;
+		w_len = srcrect->w;
+		h_len = srcrect->h;
+	}else{
+		si_start = 0;
+		sj_start = 0;
+		w_len = src->w;
+		h_len = src->h;
+	}
+	
+	// set dest rect location
+	if (dstrect){
+		di_start = dstrect->y;
+		dj_start = dstrect->x;
+	}else{
+		di_start = 0;
+		dj_start = 0;
+	}
+	
+	// copy from src_sf to dst_sf
+	for(i = 0; i < h_len; i++){
+		di = di_start + i;
+		si = si_start + i;
+		
+		for(j = 0; j < w_len; j++){
+			si = si_start + j;
+			sj = sj_start + j;
+			
+			// copy element form src[si][sj] to dst[di][dj]
+			dst_pixel_ptr = (uint32_t *)dst->pixels + di * dst->w + dj;
+      src_pixel_ptr = (uint32_t *)src->pixels + si * src->w + sj;
+      *dst_pixel_ptr = *src_pixel_ptr;
+		}
+	}
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+	int i, j;
+	uint32_t *pixel_ptr;
+
+	// update pixels in dst surface to color
+	for(i = dstrect->y; i < dstrect->y + dstrect->h; i++){
+		for(j = dstrect->x; j < dstrect->x + dstrect->w; j++){
+			pixel_ptr = (uint32_t *)dst->pixels + i * dst->w + j;
+			*pixel_ptr = color;
+		}
+	}
+	// update the NDL canvas using dst's pixels
+	//NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
+	// fill the full screen area
 	if(x==0 && y==0 && w==0 && h==0){
 		NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
 		return;
