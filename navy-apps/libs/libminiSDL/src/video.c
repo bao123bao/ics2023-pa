@@ -74,6 +74,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 		w_len = dst->w;
 		h_len = dst->h;
 	}
+
+	printf("fillrect:x=%d,y=%d,w=%d,h=%d\n",dj_start,di_start,w_len,h_len);
 	
 	// update pixels in dst surface to color
 	for(i = 0; i < h_len; i++){
