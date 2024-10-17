@@ -27,7 +27,7 @@ void init_proc() {
   Log("Initializing processes...");
 
   // load program here
-	naive_uload(NULL, "/bin/sdl-v-test");
+	naive_uload(NULL, "/bin/menu");
 
 	Log("naive loaded\n");
 }

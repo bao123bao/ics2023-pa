@@ -86,7 +86,7 @@ int main(int argc, char *argv[], char *envp[]) {
       SDL_WaitEvent(&e);
     } while (e.type != SDL_KEYDOWN);
 	
-		/*
+		
 
     int i = -1;
     switch (e.key.keysym.sym) {
@@ -118,7 +118,7 @@ int main(int argc, char *argv[], char *envp[]) {
     } else {
       fprintf(stderr, "Choose a number between %d and %d\n\n", 0, i_max);
     }
-	*/	
+	
   }
   return -1;
 }
@@ -150,7 +150,7 @@ static void display_menu(int n) {
   printf("display: call blit\n");
 	SDL_BlitSurface(logo_sf, NULL, screen, &rect);
   printf("Available applications:\n");
-  /*
+  
 	char buf[80];
   int i;
   for (i = 0; i <= n; i ++) {
@@ -180,7 +180,7 @@ static void display_menu(int n) {
   sprintf(buf, "  0-9 Choose");
   draw_text_row(buf, i);
   i ++;
-*/
+
   SDL_UpdateRect(screen, 0, 0, 0, 0);
 
   printf("========================================\n");
