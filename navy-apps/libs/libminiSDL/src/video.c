@@ -77,13 +77,13 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 		h_len = dst->h;
 	}
 
-	printf("fillrect:x=%d,y=%d,w=%d,h=%d\n",dj_start,di_start,w_len,h_len);
+	//printf("fillrect:x=%d,y=%d,w=%d,h=%d\n",dj_start,di_start,w_len,h_len);
 	
 	// update pixels in dst surface to color
 	for(i = 0; i < h_len; i++){
 		di = di_start + i;
 		for(j = 0; j < w_len; j++){
-			dj = dj_start + i;
+			dj = dj_start + j;
 			printf("pixel=(i=%d,j=%d)\n",di,dj);
 			pixel_ptr = (uint32_t *)dst->pixels + di * dst->w + dj;
 			//printf("rectfill: ptr=%p\n", pixel_ptr);
