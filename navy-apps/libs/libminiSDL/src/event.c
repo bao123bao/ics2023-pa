@@ -21,7 +21,7 @@ int SDL_PollEvent(SDL_Event *ev) {
 	char key_act;
 	int cnt;
 	
-	if(NDL_PollEvent(buf, sizeof(buf)))
+	if(NDL_PollEvent(buf, sizeof(buf))==0)
 		return 0;
 	
 	// get key up or down
