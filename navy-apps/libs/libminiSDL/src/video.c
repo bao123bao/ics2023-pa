@@ -48,7 +48,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		si = si_start + i;
 		
 		for(j = 0; j < w_len; j++){
-			si = si_start + j;
+			dj = dj_start + j;
 			sj = sj_start + j;
 			
 			// copy element form src[si][sj] to dst[di][dj]
