@@ -25,8 +25,8 @@ static void clear_display(void) {
 int main(int argc, char *argv[], char *envp[]) {
   SDL_Init(0);
 
-  //logo_sf = SDL_LoadBMP("/share/pictures/projectn.bmp");
-  //assert(logo_sf);
+  logo_sf = SDL_LoadBMP("/share/pictures/projectn.bmp");
+  assert(logo_sf);
   
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
   printf("MAIN: screen size=(%d,%d)\n",screen->w,screen->h);
