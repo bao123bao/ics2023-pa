@@ -13,7 +13,13 @@ char *SDL_GetError() {
 }
 
 int SDL_SetError(const char* fmt, ...) {
-  return -1;
+  /*
+  va_list args;
+	va_start(args, fmt);
+	vprintf(fmt, args);
+	va_end(args);
+	*/
+	return -1;
 }
 
 int SDL_ShowCursor(int toggle) {

@@ -96,7 +96,7 @@ int printf(const char *fmt, ...) {
 	for(i=0; i<cnt; i++){
 		putch(buf[i]);
 	}
-	
+	va_end(args);
 	return cnt;
 }
 
