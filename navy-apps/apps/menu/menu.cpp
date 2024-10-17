@@ -145,7 +145,8 @@ static void display_menu(int n) {
   printf("display: call blit\n");
 	SDL_BlitSurface(logo_sf, NULL, screen, &rect);
   printf("Available applications:\n");
-  char buf[80];
+  /*
+	char buf[80];
   int i;
   for (i = 0; i <= n; i ++) {
     auto *item = &items[page * 10 + i];
@@ -174,7 +175,7 @@ static void display_menu(int n) {
   sprintf(buf, "  0-9 Choose");
   draw_text_row(buf, i);
   i ++;
-
+*/
   SDL_UpdateRect(screen, 0, 0, 0, 0);
 
   printf("========================================\n");
