@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <stdio.h>
+
 #define SDL_malloc  malloc
 #define SDL_free    free
 #define SDL_realloc realloc
@@ -12,7 +15,20 @@ SDL_Surface* IMG_Load_RW(SDL_RWops *src, int freesrc) {
 }
 
 SDL_Surface* IMG_Load(const char *filename) {
-  return NULL;
+	SDL_Surface *psf;
+	FILE *f = fopen(filename, "r");
+
+	fseek(f, 0, SEEK_END);
+	int fsize = ftell(f);
+	fseek(f, 0, SEEK_SET);
+
+	unsigned char *buf = malloc(fsize);
+	psf = STBIMG_LoadFromMemory(buf, fsize);
+	
+	fclose(f);
+	free(buf);
+
+	return psf;
 }
 
 int IMG_isPNG(SDL_RWops *src) {
