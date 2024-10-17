@@ -40,6 +40,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 		dj_start = 0;
 	}
 	
+	printf("copy src(%d,%d,%d,%d) to dst(%d,%d)\n", 
+		sj_start,si_start,w_len,h_len,dj_start,di_start);
 	// copy from src_sf to dst_sf
 	for(i = 0; i < h_len; i++){
 		di = di_start + i;
