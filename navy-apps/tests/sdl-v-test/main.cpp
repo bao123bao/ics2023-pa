@@ -24,42 +24,38 @@ static void clear_display(void) {
 
 int main(int argc, char *argv[], char *envp[]) {
   SDL_Init(0);
+
+  //logo_sf = SDL_LoadBMP("/share/pictures/projectn.bmp");
+  //assert(logo_sf);
+  
   screen = SDL_SetVideoMode(0, 0, 32, SDL_HWSURFACE);
   printf("MAIN: screen size=(%d,%d)\n",screen->w,screen->h);
 
-  logo_sf = SDL_LoadBMP("/share/pictures/projectn.bmp");
-  assert(logo_sf);
-
-  while (1) {
-  	printf("navy: new while loop\n");		
-		clear_display();
-		SDL_Rect rect = { .x = screen->w - logo_sf->w, .y = 0 };
-		
-		printf("navy: call blit\n");
-		SDL_BlitSurface(logo_sf, NULL, screen, &rect);
-		printf("navy: call updaterect\n");
-		SDL_UpdateRect(screen, 0, 0, 0, 0);
-		printf("navy: updaterect done\n");
-
-  	printf("========================================\n");
-
-  	fflush(stdout);
-		
-    SDL_Event e;
-    do {
-      SDL_WaitEvent(&e);
-    } while (e.type != SDL_KEYDOWN);
+	clear_display();
+	//SDL_Rect rect = { .x = screen->w - logo_sf->w, .y = 0 };
 	
-    switch (e.key.keysym.sym) {
-      case SDLK_LEFT: 
-      	printf("left key!\n"); 
-      	break;
-      case SDLK_RIGHT: 
-      	printf("left key!\n"); 
-      	break;
-    }
-		
+	//printf("navy: call blit\n");
+	//SDL_BlitSurface(logo_sf, NULL, screen, &rect);
+	printf("navy: call updaterect\n");
+	SDL_UpdateRect(screen, 0, 0, 0, 0);
+	printf("navy: updaterect done\n");
+
+	/*
+  SDL_Event e;
+  do {
+    SDL_WaitEvent(&e);
+  } while (e.type != SDL_KEYDOWN);
+
+  switch (e.key.keysym.sym) {
+    case SDLK_LEFT: 
+    	printf("left key!\n"); 
+    	break;
+    case SDLK_RIGHT: 
+    	printf("left key!\n"); 
+    	break;
   }
+  */
+	while(1) ;
   return -1;
 }
 
