@@ -77,7 +77,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	printf("int sdl_fillrect\n");
 	int i, j, di, dj;
 	int di_start, dj_start, w_len, h_len;
-	uint32_t *pixel_ptr;
+	uint32_t *pixel_ptr_32;
+	uint8_t  *pixel_ptr_8;
 	
 	if(dstrect){
 		di_start = dstrect->y;
@@ -99,9 +100,15 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 		for(j = 0; j < w_len; j++){
 			dj = dj_start + j;
 			//printf("pixel=(i=%d,j=%d)\n",di,dj);
-			pixel_ptr = (uint32_t *)dst->pixels + di * dst->w + dj;
-			//printf("rectfill: ptr=%p\n", pixel_ptr);
-			*pixel_ptr = color;
+			
+			if(dst->format->BitsPerPixel == 32){
+				pixel_ptr_32 = (uint32_t *)dst->pixels + di * dst->w + dj;
+				//printf("rectfill: ptr=%p\n", pixel_ptr);
+				*pixel_ptr_32 = color;
+			}else if(dst->format->BitsPerPixel == 8){
+				pixel_ptr_8 = (uint8_t *)dst->pixels + di * dst->w + dj;
+				*pixel_ptr_8 = (uint8_t) color;
+			}
 		}
 	}
 	printf("rectfill return");
@@ -112,14 +119,42 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	// fill the full screen area
 	printf("SDL_UpdateRect call NDL_DrawRect:x=%d,y=%d,w=%d,h=%d\n",x,y,w,h);
+	
+
 	if(x==0 && y==0 && w==0 && h==0){
-		NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
+		if(s->format->BitsPerPixel == 32){
+			NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
+		}else if(s->format->BitsPerPixel == 8){
+			int len = s->w * s->h;
+			uint32_t colorbuf[len];
+			printf("SDL_UpdateRect: colorbuf len=%d, palette len=%d\n", len, s->format->palette->ncolors);
+			int i;
+			for(i=0; i<len; i++){
+				colorbuf[i] = ((uint32_t *) s->format->palette->colors)[s->pixels[i]];
+			}
+			NDL_DrawRect(colorbuf, 0, 0, s->w, s->h);
+		}else{
+			assert(0);
+		}
 		printf("SDL_UpdateRect return\n");
 		return;
 	}
 
-	// x y w h are given 
-	NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+	// x y w h are given
+	if(s->format->BitsPerPixel == 32){
+		NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+	}else if(s->format->BitsPerPixel == 8){
+		int len = s->w * s->h;
+		uint32_t colorbuf[len];
+		printf("SDL_UpdateRect: colorbuf len=%d, palette len=%d\n", len, s->format->palette->ncolors);
+		int i;
+		for(i=0; i<len; i++){
+			colorbuf[i] = ((uint32_t *) s->format->palette->colors)[s->pixels[i]];
+		}
+		NDL_DrawRect(colorbuf, 0, 0, s->w, s->h);
+	}else{
+		assert(0);
+	}
 	printf("SDL_UpdateRect return\n");
 }
 
