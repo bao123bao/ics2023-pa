@@ -151,7 +151,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			len, sizeof(colorbuf), s->format->palette->ncolors);
 			
 		for(int i=0; i<len; i++){
-			if(i % 500 == 0){
+			if(i % 50 == 0){
 				printf("SDL_UPDATERect(8): i=%d, pixels[i]=%d, palette[p[i]]=0x%x\n", i, pixels[i], palette[pixels[i]]);
 			}
 			colorbuf[i] = palette[pixels[i]];
