@@ -11,8 +11,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
 	
-	printf("SDL_BlitSurface: src bpp=%d, dst bpp=%d\n", 
-		src->format->BitsPerPixel, dst->format->BitsPerPixel);
+	//printf("SDL_BlitSurface: src bpp=%d, dst bpp=%d\n", 
+		//src->format->BitsPerPixel, dst->format->BitsPerPixel);
 
 	int di, dj, si, sj;
 	int di_start, dj_start, si_start, sj_start;
