@@ -122,14 +122,14 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	
 	// full screen update
 	if (x == 0 && y == 0 && w == 0 && h == 0){
-		update_w = w;
-		update_h = h;
+		update_w = s->w;
+		update_h = s->h;
 		update_x = 0;
 		update_y = 0;
 		
-	}else{ // update partial screen
-		update_w = s->w;
-		update_h = s->h;
+	}else{ // update partial screen using args
+		update_w = w;
+		update_h = h;
 		update_x = x;
 		update_y = y;
 	}
@@ -149,6 +149,12 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		
 		printf("SDL_UpdateRect: colorbuf <len=%d, size=%d>, palette len=%d\n", 
 			len, sizeof(colorbuf), s->format->palette->ncolors);
+		
+		// print colors
+		printf("palette colors:\n");
+		for(int i=0; i<s->format->palette->ncolors; i++){
+			printf("colors[%d]=0x%x\n", colors[i].val);
+		}
 			
 		for(int i=0; i<len; i++){
 			if(i % 50 == 0){
