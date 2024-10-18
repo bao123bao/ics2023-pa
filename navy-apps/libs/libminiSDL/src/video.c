@@ -157,9 +157,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		//}
 			
 		for(int i=0; i<len; i++){
-			if(i % 50 == 0){
-				printf("SDL_UPDATERect(8): i=%d, pixels[i]=%d, color_val=0x%x\n", i, pixels[i], colors[pixels[i]].val);
-			}
+			//if(i % 50 == 0){
+				//printf("SDL_UPDATERect(8): i=%d, pixels[i]=%d, color_val=0x%x\n", i, pixels[i], colors[pixels[i]].val);
+			//}
 			colorbuf[i] = colors[pixels[i]].val;
 			if(i == 40000)
 				break;
