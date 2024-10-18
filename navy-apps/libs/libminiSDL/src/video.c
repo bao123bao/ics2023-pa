@@ -154,6 +154,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			colorbuf[i] = colors[pixels[i]].val;
 		}
 		printf("loop over\n");
+		free(colorbuf);
 		NDL_DrawRect(colorbuf, update_x, update_y, update_w, update_h);
 	
 	}
