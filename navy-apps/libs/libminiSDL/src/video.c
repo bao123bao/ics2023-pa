@@ -112,8 +112,6 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 		}
 	}
 	printf("rectfill return");
-	// update the NDL canvas using dst's pixels
-	//NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
@@ -275,7 +273,7 @@ void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor, int ncolors) {
-  printf("SDL_SetPalette called\n");
+  //printf("SDL_SetPalette called\n");
 	assert(s);
   assert(s->format);
   assert(s->format->palette);
@@ -293,7 +291,7 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
     }
     SDL_UpdateRect(s, 0, 0, 0, 0);
   }
-	printf("SDL_SetPalette return\n");
+	//printf("SDL_SetPalette return\n");
 }
 
 static void ConvertPixelsARGB_ABGR(void *dst, void *src, int len) {
