@@ -122,12 +122,17 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	
 
 	if(x==0 && y==0 && w==0 && h==0){
+		
 		if(s->format->BitsPerPixel == 32){
+			
 			NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
+		
 		}else if(s->format->BitsPerPixel == 8){
+			
 			int len = s->w * s->h;
 			uint32_t colorbuf[len];
-			printf("SDL_UpdateRect: colorbuf len=%d, palette len=%d\n", len, s->format->palette->ncolors);
+			printf("SDL_UpdateRect: colorbuf <len=%d, size=%d>, palette len=%d\n", 
+				len, sizeof(colorbuf), s->format->palette->ncolors);
 			int i;
 			for(i=0; i<len; i++){
 				if(i % 500 == 0) 
