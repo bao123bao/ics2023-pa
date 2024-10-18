@@ -150,8 +150,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 		printf("SDL_UpdateRect: colorbuf <len=%d, size=%d>, palette len=%d\n", 
 			len, sizeof(colorbuf), s->format->palette->ncolors);
 		
-		for(int i=0; i<len; i++){
+		for(int i = 0; i < len; i += 2){
 			colorbuf[i] = colors[pixels[i]].val;
+			colorbuf[i+1] = colors[pixels[i+1]].val;
 		}
 		printf("loop over\n");
 		free(colorbuf);
