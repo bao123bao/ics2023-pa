@@ -11,12 +11,18 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
 	
+	printf("SDL_BlitSurface: src bpp=%d, dst bpp=%d\n", 
+		src->format->BitsPerPixel, dst->format->BitsPerPixel);
+
 	int di, dj, si, sj;
 	int di_start, dj_start, si_start, sj_start;
 	int w_len, h_len;
 	int i, j;
-	uint32_t *dst_pixel_ptr;
-	uint32_t *src_pixel_ptr;
+	uint32_t *dst_pixel_ptr_32;
+	uint32_t *src_pixel_ptr_32;
+	
+	uint8_t *dst_pixel_ptr_8;
+	uint8_t *src_pixel_ptr_8;
 	
 	// set src rect location and size
 	if (srcrect){
@@ -52,9 +58,17 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 			sj = sj_start + j;
 			
 			// copy element form src[si][sj] to dst[di][dj]
-			dst_pixel_ptr = (uint32_t *)dst->pixels + di * dst->w + dj;
-      src_pixel_ptr = (uint32_t *)src->pixels + si * src->w + sj;
-      *dst_pixel_ptr = *src_pixel_ptr;
+			if(dst->format->BitsPerPixel == 32){
+				dst_pixel_ptr_32 = (uint32_t *)dst->pixels + di * dst->w + dj;
+  	    src_pixel_ptr_32 = (uint32_t *)src->pixels + si * src->w + sj;
+    	  *dst_pixel_ptr_32 = *src_pixel_ptr_32;
+			}else if(dst->format->BitsPerPixel == 8){
+				dst_pixel_ptr_8 = (uint8_t *)dst->pixels + di * dst->w + dj;
+  	    src_pixel_ptr_8 = (uint8_t *)src->pixels + si * src->w + sj;
+    	  *dst_pixel_ptr_8 = *src_pixel_ptr_8;
+			}else{
+				assert(0);
+			}
 		}
 	}
 }
@@ -97,13 +111,16 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	// fill the full screen area
+	printf("SDL_UpdateRect call NDL_DrawRect:x=%d,y=%d,w=%d,h=%d\n",x,y,w,h);
 	if(x==0 && y==0 && w==0 && h==0){
 		NDL_DrawRect((uint32_t *)s->pixels, 0, 0, s->w, s->h);
+		printf("SDL_UpdateRect return\n");
 		return;
 	}
 
 	// x y w h are given 
 	NDL_DrawRect((uint32_t *)s->pixels, x, y, w, h);
+	printf("SDL_UpdateRect return\n");
 }
 
 // APIs below are already implemented.
@@ -210,12 +227,14 @@ void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
     SDL_BlitSurface(src, &rect, dst, dstrect);
   }
   else {
-    assert(0);
+    //return;
+		assert(0);
   }
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor, int ncolors) {
-  assert(s);
+  printf("SDL_SetPalette called\n");
+	assert(s);
   assert(s->format);
   assert(s->format->palette);
   assert(firstcolor == 0);
@@ -232,6 +251,7 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
     }
     SDL_UpdateRect(s, 0, 0, 0, 0);
   }
+	printf("SDL_SetPalette return\n");
 }
 
 static void ConvertPixelsARGB_ABGR(void *dst, void *src, int len) {

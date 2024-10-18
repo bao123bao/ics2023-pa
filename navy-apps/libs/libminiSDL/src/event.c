@@ -3,12 +3,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdlib.h>
 #define keyname(k) #k,
 
 static const char *keyname[] = {
   "NONE",
   _KEYS(keyname)
 };
+
+static uint8_t keystate[100];
 
 int SDL_PushEvent(SDL_Event *ev) {
   return 0;
@@ -43,6 +46,14 @@ int SDL_PollEvent(SDL_Event *ev) {
 		if(strcmp(keyname[i], namebuf) == 0){
 			assert(i != 0);
 			ev->key.keysym.sym = i;
+			
+			// update keystate
+			if(key_act == 'd'){
+				keystate[i] = 1;
+			}else if(key_act == 'u'){
+				keystate[i] = 0;
+			}
+
 			return 1;
 		}
 	}
@@ -81,6 +92,13 @@ int SDL_WaitEvent(SDL_Event *event) {
 		if(strcmp(keyname[i], namebuf) == 0){
 			assert(i != 0);
 			event->key.keysym.sym = i;
+
+			// update keystate
+			if(key_act == 'd'){
+				keystate[i] = 1;
+			}else if(key_act == 'u'){
+				keystate[i] = 0;
+			}
 			return 1;
 		}
 	}
@@ -94,5 +112,9 @@ int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
 }
 
 uint8_t* SDL_GetKeyState(int *numkeys) {
-  return NULL;
+  int len = sizeof(keyname) / sizeof(char *);
+	if(numkeys)
+		*numkeys = len;
+	//printf("SDL_GetKeyState: len=%d, malloc_size=%d\n", len, len * sizeof(uint8_t));
+	return keystate;
 }
