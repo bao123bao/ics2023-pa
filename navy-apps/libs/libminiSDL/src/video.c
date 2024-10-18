@@ -151,9 +151,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			len, sizeof(colorbuf), s->format->palette->ncolors);
 		
 		// print colors
-		printf("palette colors:\n");
+		printf("palette colors (ncolors=%d):\n", s->format->palette->ncolors);
 		for(int i=0; i<s->format->palette->ncolors; i++){
-			printf("colors[%d]=0x%x\n", colors[i].val);
+			printf("colors[%d]=0x%x\n", i, colors[i].val);
 		}
 			
 		for(int i=0; i<len; i++){
