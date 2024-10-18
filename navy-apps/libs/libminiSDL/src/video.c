@@ -116,7 +116,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 	// fill the full screen area
-	printf("SDL_UpdateRect call NDL_DrawRect:x=%d,y=%d,w=%d,h=%d\n",x,y,w,h);
+	printf("SDL_UpdateRect call NDL_DrawRect:x=%d,y=%d,w=%d,h=%d, color_type=%d\n",x,y,w,h,s->format->BitsPerPixel);
 	
 	int update_x, update_y, update_w, update_h;
 	
