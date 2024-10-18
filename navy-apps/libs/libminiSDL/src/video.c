@@ -151,16 +151,18 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			len, sizeof(colorbuf), s->format->palette->ncolors);
 		
 		// print colors
-		printf("palette colors (ncolors=%d):\n", s->format->palette->ncolors);
-		for(int i=0; i<s->format->palette->ncolors; i++){
-			printf("colors[%d]=0x%x\n", i, colors[i].val);
-		}
+		//printf("palette colors (ncolors=%d):\n", s->format->palette->ncolors);
+		//for(int i=0; i<s->format->palette->ncolors; i++){
+		//	printf("colors[%d]=0x%x\n", i, colors[i].val);
+		//}
 			
 		for(int i=0; i<len; i++){
 			if(i % 50 == 0){
 				printf("SDL_UPDATERect(8): i=%d, pixels[i]=%d, color_val=0x%x\n", i, pixels[i], colors[pixels[i]].val);
 			}
 			colorbuf[i] = colors[pixels[i]].val;
+			if(i == 40000)
+				break;
 		}
 		printf("loop over\n");
 		NDL_DrawRect(colorbuf, update_x, update_y, update_w, update_h);
