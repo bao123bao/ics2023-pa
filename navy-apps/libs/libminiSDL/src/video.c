@@ -131,8 +131,8 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			
 			int len = s->w * s->h;
 			uint32_t colorbuf[len];
-			printf("SDL_UpdateRect: colorbuf <len=%d, size=%d>, palette len=%d\n", 
-				len, sizeof(colorbuf), s->format->palette->ncolors);
+			printf("SDL_UpdateRect: s->w=%d, s->h=%d, colorbuf <len=%d, size=%d>, palette len=%d\n", 
+				s->w, s->h, len, sizeof(colorbuf), s->format->palette->ncolors);
 			int i;
 			for(i=0; i<len; i++){
 				if(i % 500 == 0) 
