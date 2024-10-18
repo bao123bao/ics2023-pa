@@ -129,9 +129,10 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
 			uint32_t colorbuf[len];
 			printf("SDL_UpdateRect: colorbuf len=%d, palette len=%d\n", len, s->format->palette->ncolors);
 			int i;
-			for(i=0; i<len; i++){
+			for(i=0; i<len; i += 2){
 				printf("SDL_UPDATERect(8): i=%d\r", i);
 				colorbuf[i] = ((uint32_t *) s->format->palette->colors)[s->pixels[i]];
+				colorbuf[i+1] = ((uint32_t *) s->format->palette->colors)[s->pixels[i+1]];
 			}
 			NDL_DrawRect(colorbuf, 0, 0, s->w, s->h);
 		}else{
