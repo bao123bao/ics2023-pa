@@ -1,5 +1,6 @@
 #include <common.h>
 #include <fs.h>
+#include <proc.h>
 #include "syscall.h"
 
 //#define CONFIG_STRACE 1
@@ -10,6 +11,8 @@ size_t fs_read(int fd, void *buf, size_t len);
 size_t fs_write(int fd, const void *buf, size_t len);
 size_t fs_lseek(int fd, size_t offset, int whence);
 int fs_close(int fd);
+
+void naive_uload(PCB *pcb, const char *filename);
 
 struct timeval {
 	uint32_t tv_sec;
@@ -40,10 +43,6 @@ int sys_yield() {
 	return 0;
 }
 
-int sys_exit(int status) {
-	halt(status);
-	return status;
-}
 
 int sys_write(int fd, const void *buf, size_t count) {
 	return fs_write(fd, buf, count);
@@ -71,6 +70,17 @@ int sys_close(int fd) {
 	return fs_close(fd);
 }
 
+int sys_execve(const char *pathname, char *const argv[], char *constenvp[]) {
+	naive_uload(NULL, pathname);
+	return 0;
+}
+
+int sys_exit(int status) {
+	//halt(status);
+	sys_execve("/bin/menu", NULL, NULL);
+	return status;
+}
+
 void do_syscall(Context *c) {
   int ret_val = 0;
 	
@@ -81,6 +91,14 @@ void do_syscall(Context *c) {
 	a[3] = c->GPR4;
 
   switch (a[0]) {
+
+		case SYS_execve:
+#ifdef CONFIG_STRACE
+			printf("syscall: execve (args: %s, NULL, NULL)\n", a[1]);
+#endif
+			ret_val = sys_execve((const char *)a[1], NULL, NULL);
+			break;
+
 		case SYS_gettimeofday:
 	//		printf("switch to SYS_gettime\n");
 			ret_val = sys_gettimeofday((struct timeval *)a[1], (struct timezone *)a[2]);
@@ -97,17 +115,17 @@ void do_syscall(Context *c) {
 			break;
 
 		case SYS_yield:
-			ret_val = sys_yield();
 #ifdef CONFIG_STRACE
-			printf("syscall: yield (args: none, ret_val=%d)\n",  ret_val);
+			printf("syscall: yield (args: none)\n");
 #endif
+			ret_val = sys_yield();
 			break;
 
 		case SYS_exit:
-			ret_val = sys_exit(a[1]);
 #ifdef CONFIG_STRACE
-			printf("syscall: exit (args: %d, ret_val=%d)\n", a[1], ret_val);
+			printf("syscall: exit (args: %d)\n", a[1]);
 #endif
+			ret_val = sys_exit(a[1]);
 			break;
 		
 		case SYS_open:
