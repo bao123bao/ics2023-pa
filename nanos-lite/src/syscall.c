@@ -78,7 +78,7 @@ int sys_execve(const char *pathname, char *const argv[], char *constenvp[]) {
 
 int sys_exit(int status) {
 	//halt(status);
-	sys_execve("/bin/menu", NULL, NULL);
+	sys_execve("/bin/nterm", NULL, NULL);
 	return status;
 }
 
