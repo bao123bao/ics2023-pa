@@ -3,7 +3,8 @@
 #include <proc.h>
 #include "syscall.h"
 
-#define CONFIG_STRACE 1
+//#define CONFIG_STRACE 1
+#define CONFIG_STRACE_EXE 1
 
 
 int fs_open(const char *pathname, int flags, int mode);
@@ -93,7 +94,7 @@ void do_syscall(Context *c) {
   switch (a[0]) {
 
 		case SYS_execve:
-#ifdef CONFIG_STRACE
+#ifdef CONFIG_STRACE_EXE
 			printf("syscall: execve (args: %s, NULL, NULL)\n", a[1]);
 #endif
 			ret_val = sys_execve((const char *)a[1], NULL, NULL);
